@@ -13,7 +13,7 @@ public class IConstant {
 
     public static final String GOOGLE_CLIENT_SECRET = "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";
 
-    public static final String GOOGLE_REDIRECT_URI = "http://localhost:9999/OnlineCinemaTicket/GoogleLogin/loginGoogle";
+    public static final String GOOGLE_REDIRECT_URI = "http://localhost:9999/OnlineCinemaTicket/loginGoogle";
 
     public static final String GOOGLE_GRANT_TYPE = "authorization_code";
 

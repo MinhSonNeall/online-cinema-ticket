@@ -31,8 +31,11 @@ public class LoginController extends HttpServlet {
     throws ServletException, IOException {
         String code=request.getParameter("code");
         GoogleLogin gg= new GoogleLogin();
-        String access= gg.getToken(code);
-        System.out.println(access); 
+        String token=gg.getToken(code);
+        GoogleAccount access= gg.getUserInfo(token);
+        System.out.println(access);
+        String email=access.getEmail();
+        
     } 
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -46,12 +49,7 @@ public class LoginController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-         
-        
-        request.getRequestDispatcher("/jsp/login.jsp").forward(request, response);
-        
-        
-       
+         processRequest(request, response);
     } 
 
     /** 
@@ -64,12 +62,7 @@ public class LoginController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        String username=request.getParameter("email");
-        String password=request.getParameter("pasword");
-        if (username!=null){
-            response.sendRedirect("index.html");
-        }
-        
+        processRequest(request, response);
     }
 
     /** 

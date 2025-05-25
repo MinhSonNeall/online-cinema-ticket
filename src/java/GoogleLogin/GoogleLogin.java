@@ -51,4 +51,12 @@ public class GoogleLogin {
         return accessToken;
 
     }
+    public static GoogleAccount getUserInfo(final String accessToken) throws ClientProtocolException, IOException {
+        String link = IConstant.GOOGLE_LINK_GET_USER_INFO + accessToken;
+        String response = Request.Get(link).execute().returnContent().asString();
+        GoogleAccount googlePojo = new Gson().fromJson(response, GoogleAccount.class);
+        return googlePojo;
+
+    }
+    
 }
