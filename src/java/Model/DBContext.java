@@ -17,7 +17,7 @@ public class DBContext {
 
     public DBContext(String URL, String userName, String password) {
         try {
-            // Call MySQL JDBC driver
+            
             Class.forName("com.mysql.cj.jdbc.Driver");
             // Create connection
             conn = DriverManager.getConnection(URL, userName, password);
