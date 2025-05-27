@@ -1,8 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
-
 package Controller;
 
 import java.io.IOException;
@@ -16,17 +11,18 @@ import Model.DaoUser;
 import Entity.Users;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpSession;
+import java.util.Vector;
 
 /**
  *
  * @author HP
  */
-@WebServlet(name="loginController", urlPatterns={"/loginController"})
+@WebServlet(name = "loginController", urlPatterns = {"/loginController"})
 public class loginController extends HttpServlet {
-   
+
     private static final long COOKIE_EXPIRY_SECONDS = 7 * 24 * 60 * 60; // 7 ngày
-    
-    /** 
+
+    /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
      * @param request servlet request
      * @param response servlet response
@@ -34,24 +30,22 @@ public class loginController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
+            throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet loginController</title>");  
+            out.println("<title>Servlet loginController</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet loginController at " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet loginController at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
-    } 
+    }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /** 
+    /**
      * Handles the HTTP <code>GET</code> method.
      * @param request servlet request
      * @param response servlet response
@@ -60,8 +54,8 @@ public class loginController extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
-                // Kiểm tra cookie
+            throws ServletException, IOException {
+        // Kiểm tra cookie
         String email = null;
         String roleStr = null;
         Cookie[] cookies = request.getCookies();
@@ -76,26 +70,29 @@ public class loginController extends HttpServlet {
             if (email != null && roleStr != null) {
                 try {
                     Users.Roles role = Users.Roles.valueOf(roleStr);
-                    
-                        // Xác thực lại với database
-                        DaoUser daoUser = new DaoUser();
-                        if (daoUser.checkRole(email) == role) {
-                            HttpSession session = request.getSession();
-                            session.setAttribute("email", email);
-                            session.setAttribute("role", role);
-                            switch (role) {
-                                case ADMIN:
-                                    response.sendRedirect("adminDashboard.jsp");
-                                    return;
-                                case STAFF:
-                                    response.sendRedirect("staffDashboard.jsp");
-                                    return;
-                                case CUSTOMER:
-                                    response.sendRedirect("customerHome.jsp");
-                                    return;
-                            }
+                    // Xác thực lại với database
+                    DaoUser daoUser = new DaoUser();
+                    if (daoUser.checkRole(email) == role) {
+                        HttpSession session = request.getSession();
+                        session.setAttribute("email", email);
+                        session.setAttribute("role", role);
+                        // Lấy dữ liệu user và lưu vào session
+                        Vector<Users> users = daoUser.getuserData(email);
+                        if (!users.isEmpty()) {
+                            session.setAttribute("user", users.get(0)); // Lưu user đầu tiên
                         }
-                    
+                        switch (role) {
+                            case ADMIN:
+                                response.sendRedirect("adminDashboard.jsp");
+                                return;
+                            case STAFF:
+                                response.sendRedirect("staffDashboard.jsp");
+                                return;
+                            case CUSTOMER:
+                                response.sendRedirect("customerHome.jsp");
+                                return;
+                        }
+                    }
                 } catch (IllegalArgumentException e) {
                     // Role không hợp lệ
                 }
@@ -103,10 +100,9 @@ public class loginController extends HttpServlet {
         }
         // Hiển thị trang login nếu không có cookie hợp lệ
         request.getRequestDispatcher("/jsp/login.jsp").forward(request, response);
+    }
 
-    } 
-
-    /** 
+    /**
      * Handles the HTTP <code>POST</code> method.
      * @param request servlet request
      * @param response servlet response
@@ -115,15 +111,14 @@ public class loginController extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
+            throws ServletException, IOException {
         // Lấy thông tin từ form
         String email = request.getParameter("email");
         String password = request.getParameter("password");
         String remember_me = request.getParameter("remember_me");
-        
-        // Khởi tạo DaoUser (giả sử DBContext đã cung cấp conn)
+
         DaoUser daoUser = new DaoUser();
-        
+
         // Kiểm tra đăng nhập
         if (daoUser.login(email, password)) {
             // Lấy vai trò của user
@@ -133,13 +128,18 @@ public class loginController extends HttpServlet {
                 HttpSession session = request.getSession();
                 session.setAttribute("email", email);
                 session.setAttribute("role", role);
-                if ("on".equals(remember_me)) {
+                // Lấy dữ liệu user và lưu vào session
+                Vector<Users> users = daoUser.getuserData(email);
+                if (!users.isEmpty()) {
+                    session.setAttribute("user", users.get(0)); 
+                }
+                if (remember_me != null) {
                     // Lưu email và role vào cookie
                     Cookie emailCookie = new Cookie("remember_meEmail", email);
                     emailCookie.setMaxAge((int) COOKIE_EXPIRY_SECONDS);
                     emailCookie.setPath("/");
                     response.addCookie(emailCookie);
-                    
+
                     Cookie roleCookie = new Cookie("remember_meRole", role.name());
                     roleCookie.setMaxAge((int) COOKIE_EXPIRY_SECONDS);
                     roleCookie.setPath("/");
@@ -157,13 +157,12 @@ public class loginController extends HttpServlet {
                         response.sendRedirect("customerHome.jsp");
                         break;
                     default:
-                        // Trường hợp role không hợp lệ 
                         request.setAttribute("error", "Invalid email or password!");
                         request.getRequestDispatcher("/jsp/login.jsp").forward(request, response);
                         break;
                 }
             } else {
-                // Role không hợp lệ 
+                // Role không hợp lệ
                 request.setAttribute("error", "Invalid email or password!");
                 request.getRequestDispatcher("/jsp/login.jsp").forward(request, response);
             }
@@ -174,13 +173,12 @@ public class loginController extends HttpServlet {
         }
     }
 
-    /** 
+    /**
      * Returns a short description of the servlet.
      * @return a String containing servlet description
      */
     @Override
     public String getServletInfo() {
         return "Short description";
-    }// </editor-fold>
-
+    }
 }

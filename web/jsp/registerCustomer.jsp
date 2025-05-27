@@ -171,7 +171,7 @@
 
                 <!-- Link to Login -->
                 <p class="mt-6 text-center text-sm text-gray-600">
-                    Đã có tài khoản? <a href="<c:url value='/jsp/login.jsp'/>" class="link-custom">Đăng nhập</a>
+                    Đã có tài khoản? <a href="<c:url value='/loginController'/>" class="link-custom">Đăng nhập</a>
                 </p>
             </div>
         </div>
