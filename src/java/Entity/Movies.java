@@ -52,6 +52,16 @@ public class Movies {
         this.updated_at = updated_at;
     }
 
+    public Movies(String movie_id, String title, String description, int duration, int age_restriction) {
+        this.movie_id = movie_id;
+        this.title = title;
+        this.description = description;
+        this.duration = duration;
+        this.age_restriction = age_restriction;
+    }
+    
+    
+
     // Getters và Setters
 
     public String getMovie_id() {
