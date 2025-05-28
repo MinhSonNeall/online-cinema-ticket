@@ -1,51 +1,81 @@
 package Model;
 
+import Constant.IConstant;
+import com.mysql.cj.jdbc.CallableStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.PreparedStatement;
 
 /**
  *
  * @author Admin
  */
 public class DBContext {
-    Connection conn = null;
-
-    public DBContext(String URL, String userName, String password) {
+   protected Connection connection;
+    
+    public static Connection getConnection() throws Exception {
+        
         try {
-            // Call MySQL JDBC driver
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            // Create connection
-            conn = DriverManager.getConnection(URL, userName, password);
-            System.out.println("Connected to MySQL database");
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(DBContext.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
-            Logger.getLogger(DBContext.class.getName()).log(Level.SEVERE, null, ex);
+            Class.forName(IConstant.DB_CLASSFORNAME);
+            
+            return DriverManager.getConnection(IConstant.DB_URL, IConstant.DB_USER_NAME, IConstant.DB_PASSWORD);
+        } catch (ClassNotFoundException | SQLException e) {
+            throw e;
         }
     }
 
-    public DBContext() {
-        this("jdbc:mysql://localhost:3306/?user=root", "root", "123456");
-    }
-
-    public ResultSet getData(String sql) {
-        ResultSet rs = null;
+    public void closeConnection(Connection conn, PreparedStatement ps, CallableStatement cs, ResultSet rs) {
         try {
-            Statement state = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
-                    ResultSet.CONCUR_UPDATABLE);
-            rs = state.executeQuery(sql);
-        } catch (SQLException ex) {
-            Logger.getLogger(DBContext.class.getName()).log(Level.SEVERE, null, ex);
+            if (conn != null && !conn.isClosed()) {
+                conn.close();
+            }
+            if (ps != null && !ps.isClosed()) {
+                ps.close();
+            }
+            if (cs != null && !cs.isClosed()) {
+                cs.close();
+            }
+            if (rs != null && !rs.isClosed()) {
+                rs.close();
+            }
+        } catch (SQLException e) {
         }
-        return rs;
-    }
 
-    public static void main(String[] args) {
-        new DBContext();
     }
+    
+    public void closeConnection(Connection conn, PreparedStatement ps, ResultSet rs) {
+        try {
+            if (conn != null && !conn.isClosed()) {
+                conn.close();
+            }
+            if (ps != null && !ps.isClosed()) {
+                ps.close();
+            }
+            if (rs != null && !rs.isClosed()) {
+                rs.close();
+            }
+        } catch (SQLException e) {
+        }
+
+    }
+    
+    
+
+    public static void main(String[] args) throws Exception {
+        Connection c = getConnection();
+        if (c == null) {
+            System.out.println("something wrong");
+        } else {
+            System.out.println("ok");
+        }
+    }
+  
 }
+
+
+
+
+
+
