@@ -5,7 +5,9 @@
 package Model;
 
 import Entity.Users;
+
 import Entity.Users.Roles;
+
 import java.sql.Timestamp;
 import java.sql.Statement;
 import java.sql.PreparedStatement;
@@ -13,7 +15,18 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.sql.ResultSet;
+import java.util.Properties;
+import java.util.Random;
 import java.util.Vector;
+import jakarta.mail.Authenticator;
+import jakarta.mail.Message;
+import jakarta.mail.MessagingException;
+import jakarta.mail.PasswordAuthentication;
+import jakarta.mail.Session;
+import jakarta.mail.Transport;
+import jakarta.mail.internet.InternetAddress;
+import jakarta.mail.internet.MimeMessage;
+
 
 /**
  *
@@ -91,6 +104,68 @@ public Vector<Users> getuserData(String email) {
     
     return data;
 }
+public Vector<Users> listAllUser(){
+    Vector<Users> list = new Vector<>();
+    String sql="select * from movie_ticketing.users";
+     
+        try {
+            PreparedStatement st = conn.prepareStatement(sql);
+            ResultSet rs=st.executeQuery();
+            while(rs.next()){
+                String user_id = rs.getString("user_id");
+                String user_email = rs.getString("email");
+                String full_name = rs.getString("full_name");
+                String phone_number = rs.getString("phone_number");
+                String roletype = rs.getString("role");
+                Roles role = Roles.valueOf(roletype.toUpperCase());
+                Timestamp created_at = rs.getTimestamp("created_at");
+                Timestamp updated_at = rs.getTimestamp("updated_at");
+                 Users user = new Users(user_id, user_email, null, full_name, 
+                                     phone_number, role, created_at, updated_at);
+                 list.add(user);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(DaoUser.class.getName()).log(Level.SEVERE, null, ex);
+        }
+           return list; 
+}
+    public String generateOTP() {
+        Random random = new Random();
+        int otp = 100000 + random.nextInt(900000); // Generate 6-digit OTP
+        return String.valueOf(otp);
+        // Apppassword xgfs dqfr pdpy icrr
+
+    }
+     public void sendVerificationEmail(String sentTo, String otp) {
+        final String username = "sonvd74@gmail.com"; // Update with your email address
+        final String password = "xgfs dqfr pdpy icrr"; // Update with your email password
+
+        Properties props = new Properties();
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.host", "smtp.gmail.com");
+        props.put("mail.smtp.port", "587");
+
+        Session session = Session.getInstance(props, new Authenticator() {
+            @Override
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(username, password);
+            }
+        });
+
+        try {
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(username));
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(sentTo));
+            message.setSubject("Email Verification");
+            message.setContent("<h1>Email verification</h1><p>Your OTP is: " + otp + "</p>", "text/html");
+
+            Transport.send(message);
+            System.out.println("Email sent successfully!");
+        } catch (MessagingException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
     
 
 }
