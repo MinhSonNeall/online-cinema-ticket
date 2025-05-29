@@ -1,3 +1,5 @@
+CREATE DATABASE  IF NOT EXISTS `movie_ticketing` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+USE `movie_ticketing`;
 -- MySQL dump 10.13  Distrib 8.0.42, for Win64 (x86_64)
 --
 -- Host: localhost    Database: movie_ticketing
@@ -483,6 +485,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
+INSERT INTO `users` VALUES ('550e8400-e29b-41d4-a716-446655440001','nguyen.van.a@gmail.com','password123','Nguyễn Văn A','0905123456','customer','2025-05-26 15:56:53','2025-05-26 15:56:53'),('550e8400-e29b-41d4-a716-446655440002','tran.thi.b@gmail.com','securepass456','Trần Thị B','0916234567','staff','2025-05-26 15:56:53','2025-05-26 15:56:53'),('550e8400-e29b-41d4-a716-446655440003','sonvd74@gmail.com','anhyeuem12','Ngô Minh Sơn','0927345678','admin','2025-05-26 15:56:53','2025-05-26 15:56:53'),('550e8400-e29b-41d4-a716-446655440004','pham.thi.d@gmail.com','pass789','Phạm Thị D','0938456789','customer','2025-05-26 15:56:53','2025-05-26 15:56:53'),('550e8400-e29b-41d4-a716-446655440005','hoang.van.e@gmail.com','strongpass101','Hoàng Văn E','0949567890','staff','2025-05-26 15:56:53','2025-05-26 15:56:53');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -514,6 +517,10 @@ LOCK TABLES `wishlists` WRITE;
 /*!40000 ALTER TABLE `wishlists` DISABLE KEYS */;
 /*!40000 ALTER TABLE `wishlists` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Dumping routines for database 'movie_ticketing'
+--
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -524,4 +531,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-05-23 22:44:23
+-- Dump completed on 2025-05-28  0:16:08
