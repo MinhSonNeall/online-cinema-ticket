@@ -13,6 +13,8 @@ import java.sql.Timestamp;
 
 public class Movies {
 
+  
+
     public enum Status { // Enum cho trường 'status'
         NOW_SHOWING, // Ánh xạ 'now_showing'
         COMING_SOON   // Ánh xạ 'coming_soon'
@@ -59,6 +61,18 @@ public class Movies {
         this.duration = duration;
         this.age_restriction = age_restriction;
     }
+
+    public Movies(String movie_id, String title, String description, String trailer_url, String poster_url, int duration, int age_restriction, Date release_date) {
+        this.movie_id = movie_id;
+        this.title = title;
+        this.description = description;
+        this.trailer_url = trailer_url;
+        this.poster_url = poster_url;
+        this.duration = duration;
+        this.age_restriction = age_restriction;
+        this.release_date = release_date;
+    }
+    
     
     
 

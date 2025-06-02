@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -335,85 +336,30 @@
             <h2 class="section-title">Phim đang chiếu</h2>
             
             <div class="movies-grid">
-                <div class="movie-card">
-                    <div class="movie-poster">🦸‍♂️ POSTER</div>
-                    <div class="movie-info">
-                        <h3 class="movie-title">Avengers: Endgame</h3>
-                        <p class="movie-genre">Hành động • Phê phàng táo</p>
-                        <div class="movie-rating">
-                            <span class="stars">★★★★★</span>
-                            <span style="color: #aaa;">8.9/10</span>
-                        </div>
-                        <div class="movie-details">
-                            <p class="movie-description">Sau sự kiện của Infinity War, vũ trụ đang trong tình trạng hủy diệt. Với sự trợ giúp của các đồng minh còn lại, Avengers phải tập hợp một lần nữa.</p>
-                            <div class="movie-meta">
-                                <span class="movie-length">⏱️ 181 phút</span>
-                                <span class="age-rating">🔞 T13 - Phù hợp từ 13 tuổi</span>
+                <c:forEach var="movie" items="${movieList}">
+                    <div class="movie-card">
+                        <div class="movie-poster">🎥 POSTER</div>
+                        <div class="movie-info">
+                            <h3 class="movie-title">${movie.title}</h3>
+                            <p class="movie-genre">Hành động • Phiêu lưu</p>
+                            <div class="movie-rating">
+                                <span class="stars">★★★★☆</span>
+                                <span style="color: #aaa;">8.5/10</span>
                             </div>
-                        </div>
-                        <button class="book-btn">Đặt vé</button>
-                    </div>
-                </div>
-
-                <div class="movie-card">
-                    <div class="movie-poster">🌟 POSTER</div>
-                    <div class="movie-info">
-                        <h3 class="movie-title">Spider-Man: No Way Home</h3>
-                        <p class="movie-genre">Phiêu lưu • Khoa học viễn tưởng</p>
-                        <div class="movie-rating">
-                            <span class="stars">★★★★☆</span>
-                            <span style="color: #aaa;">8.7/10</span>
-                        </div>
-                        <div class="movie-details">
-                            <p class="movie-description">Peter Parker phải đối mặt với hậu quả khi danh tính Spider-Man bị tiết lộ. Anh tìm đến Doctor Strange để xóa ký ức của mọi người.</p>
-                            <div class="movie-meta">
-                                <span class="movie-length">⏱️ 148 phút</span>
-                                <span class="age-rating">🔞 T13 - Phù hợp từ 13 tuổi</span>
+                            <div class="movie-details">
+                                <p class="movie-description">${movie.description}</p>
+                                <div class="movie-meta">
+                                    <span class="movie-length">⏱️ ${movie.duration} phút</span>
+                                    <span class="age-rating">🔞 T${movie.age_restriction} - Phù hợp từ ${movie.age_restriction} tuổi</span>
+                                </div>
                             </div>
+                            <form action="ListMovieDetailController" method="get" style="display: inline;">
+                    <input type="hidden" name="movieId" value="${movie.movie_id}">
+                    <button type="submit" class="book-btn">Đặt vé</button>
+                </form>
                         </div>
-                        <button class="book-btn">Đặt vé</button>
                     </div>
-                </div>
-
-                <div class="movie-card">
-                    <div class="movie-poster">🎭 POSTER</div>
-                    <div class="movie-info">
-                        <h3 class="movie-title">The Batman</h3>
-                        <p class="movie-genre">Hành động • Tâm lý</p>
-                        <div class="movie-rating">
-                            <span class="stars">★★★★☆</span>
-                            <span style="color: #aaa;">8.5/10</span>
-                        </div>
-                        <div class="movie-details">
-                            <p class="movie-description">Trong năm thứ hai chiến đấu với tội phạm, Batman khám phá sự tham nhũng ở Gotham City và mối liên hệ với gia đình của mình.</p>
-                            <div class="movie-meta">
-                                <span class="movie-length">⏱️ 176 phút</span>
-                                <span class="age-rating">🔞 T16 - Phù hợp từ 16 tuổi</span>
-                            </div>
-                        </div>
-                        <button class="book-btn">Đặt vé</button>
-                    </div>
-                </div>
-
-                <div class="movie-card">
-                    <div class="movie-poster">🚀 POSTER</div>
-                    <div class="movie-info">
-                        <h3 class="movie-title">Top Gun: Maverick</h3>
-                        <p class="movie-genre">Hành động • Chính kịch</p>
-                        <div class="movie-rating">
-                            <span class="stars">★★★★★</span>
-                            <span style="color: #aaa;">9.1/10</span>
-                        </div>
-                        <div class="movie-details">
-                            <p class="movie-description">Sau hơn 30 năm phục vụ, Pete "Maverick" Mitchell vẫn là phi công thử nghiệm hàng đầu của Hải quân, tránh thăng chức.</p>
-                            <div class="movie-meta">
-                                <span class="movie-length">⏱️ 130 phút</span>
-                                <span class="age-rating">🔞 T13 - Phù hợp từ 13 tuổi</span>
-                            </div>
-                        </div>
-                        <button class="book-btn">Đặt vé</button>
-                    </div>
-                </div>
+                </c:forEach>
             </div>
         </section>
 
@@ -464,12 +410,12 @@
         });
 
         // Book ticket functionality
-        document.querySelectorAll('.book-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const movieTitle = this.closest('.movie-card').querySelector('.movie-title').textContent;
-                alert(`Đặt vé cho phim: ${movieTitle}\nChức năng đang được phát triển!`);
-            });
-        });
+//        document.querySelectorAll('.book-btn').forEach(btn => {
+//            btn.addEventListener('click', function() {
+//                const movieTitle = this.closest('.movie-card').querySelector('.movie-title').textContent;
+//                alert(`Đặt vé cho phim: ${movieTitle}\nChức năng đang được phát triển!`);
+//            });
+//        });
 
         // Add loading animation for movie cards
         window.addEventListener('load', () => {
