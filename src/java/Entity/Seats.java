@@ -19,6 +19,14 @@ public class Seats { // Tên class giữ nguyên là 'Seats'
     private String room_id;
     private String seat_number;
     private Type type; // Sử dụng Enum Type
+    
+    
+    private String seatId;
+    private String name;
+    private String types;
+    private double price;
+    private boolean booked;
+    private boolean selected;
 
     // Constructor mặc định
     public Seats() {
@@ -32,6 +40,23 @@ public class Seats { // Tên class giữ nguyên là 'Seats'
         this.type = type;
     }
 
+    
+    
+    public Seats(String seatId, String name, String types, double price, boolean booked, boolean selected) {
+        this.seatId = seatId;
+        this.name = name;
+        this.types = types;
+        this.price = price;
+        this.booked = booked;
+        this.selected = selected;
+    }
+
+    public String getSeatId() { return seatId; }
+    public String getName() { return name; }
+    public String getTypes() { return types; }
+    public double getPrice() { return price; }
+    public boolean isBooked() { return booked; }
+    public boolean isSelected() { return selected; }
     // Getters và Setters
 
     public String getSeat_id() {

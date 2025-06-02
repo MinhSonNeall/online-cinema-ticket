@@ -3,16 +3,14 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Cuong/Documents/GitHub/online-cinema-ticket/src/java/Model/DBContext.java</file>
-            <file>file:/C:/Users/Cuong/Documents/GitHub/online-cinema-ticket/src/java/Model/DaoUser.java</file>
+            <file>file:/C:/Users/Cuong/Documents/GitHub/online-cinema-ticket/web/jsp/Movie/index.jsp</file>
+            <file>file:/C:/Users/Cuong/Documents/GitHub/online-cinema-ticket/src/java/Entity/Seats.java</file>
             <file>file:/C:/Users/Cuong/Documents/GitHub/online-cinema-ticket/src/java/Entity/Movies.java</file>
+            <file>file:/C:/Users/Cuong/Documents/GitHub/online-cinema-ticket/src/java/Controller/ListMovieController.java</file>
             <file>file:/C:/Users/Cuong/Documents/GitHub/online-cinema-ticket/src/java/Model/DaoMovie.java</file>
-            <file>file:/C:/Users/Cuong/Documents/GitHub/online-cinema-ticket/src/java/Constant/IConstant.java</file>
-            <file>file:/C:/Users/HP/Documents/NetBeansProjects/OnlineCinemaTicket/src/java/Controller/RegisterController.java</file>
-            <file>file:/C:/Users/HP/Documents/NetBeansProjects/OnlineCinemaTicket/src/java/Model/DaoUser.java</file>
-            <file>file:/C:/Users/HP/Documents/NetBeansProjects/OnlineCinemaTicket/src/java/Entity/Users.java</file>
-            <file>file:/C:/Users/HP/Documents/NetBeansProjects/OnlineCinemaTicket/web/jsp/registerCustomer.jsp</file>
-            <file>file:/C:/Users/HP/Documents/NetBeansProjects/OnlineCinemaTicket/web/jsp/login.jsp</file>
+            <file>file:/C:/Users/Cuong/Documents/GitHub/online-cinema-ticket/src/java/Controller/ListMovieDetailController.java</file>
+            <file>file:/C:/Users/Cuong/Documents/GitHub/online-cinema-ticket/web/jsp/Movie/listmovedetail.jsp</file>
+            <file>file:/C:/Users/Cuong/Documents/GitHub/online-cinema-ticket/src/java/Entity/Showtimes.java</file>
         </group>
     </open-files>
 </project-private>
