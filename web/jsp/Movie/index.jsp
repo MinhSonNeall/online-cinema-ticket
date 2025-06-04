@@ -144,6 +144,10 @@
             font-size: 1.2rem;
             font-weight: bold;
         }
+        
+        .trailer-video {
+            max-height: 100%;
+        }
 
         .movie-info {
             padding: 1.5rem;
@@ -338,10 +342,15 @@
             <div class="movies-grid">
                 <c:forEach var="movie" items="${movieList}">
                     <div class="movie-card">
-                        <div class="movie-poster">🎥 POSTER</div>
+                        <div class="movie-poster">
+                            <video class="trailer-video" poster="${pageContext.request.contextPath}${movie.poster_url}" muted loop>
+                                <source src="${pageContext.request.contextPath}${movie.trailer_url}" type="video/mp4">
+                                <img src="${pageContext.request.contextPath}${movie.poster_url}" alt="${movie.title} Poster" class="poster-fallback">
+                            </video>
+                        </div>
                         <div class="movie-info">
                             <h3 class="movie-title">${movie.title}</h3>
-                            <p class="movie-genre">Hành động • Phiêu lưu</p>
+                            <p class="movie-genre">${movie.genere_name}</p>
                             <div class="movie-rating">
                                 <span class="stars">★★★★☆</span>
                                 <span style="color: #aaa;">8.5/10</span>
@@ -354,14 +363,15 @@
                                 </div>
                             </div>
                             <form action="ListMovieDetailController" method="get" style="display: inline;">
-                    <input type="hidden" name="movieId" value="${movie.movie_id}">
-                    <button type="submit" class="book-btn">Đặt vé</button>
-                </form>
+                                <input type="hidden" name="movieId" value="${movie.movie_id}">
+                                <button type="submit" class="book-btn">Đặt vé</button>
+                            </form>
                         </div>
                     </div>
                 </c:forEach>
             </div>
         </section>
+        
 
         <!-- Features Section -->
         <section class="features">
@@ -416,7 +426,39 @@
 //                alert(`Đặt vé cho phim: ${movieTitle}\nChức năng đang được phát triển!`);
 //            });
 //        });
-
+            document.querySelectorAll('.trailer-video').forEach(video => {
+    let playTimeout;
+    let isPlaying = false;
+    video.addEventListener('click', () => {
+        if (isPlaying) {
+            video.currentTime = 0;
+            video.load()
+            return;
+        }
+        clearTimeout(playTimeout);
+        playTimeout = setTimeout(() => {
+            isPlaying = true;
+            video.muted = false;
+            video.play().catch(error => {
+                console.error('Lỗi khi phát video:', error);
+            });
+        }, 100); // Chờ 100ms trước khi phát
+    });
+//    video.addEventListener('mouseleave', () => {
+//        clearTimeout(playTimeout);
+//        video.pause();
+//        video.currentTime = 0;
+//    });
+//    video.addEventListener('click', () => {
+//        if (video.paused) {
+//            video.play();
+//            video.muted = false;
+//        } else {
+//            video.pause();
+//            video.currentTime = 0;
+//        }
+//    });
+});
         // Add loading animation for movie cards
         window.addEventListener('load', () => {
             const movieCards = document.querySelectorAll('.movie-card');

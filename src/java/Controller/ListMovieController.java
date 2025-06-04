@@ -60,12 +60,19 @@ public class ListMovieController extends HttpServlet {
             throws ServletException, IOException {
         DaoMovie daoMovie = new DaoMovie();
         ArrayList<Movies> movieList = daoMovie.getAllMovies();
-
+        
         if (movieList == null) {
         System.out.println("movieList is null");
         } else {
         System.out.println("movieList size: " + movieList.size());
         }
+        movieList.forEach(movie -> {
+    if (movie.getTitle().equals("Lilo & Stitch")) {
+        // Sử dụng request.getContextPath() để đảm bảo URL đúng
+        movie.setPoster_url(request.getContextPath() + "/resources/images/disney-unveils-new-poster-for-lilo-stitch.jpg");
+        movie.setTrailer_url(request.getContextPath() + "/resources/videos/test1.mp4");
+    }
+    });
         // Đặt danh sách phim vào request attribute
         request.setAttribute("movieList", movieList);
 
