@@ -182,26 +182,38 @@
             <li><a href="#contact">Liên hệ</a></li>
         </ul>
 
+        <div class="auth-section">
+    <% if (session.getAttribute("user") == null) { %>
+        <!-- Chưa đăng nhập -->
+        <div class="auth-buttons">
+            <a href="${pageContext.request.contextPath}/login" class="auth-link" style="color: white; text-decoration: none;">ĐĂNG NHẬP</a>
+           <span class="separator" style="color: white;"> / </span>
+            <a href="${pageContext.request.contextPath}/register" class="auth-link" style="color: white; text-decoration: none;">ĐĂNG KÝ</a>
+        </div>
+    <% } else { %>
+        <!-- Đã đăng nhập - giữ nguyên dropdown -->
         <div class="user-profile">
             <div class="profile-btn">
                 <span>👤</span>
-                <span>Nguyễn Văn A</span>
+                <span><%= session.getAttribute("username") != null ? session.getAttribute("username") : "User" %></span>
                 <span>▼</span>
             </div>
             
             <div class="profile-dropdown">
                 <div class="profile-info">
-                    <div class="profile-name">Nguyễn Văn A</div>
-                    <div class="profile-email">nguyenvana@email.com</div>
+                    <div class="profile-name"><%= session.getAttribute("username") != null ? session.getAttribute("username") : "User" %></div>
+                    <div class="profile-email"><%= session.getAttribute("email") != null ? session.getAttribute("email") : "user@email.com" %></div>
                 </div>
                 <div class="profile-actions">
                     <a href="#profile">Thông tin cá nhân</a>
                     <a href="#booking-history">Lịch sử đặt vé</a>
                     <a href="#settings">Cài đặt</a>
-                    <a href="#logout" class="logout-btn">Đăng xuất</a>
+                    <a href="${pageContext.request.contextPath}/logout" class="logout-btn">Đăng xuất</a>
                 </div>
             </div>
         </div>
+    <% } %>
+</div>
     </nav>
 </header>
 

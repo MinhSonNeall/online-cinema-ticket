@@ -22,7 +22,19 @@ public class DaoMovie extends DBContext{
     
     public ArrayList<Movies> getAllMovies() {
         ArrayList<Movies> list = new ArrayList<>();
-        String sql = "SELECT * FROM movie_ticketing.movies WHERE status = 'now_showing'";
+        String sql = "SELECT \n" +
+"    m.*, \n" +
+"    GROUP_CONCAT(g.name SEPARATOR ', ') AS genres\n" +
+"FROM \n" +
+"    movie_ticketing.movies m\n" +
+"JOIN \n" +
+"    movie_ticketing.movie_genres mg ON m.movie_id = mg.movie_id\n" +
+"JOIN \n" +
+"    movie_ticketing.genres g ON mg.genre_id = g.genre_id\n" +
+"WHERE \n" +
+"    m.status = 'now_showing'\n" +
+"GROUP BY \n" +
+"    m.movie_id;";
         try {
             Movies movie = null;
             connection = getConnection();
@@ -34,7 +46,10 @@ public class DaoMovie extends DBContext{
                     rs.getString("title"),
                     rs.getString("description"),
                     rs.getInt("duration"),
-                    rs.getInt("age_restriction")
+                    rs.getInt("age_restriction"),
+                    rs.getString("poster_url"),
+                        rs.getString("trailer_url"),
+                        rs.getString("genres")
                 );
                 list.add(movie);
             }
@@ -73,7 +88,9 @@ public class DaoMovie extends DBContext{
                     rs.getString("title"),
                     rs.getString("description"),
                     rs.getInt("duration"),
-                    rs.getInt("age_restriction")
+                    rs.getInt("age_restriction"),
+                        rs.getString("poster_url"),
+                        rs.getString("trailer_url")
                 );
             }
         } catch (Exception ex) {
@@ -407,5 +424,7 @@ public class DaoMovie extends DBContext{
 //        }
 //        return list;
 //    }
+    
+    
     
 }

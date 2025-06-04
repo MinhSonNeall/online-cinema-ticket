@@ -267,28 +267,33 @@ body {
     flex-wrap: wrap;
 }
 
+movie-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+}
+
 .movie-card {
-    display: flex;
-    gap: 1.25rem;
-    background: var(--glass-bg);
+    background: white;
     border-radius: 12px;
-    padding: 1.25rem;
-    flex: 1;
-    min-width: 300px;
-    border: 1px solid var(--glass-border);
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    max-width: 250px; /* Giới hạn kích thước tối đa */
 }
 
 .movie-poster {
-    width: 100px;
-    height: 150px;
-    border-radius: 8px;
-    overflow: hidden;
-    flex-shrink: 0;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    width: 100%;
+    height: 300px;
+    object-fit: fill;         
+    object-position: center;   
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    display: block;
 }
-
 .movie-info {
-    flex: 1;
+    padding: 15px;
+    height: 120px; /* Chiều cao cố định cho phần thông tin */
+    overflow: hidden;
 }
 
 .movie-title {
@@ -302,6 +307,10 @@ body {
     margin-bottom: 0.4rem;
     color: var(--text-secondary);
     font-size: 0.9rem;
+}
+
+.trailer-video {
+    max-width: 100%;
 }
 
 .cinema-showtimes {
