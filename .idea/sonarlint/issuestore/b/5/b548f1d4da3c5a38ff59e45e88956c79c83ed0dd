@@ -1,0 +1,16 @@
+
+r	java:S117$"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Í™å•ûÿÿÿÿ8’²“´ó2
+l	java:S117%"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(–­Û8´²“´ó2
+l	java:S117&"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(³Äï8¿²“´ó2
+o	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(º›°Î
+l
+java:S11923"JDefine a constant instead of duplicating this literal "errorform" 4 times.(¿…Ï¨ùÿÿÿÿ8¿²“´ó2
+|
+java:S1192"ZDefine a constant instead of duplicating this literal "/jsp/registerCustomer.jsp" 5 times.(Š—ãüÿÿÿÿ8À²“´ó2
+‡
+java:S1149H"eReplace the synchronized class "Vector" by an unsynchronized one such as "ArrayList" or "LinkedList".(”©ääÿÿÿÿÿ8×Ä“´ó2
+X	java:S125)"<This block of commented-out lines of code should be removed.(–‹«ã8çÄ“´ó2
+h
+java:S5998>"LRefactor this repetition that can lead to a stack overflow for large inputs.(õæˆB8ŒÈ“´ó2
+T
+java:S1135]"2Complete the task associated to this TODO comment.(«ûš§ûÿÿÿÿ8¬È“´ó2

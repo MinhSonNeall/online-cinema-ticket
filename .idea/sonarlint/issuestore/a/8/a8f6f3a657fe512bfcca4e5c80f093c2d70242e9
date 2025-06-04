@@ -1,0 +1,20 @@
+
+g	java:S101"MRename this class name to match the regular expression '^[A-Z][a-zA-Z0-9]*$'.(“ÛÏîøÿÿÿÿ
+k	java:S117v"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Õë†óùÿÿÿÿ
+o	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(º›°Î
+a
+java:S2184"FCast one of the operands of this multiplication operation to a "long".(°¶¨úÿÿÿÿ
+b
+java:S1192 "FDefine a constant instead of duplicating this literal "error" 3 times.(ƒŸ¼•ùÿÿÿÿ
+w
+java:S1192 "[Define a constant instead of duplicating this literal "Invalid email or password!" 3 times.(ƒŸ¼•ùÿÿÿÿ
+e
+java:S1192f"ODefine a constant instead of duplicating this literal "/jsp/login.jsp" 4 times.(½”¡¿
+\
+java:S1192M"FDefine a constant instead of duplicating this literal "email" 3 times.(µ±
+€
+java:S1149P"eReplace the synchronized class "Vector" by an unsynchronized one such as "ArrayList" or "LinkedList".(£ÓÈ˜şÿÿÿÿ
+
+java:S1149„"eReplace the synchronized class "Vector" by an unsynchronized one such as "ArrayList" or "LinkedList".(£ÓÈ˜şÿÿÿÿ
+h
+java:S37768"RRefactor this method to reduce its Cognitive Complexity from 24 to the 15 allowed.(÷¤‹ú

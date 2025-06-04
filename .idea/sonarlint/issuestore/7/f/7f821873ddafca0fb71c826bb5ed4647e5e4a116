@@ -1,0 +1,12 @@
+
+œ	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(á–Ì“8‚—å³ó2J$2dd307be-6cf0-45d1-a27b-010e257f508b
+­
+java:S1149"eReplace the synchronized class "Vector" by an unsynchronized one such as "ArrayList" or "LinkedList".(öÙý­ùÿÿÿÿ8ß©å³ó2J$34e85463-5680-4980-aee0-5b2662874f75
+­
+java:S1149""eReplace the synchronized class "Vector" by an unsynchronized one such as "ArrayList" or "LinkedList".(ý†úûÿÿÿÿ8ß©å³ó2J$1019d4cd-51be-48b8-8c06-f78b4a2f03f4
+­
+java:S1149#"eReplace the synchronized class "Vector" by an unsynchronized one such as "ArrayList" or "LinkedList".(Öð³Éûÿÿÿÿ8ß©å³ó2J$0d169763-bde3-4629-82f8-f3ab9f1c687b
+w
+java:S3457>"4Lambda should be used to defer string concatenation.(Þ”àÃ8É«å³ó2J$e0497bef-6ed5-4c24-bd84-7bcb5c8972ed
+|
+java:S3457^"4Lambda should be used to defer string concatenation.(É¾„¢þÿÿÿÿ8Ù«å³ó2J$714ab4dd-6324-4913-a6ed-47dc8a763407
