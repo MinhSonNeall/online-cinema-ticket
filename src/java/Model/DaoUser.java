@@ -166,6 +166,23 @@ public Vector<Users> listAllUser(){
             System.out.println("Error: " + e.getMessage());
         }
     }
-    
+    public boolean createUser(Users user) {
+        String sql = "INSERT INTO movie_ticketing.users (user_id, email, password, full_name, phone_number, role, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        try (PreparedStatement pre = conn.prepareStatement(sql)) {
+            pre.setString(1, user.getUser_id());
+            pre.setString(2, user.getEmail());
+            pre.setString(3, user.getPassword());
+            pre.setString(4, user.getFull_name());
+            pre.setString(5, user.getPhone_number());
+            pre.setString(6, user.getRole().name()); // Assuming role is an enum and needs its name
+            pre.setTimestamp(7, user.getCreated_at());
+            pre.setTimestamp(8, user.getUpdated_at());
+            int rowsAffected = pre.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException ex) {
+            Logger.getLogger(DaoUser.class.getName()).log(Level.SEVERE, "Error creating user: " + user.getEmail(), ex);
+            return false;
+        }
+    }
 
 }

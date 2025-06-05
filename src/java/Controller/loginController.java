@@ -98,7 +98,19 @@ public class loginController extends HttpServlet {
                 }
             }
         }
-        // Hiển thị trang login nếu không có cookie hợp lệ
+        
+        // Check for success message from session and pass to request
+        HttpSession session = request.getSession();
+        String successMessage = (String) session.getAttribute("successMessage");
+        if (successMessage != null) {
+            request.setAttribute("successMessage", successMessage);
+            session.removeAttribute("successMessage"); // Clear from session after retrieving
+        }
+        
+        // Ensure no lingering error message from previous requests on a fresh GET
+        request.removeAttribute("error");
+        
+        // Hiển thị trang login nếu không có cookie hợp lệ hoặc sau khi xử lý cookie
         request.getRequestDispatcher("/jsp/login.jsp").forward(request, response);
     }
 

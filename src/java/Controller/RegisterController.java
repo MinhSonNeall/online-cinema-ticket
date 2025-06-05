@@ -9,6 +9,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Vector;
 import java.util.regex.Pattern;
 
@@ -88,12 +90,23 @@ public class RegisterController extends HttpServlet {
         String otp = daoUser.generateOTP();
         HttpSession session = request.getSession();
         session.setAttribute("otp", otp);
-        session.setAttribute("tempUser", new Users("temp-user", gmail, password, full_name, phone_number, Users.Roles.GUEST, null, null));
+        
+        // Store individual user details in session
+        session.setAttribute("email", gmail);
+        session.setAttribute("password", password);
+        session.setAttribute("fullName", full_name);
+        session.setAttribute("phoneNumber", phone_number);
+        session.setAttribute("role", Users.Roles.CUSTOMER.name()); // Default role for new registrations
+        
+        // Set current timestamps
+        Timestamp now = Timestamp.valueOf(LocalDateTime.now());
+        session.setAttribute("createdAt", now.toString());
+        session.setAttribute("updatedAt", now.toString());
 
-        // TODO: Gửi OTP qua email (cần tích hợp dịch vụ gửi email)
+        // Gửi OTP qua email
         daoUser.sendVerificationEmail(gmail, otp);
         // Chuyển hướng đến trang xác minh OTP
-        response.sendRedirect("/jsp/SignupOTP.jsp");
+        response.sendRedirect("verifyEmailOTP");
     }
 
     @Override
