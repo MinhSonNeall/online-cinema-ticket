@@ -13,6 +13,8 @@ import java.sql.Timestamp;
 
 public class Movies {
 
+  
+
     public enum Status { // Enum cho trường 'status'
         NOW_SHOWING, // Ánh xạ 'now_showing'
         COMING_SOON   // Ánh xạ 'coming_soon'
@@ -29,6 +31,7 @@ public class Movies {
     private Status status;     // Sử dụng Enum Status
     private Timestamp created_at;
     private Timestamp updated_at;
+    private String genere_name;
 
     // Constructor mặc định
     public Movies() {
@@ -36,7 +39,7 @@ public class Movies {
 
     // Constructor với tất cả các trường
     public Movies(String movie_id, String title, String description, 
-                 String trailer_url, String poster_url, int duration, 
+                 String trailer_url, String poster_url,int duration, 
                  int age_restriction, Date release_date, Status status, 
                  Timestamp created_at, Timestamp updated_at) {
         this.movie_id = movie_id;
@@ -45,6 +48,7 @@ public class Movies {
         this.trailer_url = trailer_url;
         this.poster_url = poster_url;
         this.duration = duration;
+       
         this.age_restriction = age_restriction;
         this.release_date = release_date;
         this.status = status;
@@ -52,7 +56,52 @@ public class Movies {
         this.updated_at = updated_at;
     }
 
+    public Movies(String movie_id, String title, String description, int duration,int age_restriction, String poster_url,String trailer_url, String genere_name) {
+        this.movie_id = movie_id;
+        this.title = title;
+        this.description = description;
+        this.duration = duration;
+       
+        this.age_restriction = age_restriction;
+        this.poster_url = poster_url;
+        this.trailer_url = trailer_url;
+        this.genere_name = genere_name;
+    }
+    
+    public Movies(String movie_id, String title, String description, int duration,int age_restriction, String poster_url,String trailer_url) {
+        this.movie_id = movie_id;
+        this.title = title;
+        this.description = description;
+        this.duration = duration;
+       
+        this.age_restriction = age_restriction;
+        this.poster_url = poster_url;
+        this.trailer_url = trailer_url;
+    }
+    
+    
+
+    public Movies(String movie_id, String title, String description, String trailer_url, String poster_url, int duration,int age_restriction, Date release_date) {
+        this.movie_id = movie_id;
+        this.title = title;
+        this.description = description;
+        this.trailer_url = trailer_url;
+        this.poster_url = poster_url;
+        this.duration = duration;
+       
+        this.age_restriction = age_restriction;
+        this.release_date = release_date;
+    }
+ 
+    
+    public String getGenere_name() {
+        return genere_name;
+    }
+
     // Getters và Setters
+    public void setGenere_name(String genere_name) {
+        this.genere_name = genere_name;
+    }
 
     public String getMovie_id() {
         return movie_id;
@@ -101,6 +150,7 @@ public class Movies {
     public void setDuration(int duration) {
         this.duration = duration;
     }
+
 
     public int getAge_restriction() {
         return age_restriction;
