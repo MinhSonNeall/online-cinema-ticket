@@ -1,2 +1,40 @@
 
+<<<<<<< HEAD
 w	java:S125"<This block of commented-out lines of code should be removed.(„ìÆJ$b0f61558-7302-43c7-a204-78de3ad7329c
+=======
+k	java:S117R"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(½äòñüÿÿÿÿ
+f	java:S117S"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ÍÎÿ¦
+k	java:S117T"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(’Ñ•Àÿÿÿÿÿ
+k	java:S117U"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Õàº²ÿÿÿÿÿ
+e	java:S117X"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(èþþ
+
+f	java:S117Y"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Š¤™Ž
+k	java:S117s"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(½äòñüÿÿÿÿ
+f	java:S117t"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ÍÎÿ¦
+k	java:S117u"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(’Ñ•Àÿÿÿÿÿ
+k	java:S117v"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Õàº²ÿÿÿÿÿ
+e	java:S117y"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(èþþ
+
+f	java:S117z"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Š¤™Ž
+o	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(á–Ì“
+P
+java:S1141:"5Extract this nested try block into a separate method.(¡»¢üùÿÿÿÿ
+{
+java:S1149H"eReplace the synchronized class "Vector" by an unsynchronized one such as "ArrayList" or "LinkedList".(ÚÜùÍ
+{
+java:S1149I"eReplace the synchronized class "Vector" by an unsynchronized one such as "ArrayList" or "LinkedList".(à¨æ—
+€
+java:S1149k"eReplace the synchronized class "Vector" by an unsynchronized one such as "ArrayList" or "LinkedList".(èó»Šùÿÿÿÿ
+€
+java:S1149l"eReplace the synchronized class "Vector" by an unsynchronized one such as "ArrayList" or "LinkedList".(ÄµÛ“ýÿÿÿÿ
+O
+java:S3457="4Lambda should be used to defer string concatenation.(Æ†úÿÿÿÿ
+O
+java:S3457b"4Lambda should be used to defer string concatenation.(‹°µÕÿÿÿÿÿ
+O
+java:S3457e"4Lambda should be used to defer string concatenation.(‹°µÕÿÿÿÿÿ
+4
+java:S2119…"Save and re-use this "Random".(¼ÝÅf
+A	java:S106¤"+Replace this use of System.out by a logger.(™ÑËÞ
+A	java:S106¦"+Replace this use of System.out by a logger.(äìÎÆ
+>>>>>>> 3452f5885dae4881557015fe1d4a54f6ee7f9130
