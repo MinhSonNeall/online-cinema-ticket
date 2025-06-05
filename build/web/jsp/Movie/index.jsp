@@ -297,6 +297,7 @@
                 gap: 1rem;
             }
         }
+        
 
         /* Animations */
         @keyframes fadeInUp {
@@ -372,6 +373,7 @@
             </div>
         </section>
         
+
 
         <!-- Features Section -->
         <section class="features">
