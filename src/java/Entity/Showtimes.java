@@ -19,6 +19,11 @@ public class Showtimes { // Tên class giữ nguyên là 'Showtimes'
     private Timestamp start_time; // Ánh xạ DATETIME
     private Timestamp end_time;   // Ánh xạ DATETIME
     private BigDecimal ticket_price;
+    
+    private String showtimeId;
+    private String time;
+    private String ticketPrice;
+    private int remainingSeats;
 
     // Constructor mặc định
     public Showtimes() {
@@ -35,6 +40,20 @@ public class Showtimes { // Tên class giữ nguyên là 'Showtimes'
         this.ticket_price = ticket_price;
     }
 
+    public Showtimes(String showtimeId, String time, String ticketPrice, int remainingSeats) {
+        this.showtimeId = showtimeId;
+        this.time = time;
+        this.ticketPrice = ticketPrice;
+        this.remainingSeats = remainingSeats;
+    }
+    
+    
+    public String getShowtimeId() { return showtimeId; }
+    public String getTime() { return time; }
+    public String getTicketPrice() { return ticketPrice; }
+    public int getRemainingSeats() { return remainingSeats; }
+    
+    
     // Getters và Setters
 
     public String getShowtime_id() {
