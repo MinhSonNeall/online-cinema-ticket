@@ -33,6 +33,8 @@ import jakarta.mail.internet.MimeMessage;
  * @author HP
  */
 public class DaoUser extends DBContext {
+    PreparedStatement ps;
+    ResultSet rs;
 
     public boolean login(String email, String password) {
         String sql = "SELECT * FROM movie_ticketing.users WHERE email = ? AND password = ?";
