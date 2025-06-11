@@ -4,11 +4,13 @@
  */
 package Entity;
 
+import java.sql.Timestamp;
+import java.util.UUID; // Import UUID
+
 /**
  *
  * @author HP
  */
-import java.sql.Timestamp;
 
 public class Users {
 
@@ -32,11 +34,25 @@ public class Users {
     public Users() {
     }
 
-    // Constructor với tất cả các trường
+    // Constructor với tất cả các trường, bao gồm user_id
     public Users(String user_id, String email, String password,
             String full_name, String phone_number, Roles role,
-            Timestamp created_at, Timestamp updated_at) { // Cập nhật tên tham số
+            Timestamp created_at, Timestamp updated_at) {
         this.user_id = user_id;
+        this.email = email;
+        this.password = password;
+        this.full_name = full_name;
+        this.phone_number = phone_number;
+        this.role = role;
+        this.created_at = created_at;
+        this.updated_at = updated_at;
+    }
+
+    // Constructor để tạo User mới, tự động tạo user_id từ email
+    public Users(String email, String password,
+            String full_name, String phone_number, Roles role,
+            Timestamp created_at, Timestamp updated_at) {
+        this.user_id = UUID.nameUUIDFromBytes(email.getBytes()).toString(); // Generate UUID from email
         this.email = email;
         this.password = password;
         this.full_name = full_name;
