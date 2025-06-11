@@ -169,18 +169,18 @@ public class loginController extends HttpServlet {
                         response.sendRedirect("customerHome.jsp");
                         break;
                     default:
-                        request.setAttribute("error", "Invalid email or password!");
-                        request.getRequestDispatcher("/jsp/login.jsp").forward(request, response);
-                        break;
+                    request.setAttribute("error", "Email hoặc mật khẩu không hợp lệ!");
+                    request.getRequestDispatcher("/jsp/login.jsp").forward(request, response);
+                    break;
                 }
             } else {
                 // Role không hợp lệ
-                request.setAttribute("error", "Invalid email or password!");
+                request.setAttribute("error", "Email hoặc mật khẩu không hợp lệ!");
                 request.getRequestDispatcher("/jsp/login.jsp").forward(request, response);
             }
         } else {
             // Đăng nhập thất bại
-            request.setAttribute("error", "Invalid email or password!");
+            request.setAttribute("error", "Email hoặc mật khẩu không hợp lệ!");
             request.getRequestDispatcher("/jsp/login.jsp").forward(request, response);
         }
     }
@@ -191,6 +191,6 @@ public class loginController extends HttpServlet {
      */
     @Override
     public String getServletInfo() {
-        return "Short description";
+        return "Xử lý đăng nhập người dùng";
     }
 }

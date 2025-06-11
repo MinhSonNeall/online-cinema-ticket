@@ -59,6 +59,27 @@ public class RegisterController extends HttpServlet {
             request.getRequestDispatcher("/jsp/registerCustomer.jsp").forward(request, response);
             return;
         }
+        if (password.length() < 12) {
+            request.setAttribute("errorform", "Mật khẩu phải có ít nhất 12 ký tự!");
+            request.getRequestDispatcher("/jsp/registerCustomer.jsp").forward(request, response);
+            return;
+        }
+
+        // Validate full_name: not contain special characters
+        String nameRegex = "^[a-zA-Z\\s]+$";
+        if (!Pattern.matches(nameRegex, full_name.trim())) {
+            request.setAttribute("errorform", "Tên phải có ký tự từ bảng chữ cái!");
+            request.getRequestDispatcher("/jsp/registerCustomer.jsp").forward(request, response);
+            return;
+        }
+
+        // Validate phone_number: must be at least 10 digits
+        String phoneRegex = "^\\d{10,}$";
+        if (!Pattern.matches(phoneRegex, phone_number)) {
+            request.setAttribute("errorform", "Số điện thoại phải có ít nhất 10 chữ số!");
+            request.getRequestDispatcher("/jsp/registerCustomer.jsp").forward(request, response);
+            return;
+        }
 
         // Xác thực định dạng email
         String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";

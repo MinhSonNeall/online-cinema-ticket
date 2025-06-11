@@ -23,7 +23,8 @@ public class Showtimes { // Tên class giữ nguyên là 'Showtimes'
     // Constructor mặc định
     public Showtimes() {
     }
-
+    
+    
     // Constructor với tất cả các trường
     public Showtimes(String showtime_id, String movie_id, String room_id, 
                      Timestamp start_time, Timestamp end_time, BigDecimal ticket_price) {

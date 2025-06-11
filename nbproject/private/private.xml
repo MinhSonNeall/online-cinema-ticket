@@ -4,14 +4,22 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/C:/Users/HP/Documents/NetBeansProjects/OnlineCinemaTicket/web/css/style.css</file>
-            <file>file:/C:/Users/HP/Documents/NetBeansProjects/OnlineCinemaTicket/web/jsp/index.jsp</file>
-            <file>file:/C:/Users/HP/Documents/NetBeansProjects/OnlineCinemaTicket/src/java/Controller/RegisterController.java</file>
-            <file>file:/C:/Users/HP/Documents/NetBeansProjects/OnlineCinemaTicket/web/jsp/SignupOTP.jsp</file>
-            <file>file:/C:/Users/HP/Documents/NetBeansProjects/OnlineCinemaTicket/src/java/Model/DaoUser.java</file>
+            <file>file:/C:/Users/HP/Documents/NetBeansProjects/OnlineCinemaTicket/src/java/Controller/loginController.java</file>
+            <file>file:/C:/Users/HP/Documents/NetBeansProjects/OnlineCinemaTicket/src/java/GoogleLogin/GoogleAccount.java</file>
+            <file>file:/C:/Users/HP/Documents/NetBeansProjects/OnlineCinemaTicket/src/java/GoogleLogin/LoginGoogleController.java</file>
             <file>file:/C:/Users/HP/Documents/NetBeansProjects/OnlineCinemaTicket/src/java/Entity/Users.java</file>
-            <file>file:/C:/Users/HP/Documents/NetBeansProjects/OnlineCinemaTicket/web/jsp/registerCustomer.jsp</file>
+            <file>file:/C:/Users/HP/Documents/NetBeansProjects/OnlineCinemaTicket/src/java/Controller/ForgotPasswordOTPVerifyController.java</file>
             <file>file:/C:/Users/HP/Documents/NetBeansProjects/OnlineCinemaTicket/web/css/stylelogin.css</file>
             <file>file:/C:/Users/HP/Documents/NetBeansProjects/OnlineCinemaTicket/web/jsp/login.jsp</file>
+            <file>file:/C:/Users/HP/Documents/NetBeansProjects/OnlineCinemaTicket/src/java/Controller/RegisterController.java</file>
+            <file>file:/C:/Users/HP/Documents/NetBeansProjects/OnlineCinemaTicket/src/java/GoogleLogin/GoogleLogin.java</file>
+            <file>file:/C:/Users/HP/Documents/NetBeansProjects/OnlineCinemaTicket/src/java/Model/DaoUser.java</file>
+            <file>file:/C:/Users/HP/Documents/NetBeansProjects/OnlineCinemaTicket/src/java/Controller/VerifyEmailOTPController.java</file>
+            <file>file:/C:/Users/HP/Documents/NetBeansProjects/OnlineCinemaTicket/src/java/Controller/ForgotPasswordController.java</file>
+            <file>file:/C:/Users/HP/Documents/NetBeansProjects/OnlineCinemaTicket/web/jsp/forgotPassword.jsp</file>
+            <file>file:/C:/Users/HP/Documents/NetBeansProjects/OnlineCinemaTicket/web/jsp/registerCustomer.jsp</file>
+            <file>file:/C:/Users/HP/Documents/NetBeansProjects/OnlineCinemaTicket/web/jsp/verifyForgotPasswordOTP.jsp</file>
+            <file>file:/C:/Users/HP/Documents/NetBeansProjects/OnlineCinemaTicket/src/java/Controller/LogoutController.java</file>
         </group>
     </open-files>
 </project-private>

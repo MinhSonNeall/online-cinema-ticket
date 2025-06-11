@@ -24,7 +24,9 @@
                                 <div class="row">
                                     <div class="col-12">
                                         <div class="text-center mb-5">
-                                            <img src="https://via.placeholder.com/150x50?text=Cinema+Logo" alt="Cinema Logo" class="img-fluid mb-3">
+<a href="${pageContext.request.contextPath}/jsp/index.jsp">
+    <img src="${pageContext.request.contextPath}/img/logo.png" alt="Cinema Logo" class="img-fluid mb-3">
+</a>
                                             <h3>Xác nhận OTP</h3>
                                         </div>
                                     </div>

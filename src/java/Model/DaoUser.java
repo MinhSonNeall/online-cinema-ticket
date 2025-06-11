@@ -185,4 +185,32 @@ public Vector<Users> listAllUser(){
         }
     }
 
+    public String getPasswordByEmail(String email) {
+        String sql = "SELECT password FROM movie_ticketing.users WHERE email = ?";
+        try (PreparedStatement pre = conn.prepareStatement(sql)) {
+            pre.setString(1, email);
+            try (ResultSet rs = pre.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getString("password");
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(DaoUser.class.getName()).log(Level.SEVERE, "Error getting password for email: " + email, ex);
+        }
+        return null; // Return null if user not found or error
+    }
+
+    public boolean updatePassword(String email, String newPassword) {
+        String sql = "UPDATE movie_ticketing.users SET password = ?, updated_at = ? WHERE email = ?";
+        try (PreparedStatement pre = conn.prepareStatement(sql)) {
+            pre.setString(1, newPassword); // Assuming no hashing is applied here, matching existing behavior
+            pre.setTimestamp(2, new Timestamp(System.currentTimeMillis())); // Set current timestamp
+            pre.setString(3, email);
+            int rowsAffected = pre.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException ex) {
+            Logger.getLogger(DaoUser.class.getName()).log(Level.SEVERE, "Error updating password for email: " + email, ex);
+            return false;
+        }
+    }
 }

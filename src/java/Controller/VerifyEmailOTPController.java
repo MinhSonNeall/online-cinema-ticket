@@ -128,21 +128,21 @@ public class VerifyEmailOTPController extends HttpServlet {
                     session.removeAttribute("createdAt");
                     session.removeAttribute("updatedAt");
                     
-                    session.setAttribute("successMessage", "Account created successfully! Please login."); // Use session attribute
+                    session.setAttribute("successMessage", "Tài khoản đã được tạo thành công! Vui lòng đăng nhập."); // Use session attribute
                     response.sendRedirect(request.getContextPath() + "/loginController"); // Redirect to loginController
                 } else {
                     // Failed to create user (e.g., database error)
-                    request.setAttribute("er", "Failed to create account. Please try again.");
+                    request.setAttribute("er", "Tạo tài khoản thất bại. Vui lòng thử lại.");
                     request.getRequestDispatcher("jsp/verifyRegisOTP.jsp").forward(request, response);
                 }
             } catch (IllegalArgumentException e) {
                 Logger.getLogger(VerifyEmailOTPController.class.getName()).log(Level.SEVERE, "Invalid role or timestamp format in session", e);
-                request.setAttribute("er", "An internal error occurred. Please try again.");
+                request.setAttribute("er", "Đã xảy ra lỗi nội bộ. Vui lòng thử lại.");
                 request.getRequestDispatcher("jsp/verifyRegisOTP.jsp").forward(request, response);
             }
         } else {
             // OTP does not match
-            request.setAttribute("er", "Wrong OTP. Please try again.");
+            request.setAttribute("er", "Mã OTP không đúng. Vui lòng thử lại.");
             request.getRequestDispatcher("jsp/verifyRegisOTP.jsp").forward(request, response);
         }
     }
@@ -153,7 +153,7 @@ public class VerifyEmailOTPController extends HttpServlet {
      */
     @Override
     public String getServletInfo() {
-        return "Short description";
+        return "Xử lý xác minh OTP email";
     }// </editor-fold>
 
 }

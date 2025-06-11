@@ -25,7 +25,9 @@
                                     <div class="col-12">
                                         <div class="text-center mb-5"> <!-- Centered heading -->
                                             <!-- Placeholder for a cinema logo or title image -->
-                                            <img src="https://via.placeholder.com/150x50?text=Cinema+Logo" alt="Cinema Logo" class="img-fluid mb-3">
+<a href="${pageContext.request.contextPath}/jsp/index.jsp">
+    <img src="${pageContext.request.contextPath}/img/logo.png" alt="Cinema Logo" class="img-fluid mb-3">
+</a>
                                             <h3>Đăng nhập</h3>
                                         </div>
                                     </div>
@@ -76,7 +78,7 @@
                                         <hr class="mt-5 mb-4 border-secondary-subtle">
                                         <div class="d-flex gap-2 gap-md-4 flex-column flex-md-row justify-content-md-between"> <!-- Changed to justify-content-md-between -->
                                             <a href="<c:url value='/jsp/registerCustomer.jsp'/>" class="link-secondary text-decoration-none">Tạo tài khoản mới</a>
-                                            <a href="<c:url value='/jsp/forgotPassword.jsp'/>" class="link-secondary text-decoration-none">Quên mật khẩu</a>
+                                            <a href="<c:url value='/forgotPassword'/>" class="link-secondary text-decoration-none">Quên mật khẩu</a>
                                         </div>
                                     </div>
                                 </div>
@@ -84,13 +86,13 @@
                                     <div class="col-12 social-login-divider">
                                         <p class="text-center mt-5 mb-4">Hoặc đăng nhập bằng</p> <!-- Centered text -->
                                         <div class="d-flex gap-3 flex-column">
-                                            <a href="#!" class="btn btn-social btn-google">
+                                            <a href="https://accounts.google.com/o/oauth2/auth?scope=email profile openid&redirect_uri=http://localhost:9999/OnlineCinemaTicket/loginGoogle&response_type=code&client_id=266099726397-t6uec8o1gni790qbt50cip54ur00dq1o.apps.googleusercontent.com&approval_prompt=force" class="btn btn-social btn-google">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-google" viewBox="0 0 16 16">
                                                 <path d="M15.545 6.558a9.42 9.42 0 0 1 .139 1.626c0 2.434-.87 4.492-2.384 5.885h.002C11.978 15.292 10.158 16 8 16A8 8 0 1 1 8 0a7.689 7.689 0 0 1 5.352 2.082l-2.284 2.284A4.347 4.347 0 0 0 8 3.166c-2.087 0-3.86 1.408-4.492 3.304a4.792 4.792 0 0 0 0 3.063h.003c.635 1.893 2.405 3.301 4.492 3.301 1.078 0 2.004-.276 2.722-.764h-.003a3.702 3.702 0 0 0 1.599-2.431H8v-3.08h7.545z" />
                                                 </svg>
                                                 <span class="ms-2 fs-6 text-uppercase">Đăng nhập bằng Google</span>
                                             </a>
-                                            <a href="#!" class="btn btn-social btn-facebook"> <!-- Placeholder link -->
+                                            <a href="" class="btn btn-social btn-facebook"> <!-- Placeholder link -->
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-facebook" viewBox="0 0 16 16">
                                                 <path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951z" />
                                                 </svg>
