@@ -27,59 +27,66 @@ import jakarta.mail.Transport;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 
-
 /**
  *
  * @author HP
  */
 public class DaoUser extends DBContext {
+
     PreparedStatement ps;
     ResultSet rs;
 
     public boolean login(String email, String password) {
         String sql = "SELECT * FROM movie_ticketing.users WHERE email = ? AND password = ?";
-        try (PreparedStatement pre = conn.prepareStatement(sql)) {
-            pre.setString(1, email);
-            pre.setString(2, password);
-            try (ResultSet rs = pre.executeQuery()) {
-                return rs.next();
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(DaoUser.class.getName()).log(Level.SEVERE, null, ex);
+        try {
+            connection = getConnection();
+            ps = connection.prepareStatement(sql);
+            ps.setString(1, email);
+            ps.setString(2, password);
+            rs = ps.executeQuery();
+            return rs.next();
+        } catch (Exception ex) {
+            ex.printStackTrace();
             return false;
+        } finally {
+            closeConnection(connection, ps, rs);
         }
     }
 
     public Users.Roles checkRole(String email) {
         String sql = "SELECT role FROM movie_ticketing.users WHERE email = ?";
-        try (PreparedStatement pre = conn.prepareStatement(sql)) {
-            pre.setString(1, email);
-            try (ResultSet rs = pre.executeQuery()) {
-                if (rs.next()) {
-                    String roleStr = rs.getString("role");
-                    try {
-                        return Users.Roles.valueOf(roleStr.toUpperCase());
-                    } catch (IllegalArgumentException e) {
-                        Logger.getLogger(DaoUser.class.getName()).log(Level.SEVERE, "Invalid role value: " + roleStr, e);
-                        return null;
-                    }
+        try {
+            connection = getConnection();
+            ps = connection.prepareStatement(sql);
+            ps.setString(1, email);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                String roleStr = rs.getString("role");
+                try {
+                    return Users.Roles.valueOf(roleStr.toUpperCase());
+                } catch (IllegalArgumentException e) {
+                    Logger.getLogger(DaoUser.class.getName()).log(Level.SEVERE, "Invalid role value: " + roleStr, e);
+                    return null;
                 }
             }
-        } catch (SQLException ex) {
-            Logger.getLogger(DaoUser.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            closeConnection(connection, ps, rs);
         }
         return null; // Trả về null nếu không tìm thấy user hoặc có lỗi
     }
 
-public Vector<Users> getuserData(String email) {
-    Vector<Users> data = new Vector<>();
-    String sql = "SELECT user_id, email, full_name, phone_number, role, created_at, updated_at " +
-                "FROM movie_ticketing.users WHERE email = ?";
-    
-    try (PreparedStatement statement = conn.prepareStatement(sql, 
-            ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE)) {
-        statement.setString(1, email);
-        try (ResultSet rs = statement.executeQuery()) {
+    public Vector<Users> getuserData(String email) {
+        Vector<Users> data = new Vector<>();
+        String sql = "SELECT user_id, email, full_name, phone_number, role, created_at, updated_at "
+                + "FROM movie_ticketing.users WHERE email = ?";
+
+        try {
+            connection = getConnection();
+            ps = connection.prepareStatement(sql);
+            ps.setString(1, email);
+            rs = ps.executeQuery();
             while (rs.next()) {
                 String user_id = rs.getString("user_id");
                 String user_email = rs.getString("email");
@@ -89,31 +96,30 @@ public Vector<Users> getuserData(String email) {
                 Roles role = Roles.valueOf(roletype.toUpperCase());
                 Timestamp created_at = rs.getTimestamp("created_at");
                 Timestamp updated_at = rs.getTimestamp("updated_at");
-                
+
                 // Truyền null cho password vì không lấy từ database
-                Users user = new Users(user_id, user_email, null, full_name, 
-                                     phone_number, role, created_at, updated_at);
+                Users user = new Users(user_id, user_email, null, full_name,
+                        phone_number, role, created_at, updated_at);
                 data.add(user);
             }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            closeConnection(connection, ps, rs);
         }
-    } catch (SQLException ex) {
-        Logger.getLogger(DaoUser.class.getName()).log(Level.SEVERE, 
-            "Error fetching user data for email: " + email, ex);
-    } catch (IllegalArgumentException ex) {
-        Logger.getLogger(DaoUser.class.getName()).log(Level.SEVERE, 
-            "Invalid role value for email: " + email, ex);
+
+        return data;
     }
-    
-    return data;
-}
-public Vector<Users> listAllUser(){
-    Vector<Users> list = new Vector<>();
-    String sql="select * from movie_ticketing.users";
-     
+
+    public Vector<Users> listAllUser() {
+        Vector<Users> list = new Vector<>();
+        String sql = "select * from movie_ticketing.users";
+
         try {
-            PreparedStatement st = conn.prepareStatement(sql);
-            ResultSet rs=st.executeQuery();
-            while(rs.next()){
+            connection = getConnection();
+            ps = connection.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
                 String user_id = rs.getString("user_id");
                 String user_email = rs.getString("email");
                 String full_name = rs.getString("full_name");
@@ -122,15 +128,18 @@ public Vector<Users> listAllUser(){
                 Roles role = Roles.valueOf(roletype.toUpperCase());
                 Timestamp created_at = rs.getTimestamp("created_at");
                 Timestamp updated_at = rs.getTimestamp("updated_at");
-                 Users user = new Users(user_id, user_email, null, full_name, 
-                                     phone_number, role, created_at, updated_at);
-                 list.add(user);
+                Users user = new Users(user_id, user_email, null, full_name,
+                        phone_number, role, created_at, updated_at);
+                list.add(user);
             }
-        } catch (SQLException ex) {
-            Logger.getLogger(DaoUser.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            closeConnection(connection, ps, rs);
         }
-           return list; 
-}
+        return list;
+    }
+
     public String generateOTP() {
         Random random = new Random();
         int otp = 100000 + random.nextInt(900000); // Generate 6-digit OTP
@@ -138,7 +147,8 @@ public Vector<Users> listAllUser(){
         // Apppassword xgfs dqfr pdpy icrr
 
     }
-     public void sendVerificationEmail(String sentTo, String otp) {
+
+    public void sendVerificationEmail(String sentTo, String otp) {
         final String username = "sonvd74@gmail.com"; // Update with your email address
         final String password = "xgfs dqfr pdpy icrr"; // Update with your email password
 
@@ -168,22 +178,29 @@ public Vector<Users> listAllUser(){
             System.out.println("Error: " + e.getMessage());
         }
     }
+
     public boolean createUser(Users user) {
         String sql = "INSERT INTO movie_ticketing.users (user_id, email, password, full_name, phone_number, role, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-        try (PreparedStatement pre = conn.prepareStatement(sql)) {
-            pre.setString(1, user.getUser_id());
-            pre.setString(2, user.getEmail());
-            pre.setString(3, user.getPassword());
-            pre.setString(4, user.getFull_name());
-            pre.setString(5, user.getPhone_number());
-            pre.setString(6, user.getRole().name()); // Assuming role is an enum and needs its name
-            pre.setTimestamp(7, user.getCreated_at());
-            pre.setTimestamp(8, user.getUpdated_at());
-            int rowsAffected = pre.executeUpdate();
+        try {
+            connection = getConnection();
+            ps = connection.prepareStatement(sql);
+            ps.setString(1, user.getUser_id());
+            ps.setString(2, user.getEmail());
+            ps.setString(3, user.getPassword());
+            ps.setString(4, user.getFull_name());
+            ps.setString(5, user.getPhone_number());
+            ps.setString(6, user.getRole().name()); // Assuming role is an enum and needs its name
+            ps.setTimestamp(7, user.getCreated_at());
+            ps.setTimestamp(8, user.getUpdated_at());
+
+            int rowsAffected = ps.executeUpdate();
             return rowsAffected > 0;
-        } catch (SQLException ex) {
+        } catch (Exception ex) {
+            ex.printStackTrace();
             Logger.getLogger(DaoUser.class.getName()).log(Level.SEVERE, "Error creating user: " + user.getEmail(), ex);
             return false;
+        } finally {
+            closeConnection(connection, ps, rs);
         }
     }
 
