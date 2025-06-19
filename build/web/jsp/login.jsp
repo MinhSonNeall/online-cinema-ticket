@@ -11,129 +11,7 @@
         <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="https://unpkg.com/bootstrap@5.3.3/dist/css/bootstrap.min.css">
         <link rel="stylesheet" href="https://unpkg.com/bs-brain@2.0.4/components/logins/login-6/assets/css/login-6.css">
-        <style>
-            body {
-                font-family: 'Poppins', sans-serif;
-                background-color: #f4f7f6; /* A lighter background for the whole page */
-            }
-
-            .login-section {
-                background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); /* Dark cinematic gradient */
-                min-height: 100vh;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            }
-
-            .login-card {
-                background-color: rgba(255, 255, 255, 0.95); /* Slightly transparent white card */
-                border-radius: 15px; /* More rounded corners */
-                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2); /* Softer, more pronounced shadow */
-                border: none;
-            }
-
-            .login-card .card-body {
-                padding: 2.5rem; /* More padding */
-            }
-
-            .login-card h3 {
-                color: #1a1a2e; /* Dark blue heading */
-                font-weight: 600;
-                margin-bottom: 1.5rem; /* Increased margin */
-            }
-
-            .form-control {
-                border-radius: 8px; /* Rounded input fields */
-                border: 1px solid #ced4da;
-                padding: 0.75rem 1rem; /* Adjust padding */
-            }
-
-            .form-control:focus {
-                border-color: #e94560; /* Cinema red accent for focus */
-                box-shadow: 0 0 0 0.2rem rgba(233, 69, 96, 0.25);
-            }
-
-            .form-floating > label {
-                padding: 0.75rem 1rem; /* Match input padding */
-            }
-
-            .btn-primary-custom {
-                background-color: #e94560; /* Cinema red */
-                border-color: #e94560;
-                font-weight: 500;
-                padding: 0.75rem 1.5rem;
-                border-radius: 8px;
-                transition: background-color 0.3s ease, border-color 0.3s ease;
-            }
-
-            .btn-primary-custom:hover,
-            .btn-primary-custom:focus {
-                background-color: #c73049; /* Darker cinema red on hover */
-                border-color: #c73049;
-                box-shadow: 0 4px 15px rgba(233, 69, 96, 0.3);
-            }
-
-            .link-secondary {
-                color: #5a5a5a !important; /* Darker grey for links */
-                transition: color 0.3s ease;
-            }
-
-            .link-secondary:hover {
-                color: #e94560 !important; /* Cinema red on hover */
-            }
-
-            .social-login-divider p {
-                color: #333;
-                font-weight: 500;
-            }
-
-            .btn-social {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                padding: 0.65rem 1rem;
-                border-radius: 8px;
-                font-size: 0.9rem;
-                font-weight: 500;
-                transition: transform 0.2s ease, box-shadow 0.2s ease;
-            }
-            .btn-social:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            }
-
-            .btn-google {
-                background-color: #DB4437 !important;
-                color: white !important;
-                border: none;
-            }
-            .btn-google:hover {
-                background-color: #C33D2E !important;
-            }
-
-            .btn-facebook {
-                background-color: #4267B2 !important;
-                color: white !important;
-                border: none;
-            }
-            .btn-facebook:hover {
-                background-color: #365899 !important;
-            }
-
-            .btn-twitter {
-                background-color: #1DA1F2 !important;
-                color: white !important;
-                border: none;
-            }
-            .btn-twitter:hover {
-                background-color: #0c85d0 !important;
-            }
-
-            .form-check-input:checked {
-                background-color: #e94560;
-                border-color: #e94560;
-            }
-        </style>
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/stylelogin.css">
     </head>
     <body>
         <!-- Login Section -->
@@ -146,6 +24,8 @@
                                 <div class="row">
                                     <div class="col-12">
                                         <div class="text-center mb-5"> <!-- Centered heading -->
+                                            <!-- Placeholder for a cinema logo or title image -->
+                                            <img src="https://via.placeholder.com/150x50?text=Cinema+Logo" alt="Cinema Logo" class="img-fluid mb-3">
                                             <h3>Đăng nhập</h3>
                                         </div>
                                     </div>
@@ -156,7 +36,13 @@
                                         ${error}
                                     </div>
                                 </c:if>
-                                <form action="loginController" method="POST">
+                                <!-- Hiển thị thông báo thành công nếu có -->
+                                <c:if test="${not empty successMessage}">
+                                    <div class="alert alert-success" role="alert">
+                                        ${successMessage}
+                                    </div>
+                                </c:if>
+                                <form action="${pageContext.request.contextPath}/loginController" method="POST">
                                     <div class="row gy-3 overflow-hidden">
                                         <div class="col-12">
                                             <div class="form-floating mb-3">
@@ -198,7 +84,7 @@
                                     <div class="col-12 social-login-divider">
                                         <p class="text-center mt-5 mb-4">Hoặc đăng nhập bằng</p> <!-- Centered text -->
                                         <div class="d-flex gap-3 flex-column">
-                                            <a href="https://accounts.google.com/o/oauth2/auth?scope=email profile openid&redirect_uri=http://localhost:9999/OnlineCinemaTicket/loginGoogle&response_type=code&client_id=266099726397-t6uec8o1gni790qbt50cip54ur00dq1o.apps.googleusercontent.com&approval_prompt=force" class="btn btn-social btn-google">
+                                            <a href="#!" class="btn btn-social btn-google">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-google" viewBox="0 0 16 16">
                                                 <path d="M15.545 6.558a9.42 9.42 0 0 1 .139 1.626c0 2.434-.87 4.492-2.384 5.885h.002C11.978 15.292 10.158 16 8 16A8 8 0 1 1 8 0a7.689 7.689 0 0 1 5.352 2.082l-2.284 2.284A4.347 4.347 0 0 0 8 3.166c-2.087 0-3.86 1.408-4.492 3.304a4.792 4.792 0 0 0 0 3.063h.003c.635 1.893 2.405 3.301 4.492 3.301 1.078 0 2.004-.276 2.722-.764h-.003a3.702 3.702 0 0 0 1.599-2.431H8v-3.08h7.545z" />
                                                 </svg>

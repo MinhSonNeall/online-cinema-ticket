@@ -2,152 +2,105 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Đăng ký tài khoản - Online Cinema Ticket</title>
-    <!-- Google Fonts: Poppins -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        body {
-            font-family: 'Poppins', sans-serif;
-        }
-        .register-section {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 1rem;
-        }
-        .register-card {
-            background-color: rgba(255, 255, 255, 0.95);
-            border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-            width: 100%;
-            max-width: 28rem;
-            padding: 2.5rem;
-        }
-        .register-card h2 {
-            color: #1a1a2e;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            text-align: center;
-        }
-        .form-input-custom {
-            border-radius: 8px !important;
-            border: 1px solid #D1D5DB !important;
-            padding: 0.75rem 1rem !important;
-            box-shadow: none !important;
-        }
-        .form-input-custom:focus {
-            border-color: #e94560 !important;
-            box-shadow: 0 0 0 0.2rem rgba(233, 69, 96, 0.25) !important;
-            outline: none !important;
-        }
-        .btn-primary-custom {
-            background-color: #e94560 !important;
-            border-color: #e94560 !important;
-            color: white !important;
-            font-weight: 500 !important;
-            padding: 0.75rem 1.5rem !important;
-            border-radius: 8px !important;
-            transition: background-color 0.3s ease, border-color 0.3s ease;
-            width: 100%;
-        }
-        .btn-primary-custom:hover,
-        .btn-primary-custom:focus {
-            background-color: #c73049 !important;
-            border-color: #c73049 !important;
-            box-shadow: 0 4px 15px rgba(233, 69, 96, 0.3) !important;
-        }
-        .link-custom {
-            color: #5a5a5a !important;
-            transition: color 0.3s ease;
-        }
-        .link-custom:hover {
-            color: #e94560 !important;
-            text-decoration: underline;
-        }
-        .error-message {
-            color: #EF4444;
-            font-size: 0.875rem;
-            margin-top: 0.25rem;
-        }
-        .general-error-message {
-            background-color: #FEE2E2;
-            color: #B91C1C;
-            padding: 0.75rem 1rem;
-            border-radius: 8px;
-            border: 1px solid #FCA5A5;
-            margin-bottom: 1rem;
-            text-align: center;
-        }
-    </style>
-</head>
-<body>
-    <div class="register-section">
-        <div class="register-card">
-            <h2 class="text-2xl">Đăng ký tài khoản</h2>
-            <!-- Hiển thị thông báo lỗi chung nếu có -->
-            <c:if test="${not empty errorform}">
-                <p class="general-error-message">${errorform}</p>
-            </c:if>
-            <form action="<c:url value='/RegisterController'/>" method="POST" class="space-y-6">
-                <!-- Email -->
-                <div>
-                    <label for="email" class="block text-sm font-medium text-gray-700">Email <span class="text-red-500">*</span></label>
-                    <input type="email" id="email" name="email" required
-                           value="<c:out value='${param.email}' default=''/>"
-                           class="mt-1 block w-full form-input-custom"
-                           placeholder="nhap@email.com">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Đăng ký tài khoản - Online Cinema Ticket</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://unpkg.com/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://unpkg.com/bs-brain@2.0.4/components/logins/login-6/assets/css/login-6.css">
+        <link rel="stylesheet" href="../css/stylelogin.css">
+    </head>
+    <body>
+        <!-- Register Section -->
+        <section class="login-section p-3 p-md-4 p-xl-5">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-12 col-md-9 col-lg-7 col-xl-6 col-xxl-5">
+                        <div class="card border-0 shadow-sm rounded-4 login-card">
+                            <div class="card-body p-3 p-md-4 p-xl-5">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="text-center mb-5">
+                                            <img src="https://via.placeholder.com/150x50?text=Cinema+Logo" alt="Cinema Logo" class="img-fluid mb-3">
+                                            <h3>Đăng ký tài khoản</h3>
+                                        </div>
+                                    </div>
+                                </div>
+                                <c:if test="${not empty errorform}">
+                                    <div class="alert alert-danger mb-3" role="alert">
+                                        ${errorform}
+                                    </div>
+                                </c:if>
+                                <form action="<c:url value='/RegisterController'/>" method="POST">
+                                    <div class="row gy-3">
+                                        <div class="col-12">
+                                            <div class="form-floating mb-3">
+                                                <input type="email" class="form-control" name="email" id="email" placeholder="name@example.com" required value="<c:out value='${param.email}' default=''/>">
+                                                <label for="email" class="form-label">Email</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="form-floating mb-3">
+                                                <input type="password" class="form-control" name="password" id="password" placeholder="Mật khẩu" required>
+                                                <label for="password" class="form-label">Mật khẩu</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="form-floating mb-3">
+                                                <input type="password" class="form-control" name="re_password" id="re_password" placeholder="Nhập lại mật khẩu" required>
+                                                <label for="re_password" class="form-label">Nhập lại mật khẩu</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="form-floating mb-3">
+                                                <input type="text" class="form-control" name="full_name" id="full_name" placeholder="Họ và tên" required value="<c:out value='${param.full_name}' default=''/>">
+                                                <label for="full_name" class="form-label">Họ và tên</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="form-floating mb-3">
+                                                <input type="tel" class="form-control" name="phone_number" id="phone_number" placeholder="Số điện thoại" required value="<c:out value='${param.phone_number}' default=''/>">
+                                                <label for="phone_number" class="form-label">Số điện thoại</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="d-grid mt-4" style="min-height: 60px;">
+                                                <button class="btn btn-primary-custom btn-lg" type="submit">Đăng ký ngay</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <hr class="mt-5 mb-4 border-secondary-subtle">
+                                        <div class="d-flex gap-2 gap-md-4 flex-column flex-md-row justify-content-md-between">
+                                            <a href="<c:url value='/loginController'/>" class="link-secondary text-decoration-none">Đã có tài khoản? Đăng nhập</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <!-- Password -->
-                <div>
-                    <label for="password" class="block text-sm font-medium text-gray-700">Mật khẩu <span class="text-red-500">*</span></label>
-                    <input type="password" id="password" name="password" required
-                           class="mt-1 block w-full form-input-custom"
-                           placeholder="Nhập mật khẩu">
-                </div>
-                <!-- Re-Password -->
-                <div>
-                    <label for="re_password" class="block text-sm font-medium text-gray-700">Nhập lại mật khẩu <span class="text-red-500">*</span></label>
-                    <input type="password" id="re_password" name="re_password" required
-                           class="mt-1 block w-full form-input-custom"
-                           placeholder="Nhập lại mật khẩu">
-                </div>
-                <!-- Full Name -->
-                <div>
-                    <label for="full_name" class="block text-sm font-medium text-gray-700">Họ và tên <span class="text-red-500">*</span></label>
-                    <input type="text" id="full_name" name="full_name" required
-                           value="<c:out value='${param.full_name}' default=''/>"
-                           class="mt-1 block w-full form-input-custom"
-                           placeholder="Nhập họ và tên">
-                </div>
-                <!-- Phone Number -->
-                <div>
-                    <label for="phone_number" class="block text-sm font-medium text-gray-700">Số điện thoại <span class="text-red-500">*</span></label>
-                    <input type="tel" id="phone_number" name="phone_number" required
-                           value="<c:out value='${param.phone_number}' default=''/>"
-                           class="mt-1 block w-full form-input-custom"
-                           placeholder="Nhập số điện thoại">
-                </div>
-                <!-- Submit Button -->
-                <div>
-                    <button type="submit" class="btn-primary-custom">
-                        Đăng ký
-                    </button>
-                </div>
-            </form>
-            <!-- Link to Login -->
-            <p class="mt-6 text-center text-sm text-gray-600">
-                Đã có tài khoản? <a href="<c:url value='/LoginController'/>" class="link-custom">Đăng nhập</a>
-            </p>
-        </div>
-    </div>
+            </div>
+        </section>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var submitButton = document.querySelector('.btn-primary-custom');
+            if (submitButton) {
+                // Ensure Bootstrap classes are present
+                submitButton.classList.add('btn', 'btn-lg');
+                // Ensure custom class is present
+                submitButton.classList.add('btn-primary-custom');
+                // Re-apply any necessary inline styles if they were removed
+                submitButton.style.backgroundColor = '#e94560';
+                submitButton.style.borderColor = '#e94560';
+                submitButton.style.color = 'white';
+            }
+        });
+    </script>
 </body>
 </html>
