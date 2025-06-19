@@ -26,7 +26,7 @@ public class IConstant {
     public static final String DB_NAME = "movie_ticketing";
     public static final String DB_USER_NAME = "root";
     public static final String DB_PASSWORD = "123456"; // sua mk cua b
-    public static final String DB_URL = "jdbc:mysql://localhost:3306/"
+    public static final String DB_URL = "jdbc:mysql://localhost:3306/ "
             + IConstant.DB_NAME + "?autoReconnect=true&useSSL=false";
     public static final String DB_CLASSFORNAME = "com.mysql.cj.jdbc.Driver";
 
