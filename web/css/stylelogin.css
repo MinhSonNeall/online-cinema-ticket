@@ -1,126 +1,310 @@
 body {
     font-family: 'Poppins', sans-serif;
-    background-color: #f4f7f6; /* A lighter background for the whole page */
+    background-color: #f4f7f6;
+    padding-top: 120px; /* Adjust for fixed-top navbar and icon nav */
 }
 
-.login-section {
-    background-image: url('../../build/web/img/login_background.webp'); /* User-specified background image */
+/* Top Bar */
+.top-bar {
+    background-color: #222 !important; /* Darker background for top bar */
+    border-bottom: 1px solid #333;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1030; /* Below main navbar */
+}
+
+.top-bar .list-inline-item a {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.7) !important;
+}
+
+.top-bar .list-inline-item a:hover {
+    color: #e94560 !important;
+}
+
+/* Main Navigation Bar */
+.main-navbar {
+    background-color: #1a1a2e !important; /* Dark cinematic background */
+    top: 32px; /* Below top bar */
+    border-bottom: 1px solid #333;
+}
+
+.navbar-brand img {
+    height: 40px;
+    width: auto; /* Maintain aspect ratio */
+}
+
+.main-navbar .navbar-nav .nav-link {
+    color: white !important;
+    font-weight: 500;
+    padding: 0.5rem 1.2rem;
+    transition: color 0.3s ease;
+}
+
+.main-navbar .navbar-nav .nav-link:hover,
+.main-navbar .navbar-nav .nav-link.active {
+    color: #e94560 !important; /* Cinema red on hover/active */
+}
+
+/* Icon Navigation */
+.icon-nav {
+    background-color: #f8f9fa !important; /* Light background */
+    border-bottom: 1px solid #e9ecef;
+    position: fixed;
+    width: 100%;
+    top: 88px; /* Below main navbar */
+    left: 0;
+    z-index: 1020;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.icon-nav .col-2 {
+    padding: 0.5rem;
+}
+
+.icon-nav a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #333;
+    font-size: 0.8rem;
+    font-weight: 500;
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.icon-nav a:hover {
+    color: #e94560;
+    transform: translateY(-3px);
+}
+
+.icon-nav img {
+    height: 50px;
+    width: 50px;
+    object-fit: contain;
+    margin-bottom: 5px;
+}
+
+/* Hero Section */
+.hero-section {
+    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1517604931442-73c210c18595?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D') no-repeat center center;
     background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    min-height: 100vh;
+    height: 80vh; /* Increased height */
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    margin-top: -120px; /* Compensate for fixed header height */
+    padding-top: 120px; /* Push content down */
 }
 
-.login-card {
-    background-color: rgba(255, 255, 255, 0.98); /* Slightly less transparent white card */
-    border-radius: 15px; /* More rounded corners */
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3); /* More pronounced shadow for depth */
-    border: none;
-    backdrop-filter: blur(5px); /* Subtle blur effect */
+.hero-section h1 {
+    font-size: 4rem; /* Larger font size */
+    margin-bottom: 1.5rem;
 }
 
-.login-card .card-body {
-    padding: 2.5rem; /* More padding */
+.hero-section p {
+    font-size: 1.5rem; /* Larger font size */
+    max-width: 900px;
+    margin: 0 auto 2.5rem auto;
 }
 
-.login-card h3 {
-    color: #1a1a2e; /* Dark blue heading */
-    font-weight: 600;
-    margin-bottom: 1.5rem; /* Increased margin */
-}
-
-.form-control {
-    border-radius: 8px; /* Rounded input fields */
-    border: 1px solid #ced4da;
-    padding: 0.75rem 1rem; /* Adjust padding */
-}
-
-.form-control:focus {
-    border-color: #e94560; /* Cinema red accent for focus */
-    box-shadow: 0 0 0 0.2rem rgba(233, 69, 96, 0.25);
-}
-
-.form-floating > label {
-    padding: 0.75rem 1rem; /* Match input padding */
-}
-
+/* Custom Primary Button (reused from login) */
 .btn-primary-custom {
     background-color: #e94560; /* Cinema red */
     border-color: #e94560;
     font-weight: 500;
     padding: 0.75rem 1.5rem;
     border-radius: 8px;
-    transition: background-color 0.3s ease, border-color 0.3s ease;
+    transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .btn-primary-custom:hover,
 .btn-primary-custom:focus {
     background-color: #c73049; /* Darker cinema red on hover */
     border-color: #c73049;
-    box-shadow: 0 6px 20px rgba(233, 69, 96, 0.4); /* More pronounced shadow on hover */
-    transform: translateY(-2px); /* Slight lift effect */
+    box-shadow: 0 6px 20px rgba(233, 69, 96, 0.4);
+    transform: translateY(-2px);
 }
 
-.link-secondary {
-    color: #5a5a5a !important; /* Darker grey for links */
+/* Section Titles */
+.section-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #1a1a2e;
+    margin-bottom: 3rem;
+    position: relative;
+    display: inline-block;
+    padding-bottom: 10px;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 4px;
+    background-color: #e94560;
+    border-radius: 2px;
+}
+
+/* Movie Cards */
+.movie-card {
+    border: none;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.movie-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+.movie-card img {
+    height: 400px; /* Adjusted height for consistency */
+    object-fit: cover;
+}
+
+.movie-card .card-body {
+    padding: 1rem;
+    text-align: center;
+}
+
+.movie-card .card-title {
+    font-weight: 600;
+    color: #1a1a2e;
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+}
+
+.movie-card .card-text {
+    color: #5a5a5a;
+    font-size: 0.85rem;
+    margin-bottom: 1rem;
+}
+
+/* Search Showtime Section */
+#search-showtime {
+    background-color: #fff !important;
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+    padding: 2.5rem !important;
+}
+
+#search-showtime .form-control,
+#search-showtime .form-select {
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: #e94560;
+    box-shadow: 0 0 0 0.2rem rgba(233, 69, 96, 0.25);
+}
+
+#search-showtime .form-label {
+    font-weight: 500;
+    color: #1a1a2e;
+}
+
+/* Footer */
+footer {
+    background-color: #1a1a2e !important;
+    color: white;
+}
+
+footer h5 {
+    color: #e94560; /* Cinema red for footer headings */
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+}
+
+footer .list-unstyled li a {
+    color: rgba(255, 255, 255, 0.7) !important;
+    font-size: 0.9rem;
     transition: color 0.3s ease;
 }
 
-.link-secondary:hover {
-    color: #e94560 !important; /* Cinema red on hover */
+footer .list-unstyled li a:hover {
+    color: #e94560 !important;
 }
 
-.social-login-divider p {
-    color: #333;
-    font-weight: 500;
+footer .social-icons a {
+    font-size: 1.8rem; /* Larger social icons */
+    margin: 0 8px;
+    color: white !important;
+    transition: color 0.3s ease;
 }
 
+footer .social-icons a:hover {
+    color: #e94560 !important;
+}
+
+footer .text-white-50 {
+    color: rgba(255, 255, 255, 0.6) !important;
+}
+
+/* Custom Checkbox */
+.form-check-input:checked {
+    background-color: #e94560;
+    border-color: #e94560;
+}
+
+.form-check-input:focus {
+    border-color: #e94560;
+    box-shadow: 0 0 0 0.2rem rgba(233, 69, 96, 0.25);
+}
+
+/* Social Login Buttons */
 .btn-social {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 0.65rem 1rem;
+    gap: 0.75rem;
+    width: 100%;
+    padding: 0.75rem 1rem;
     border-radius: 8px;
-    font-size: 0.9rem;
-    font-weight: 500;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border: 1px solid #ced4da;
+    background-color: white;
+    color: #495057;
+    text-decoration: none;
+    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
 }
+
 .btn-social:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    background-color: #f8f9fa;
+    border-color: #adb5bd;
+    color: #212529;
 }
 
 .btn-google {
-    background-color: #DB4437 !important;
-    color: white !important;
-    border: none;
-}
-.btn-google:hover {
-    background-color: #C33D2E !important;
+    border-color: #d3d9df;
 }
 
 .btn-facebook {
-    background-color: #4267B2 !important;
-    color: white !important;
-    border: none;
+    border-color: #1877f2;
+    color: #1877f2;
 }
+
 .btn-facebook:hover {
-    background-color: #365899 !important;
+    background-color: rgba(24, 119, 242, 0.05);
 }
 
 .btn-twitter {
-    background-color: #1DA1F2 !important;
-    color: white !important;
-    border: none;
-}
-.btn-twitter:hover {
-    background-color: #0c85d0 !important;
+    border-color: #1da1f2;
+    color: #1da1f2;
 }
 
-.form-check-input:checked {
-    background-color: #e94560;
-    border-color: #e94560;
+.btn-twitter:hover {
+    background-color: rgba(29, 161, 242, 0.05);
 }

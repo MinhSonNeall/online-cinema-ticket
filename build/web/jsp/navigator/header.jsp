@@ -186,9 +186,9 @@
     <% if (session.getAttribute("user") == null) { %>
         <!-- Chưa đăng nhập -->
         <div class="auth-buttons">
-            <a href="${pageContext.request.contextPath}/login" class="auth-link" style="color: white; text-decoration: none;">ĐĂNG NHẬP</a>
+            <a href="${pageContext.request.contextPath}/loginController" class="auth-link" style="color: white; text-decoration: none;">ĐĂNG NHẬP</a>
            <span class="separator" style="color: white;"> / </span>
-            <a href="${pageContext.request.contextPath}/register" class="auth-link" style="color: white; text-decoration: none;">ĐĂNG KÝ</a>
+            <a href="${pageContext.request.contextPath}/loginController" class="auth-link" style="color: white; text-decoration: none;">ĐĂNG KÝ</a>
         </div>
     <% } else { %>
         <!-- Đã đăng nhập - giữ nguyên dropdown -->
