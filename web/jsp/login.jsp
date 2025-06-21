@@ -424,6 +424,13 @@
                     >
                 </div>
                 
+                <div class="form-group">
+                    <div style="display: flex; align-items: center;">
+                        <input type="checkbox" id="remember_me" name="remember_me" style="margin-right: 5px;">
+                        <label for="remember_me" class="form-label" style="margin-bottom: 0;">Nhớ mật khẩu</label>
+                    </div>
+                </div>
+                
                 <button type="submit" class="login-btn">Đăng nhập</button>
             </form>
             
