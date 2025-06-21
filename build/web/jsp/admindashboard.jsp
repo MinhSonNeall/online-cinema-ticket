@@ -1,4 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<c:if test="${sessionScope.user.role != 'ADMIN'}">
+    <c:redirect url="/jsp/authenticationFailed.jsp"/>
+</c:if>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -349,7 +352,18 @@
             <!-- User Info Section -->
             <div class="welcome-user">
                 <i class="fas fa-user-circle" style="font-size: 48px; margin-bottom: 10px;"></i>
-                <p>Welcome, ${staffuser}</p>
+                <p>Welcome, ${adminUser.getFull_name()}</p>
+                <div class="profile-dropdown">
+                    <div class="profile-info">
+                        <div class="profile-name">${adminUser.getFull_name()}</div>
+                        <div class="profile-role">${adminUser.getRole()}</div>
+                        <div class="profile-email">${adminUser.getEmail()}</div>
+                    </div>
+                    <div class="profile-actions">
+<c:url var="logoutUrl" value="/LogoutController"/>
+                        <a href="${logoutUrl}" class="logout-btn">Logout</a>
+                    </div>
+                </div>
             </div>
 
             <!-- Management Menu -->
@@ -368,7 +382,8 @@
 <a href="#" class="logout-btn">
                 <i class="fas fa-user-cog"></i> Change Profile
             </a>
-            <a href="../logout" class="logout-btn">
+<c:url var="logoutUrl" value="/LogoutController"/>
+            <a href="${logoutUrl}" class="logout-btn">
                 <i class="fas fa-sign-out-alt"></i> Logout
             </a>
         </div>
@@ -386,19 +401,31 @@
     <div class="dashboard-card">
 <h3><i class="fas fa-users"></i> User Accounts</h3>
         <p>Manage user accounts and permissions.</p>
-        <a href="http://localhost:9999/OnlineCinemaTicket/admin/ManageUserAccount" class="card-link">Manage Users <i class="fas fa-arrow-right"></i></a>
+<form action="http://localhost:9999/OnlineCinemaTicket/admin/ManageUserAccount" method="post">
+    <button type="submit" class="card-link" style="border: none; background: none; padding: 0; margin: 0; cursor: pointer;">
+        Manage Users <i class="fas fa-arrow-right"></i>
+    </button>
+</form>
     </div>
 
     <div class="dashboard-card">
         <h3><i class="fas fa-film"></i> Movies</h3>
         <p>Manage movie listings and details.</p>
-        <a href="http://localhost:9999/OnlineCinemaTicket/admin/ManageMovie" class="card-link">Manage Movies <i class="fas fa-arrow-right"></i></a>
+<form action="http://localhost:9999/OnlineCinemaTicket/admin/ManageMovie" method="post">
+    <button type="submit" class="card-link" style="border: none; background: none; padding: 0; margin: 0; cursor: pointer;">
+        Manage Movies <i class="fas fa-arrow-right"></i>
+    </button>
+</form>
     </div>
 
     <div class="dashboard-card">
         <h3><i class="fas fa-clock"></i> Showtimes</h3>
         <p>Manage movie showtimes and schedules.</p>
-        <a href="http://localhost:9999/OnlineCinemaTicket/admin/ManageShowtime" class="card-link">Manage Showtimes <i class="fas fa-arrow-right"></i></a>
+<form action="http://localhost:9999/OnlineCinemaTicket/admin/ManageShowtime" method="post">
+    <button type="submit" class="card-link" style="border: none; background: none; padding: 0; margin: 0; cursor: pointer;">
+        Manage Showtimes <i class="fas fa-arrow-right"></i>
+    </button>
+</form>
     </div>
 
     <div class="dashboard-card">
