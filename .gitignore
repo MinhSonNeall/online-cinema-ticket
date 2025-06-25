@@ -1,6 +1,6 @@
 dist
 build.xml
-build/
+build
 nbproject/private/
 tmp/
 /web/WEB-INF/lib
