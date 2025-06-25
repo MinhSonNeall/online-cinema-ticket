@@ -1,3 +1,5 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@page import="Entity.Users"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <style>
@@ -215,6 +217,57 @@
         </div>
     <% } %>
 </div>
+<%
+    } else {
+        Users user = (Users) session.getAttribute("user");
+        String role = user.getRole().toString();
+        if ("CUSTOMER".equals(role)) {
+%>
+<div class="auth-section">
+    <!-- Đã đăng nhập - giữ nguyên dropdown -->
+    <div class="user-profile">
+        <div class="profile-btn">
+            <span>👤</span>
+            <!-- this span tag below get attribute of user, not username, and take user.fullname-->
+            <span>
+                <%
+                    String fullName = user.getFull_name();
+                %>
+                    <%= fullName %>
+            </span>
+            <span>▼</span>
+        </div>
+        
+        <div class="profile-dropdown">
+            <div class="profile-info">
+                <%
+                    fullName = user.getFull_name();
+                %>
+                    <div class="profile-name"><%= fullName %></div>
+                <div class="profile-email"><%= session.getAttribute("email") != null ? session.getAttribute("email") : "user@email.com" %></div>
+            </div>
+            <div class="profile-actions">
+                <a href="#profile">Thông tin cá nhân</a>
+                <a href="#booking-history">Lịch sử đặt vé</a>
+                <a href="#settings">Cài đặt</a>
+                <a href="${pageContext.request.contextPath}/LogoutController" class="logout-btn">Đăng xuất</a>
+            </div>
+        </div>
+    </div>
+</div>
+<%
+        }
+else{
+%>
+<div class="auth-buttons">
+        <a href="${pageContext.request.contextPath}/loginController" class="auth-link" style="color: white; text-decoration: none;">ĐĂNG NHẬP</a>
+        <span class="separator" style="color: white;"> / </span>
+        <a href="${pageContext.request.contextPath}/loginController" class="auth-link" style="color: white; text-decoration: none;">ĐĂNG KÝ</a>
+    </div>
+<%
+}
+    }
+%>
     </nav>
 </header>
 

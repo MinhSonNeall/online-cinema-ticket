@@ -83,13 +83,13 @@ public class loginController extends HttpServlet {
                         }
                         switch (role) {
                             case ADMIN:
-                                response.sendRedirect("adminDashboard.jsp");
+                                response.sendRedirect("adminController");
                                 return;
                             case STAFF:
-                                response.sendRedirect("staffDashboard.jsp");
+                                response.sendRedirect("adminController");
                                 return;
                             case CUSTOMER:
-                                response.sendRedirect("customerHome.jsp");
+                                response.sendRedirect("ListMovieController");
                                 return;
                         }
                     }
@@ -160,13 +160,13 @@ public class loginController extends HttpServlet {
                 // Chuyển hướng dựa trên vai trò
                 switch (role) {
                     case ADMIN:
-                        response.sendRedirect("adminDashboard.jsp");
+                        response.sendRedirect("adminController");
                         break;
                     case STAFF:
-                        response.sendRedirect("staffDashboard.jsp");
+                        response.sendRedirect("adminController");
                         break;
                     case CUSTOMER:
-                        response.sendRedirect("customerHome.jsp");
+                        response.sendRedirect("ListMovieController");
                         break;
                     default:
                         request.setAttribute("error", "Invalid email or password!");
