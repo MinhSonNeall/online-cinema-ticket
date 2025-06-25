@@ -214,6 +214,14 @@ body {
     color: var(--text-secondary);
 }
 
+.date-grid a {
+    text-decoration: none;
+}
+
+.date-item a {
+    text-decoration: none;
+}
+
 /* Location Selector */
 .location-tabs {
     display: flex;
@@ -321,7 +329,7 @@ movie-grid {
 
 .cinema-name {
     font-size: 1.1rem;
-    color: var(--primary-color);
+    color:  #ff6b35 !important;
     margin-bottom: 1.25rem;
     font-weight: 600;
 }
@@ -715,7 +723,7 @@ movie-grid {
                         <img src="${pageContext.request.contextPath}${poster}" alt="${movieTitle}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;">
                     </div>
                     <div class="movie-info">
-                        <h4 class="movie-title">Chi tiết: ${movieTitle != null ? movieTitle : 'Avengers: Endgame'}</h4>
+                        <h4 class="movie-title">${movieTitle != null ? movieTitle : 'Avengers: Endgame'}</h4>
                         <p class="movie-details">Thể loại: Hành động, Khoa học viễn tưởng</p>
                         <p class="movie-details">Thời lượng: ${movieDuration != null ? movieDuration : '1'}</p>
                         <p class="movie-details">Độ tuổi: ${movieAge != null ? movieAge : '1'}</p>
@@ -723,7 +731,6 @@ movie-grid {
                 </div>
                 
                 <div class="cinema-showtimes">
-                    <h5 class="cinema-name">🏢 CGV Bắc Giang</h5>
                     <div class="showtime-grid">
                         <c:forEach var="showtime" items="${showtimeList}">
                             <button class="showtime-btn active"}" 
