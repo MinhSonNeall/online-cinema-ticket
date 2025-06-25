@@ -1,4 +1,3 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page import="Entity.Users"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -175,99 +174,62 @@
 
 <header class="header">
     <nav class="nav-container">
-        <a href="${pageContext.request.contextPath}/ListMovieController"" class="logo">🎬 CinePlex</a>
+        <a href="${pageContext.request.contextPath}/ListMovieController" class="logo">🎬 CinePlex</a>
         
         <ul class="nav-menu">
-            <li><a href="${pageContext.request.contextPath}/ListMovieController"">Trang chủ</a></li>
-            <li><a href="${pageContext.request.contextPath}/ListMovieController"">Phim</a></li>
+            <li><a href="${pageContext.request.contextPath}/ListMovieController">Trang chủ</a></li>
+            <li><a href="${pageContext.request.contextPath}/ListMovieController">Phim</a></li>
             <li><a href="#theaters">Rạp chiếu</a></li>
             <li><a href="#promotions">Khuyến mãi</a></li>
             <li><a href="#contact">Liên hệ</a></li>
         </ul>
 
         <div class="auth-section">
-    <% if (session.getAttribute("user") == null) { %>
-        <!-- Chưa đăng nhập -->
-        <div class="auth-buttons">
-            <a href="${pageContext.request.contextPath}/loginController" class="auth-link" style="color: white; text-decoration: none;">ĐĂNG NHẬP</a>
-           <span class="separator" style="color: white;"> / </span>
-            <a href="${pageContext.request.contextPath}/RegisterController" class="auth-link" style="color: white; text-decoration: none;">ĐĂNG KÝ</a>
-        </div>
-    <% } else { %>
-        <!-- Đã đăng nhập - giữ nguyên dropdown -->
-        <div class="user-profile">
-            <div class="profile-btn">
-                <span>👤</span>
-                <span><%= session.getAttribute("username") != null ? session.getAttribute("username") : "User" %></span>
-                <span>▼</span>
-            </div>
-            
-            <div class="profile-dropdown">
-                <div class="profile-info">
-                    <div class="profile-name"><%= session.getAttribute("username") != null ? session.getAttribute("username") : "User" %></div>
-                    <div class="profile-email"><%= session.getAttribute("email") != null ? session.getAttribute("email") : "user@email.com" %></div>
+            <%
+                Users user = (Users) session.getAttribute("user");
+                if (user == null) {
+            %>
+                <!-- Chưa đăng nhập -->
+                <div class="auth-buttons">
+                    <a href="${pageContext.request.contextPath}/loginController" class="auth-link" style="color: white; text-decoration: none;">ĐĂNG NHẬP</a>
+                    <span class="separator" style="color: white;"> / </span>
+                    <a href="${pageContext.request.contextPath}/RegisterController" class="auth-link" style="color: white; text-decoration: none;">ĐĂNG KÝ</a>
                 </div>
-                <div class="profile-actions">
-                    <a href="#profile">Thông tin cá nhân</a>
-                    <a href="#booking-history">Lịch sử đặt vé</a>
-                    <a href="#settings">Cài đặt</a>
-                    <a href="${pageContext.request.contextPath}/logout" class="logout-btn">Đăng xuất</a>
-                </div>
-            </div>
+            <% } else {
+                String role = user.getRole().toString();
+                String fullName = user.getFull_name();
+                String email = (String) session.getAttribute("email");
+                if ("CUSTOMER".equals(role)) {
+            %>
+                    <div class="user-profile">
+                        <div class="profile-btn">
+                            <span>👤</span>
+                            <span><%= fullName != null ? fullName : "User" %></span>
+                            <span>▼</span>
+                        </div>
+                        
+                        <div class="profile-dropdown">
+                            <div class="profile-info">
+                                <div class="profile-name"><%= fullName != null ? fullName : "User" %></div>
+                                <div class="profile-email"><%= email != null ? email : "user@email.com" %></div>
+                            </div>
+                            <div class="profile-actions">
+                                <a href="#profile">Thông tin cá nhân</a>
+                                <a href="#booking-history">Lịch sử đặt vé</a>
+                                <a href="#settings">Cài đặt</a>
+                                <a href="${pageContext.request.contextPath}/LogoutController" class="logout-btn">Đăng xuất</a>
+                            </div>
+                        </div>
+                    </div>
+            <% } else { %>
+                    <div class="auth-buttons">
+                        <a href="${pageContext.request.contextPath}/loginController" class="auth-link" style="color: white; text-decoration: none;">ĐĂNG NHẬP</a>
+                        <span class="separator" style="color: white;"> / </span>
+                        <a href="${pageContext.request.contextPath}/RegisterController" class="auth-link" style="color: white; text-decoration: none;">ĐĂNG KÝ</a>
+                    </div>
+            <% }
+            } %>
         </div>
-    <% } %>
-</div>
-<%
-    } else {
-        Users user = (Users) session.getAttribute("user");
-        String role = user.getRole().toString();
-        if ("CUSTOMER".equals(role)) {
-%>
-<div class="auth-section">
-    <!-- Đã đăng nhập - giữ nguyên dropdown -->
-    <div class="user-profile">
-        <div class="profile-btn">
-            <span>👤</span>
-            <!-- this span tag below get attribute of user, not username, and take user.fullname-->
-            <span>
-                <%
-                    String fullName = user.getFull_name();
-                %>
-                    <%= fullName %>
-            </span>
-            <span>▼</span>
-        </div>
-        
-        <div class="profile-dropdown">
-            <div class="profile-info">
-                <%
-                    fullName = user.getFull_name();
-                %>
-                    <div class="profile-name"><%= fullName %></div>
-                <div class="profile-email"><%= session.getAttribute("email") != null ? session.getAttribute("email") : "user@email.com" %></div>
-            </div>
-            <div class="profile-actions">
-                <a href="#profile">Thông tin cá nhân</a>
-                <a href="#booking-history">Lịch sử đặt vé</a>
-                <a href="#settings">Cài đặt</a>
-                <a href="${pageContext.request.contextPath}/LogoutController" class="logout-btn">Đăng xuất</a>
-            </div>
-        </div>
-    </div>
-</div>
-<%
-        }
-else{
-%>
-<div class="auth-buttons">
-        <a href="${pageContext.request.contextPath}/loginController" class="auth-link" style="color: white; text-decoration: none;">ĐĂNG NHẬP</a>
-        <span class="separator" style="color: white;"> / </span>
-        <a href="${pageContext.request.contextPath}/loginController" class="auth-link" style="color: white; text-decoration: none;">ĐĂNG KÝ</a>
-    </div>
-<%
-}
-    }
-%>
     </nav>
 </header>
 
