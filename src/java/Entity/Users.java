@@ -47,6 +47,18 @@ public class Users {
         this.created_at = created_at;
         this.updated_at = updated_at;
     }
+     public Users(String user_id, String email, String password,
+            String full_name, String phone_number, 
+             Timestamp updated_at) {
+        this.user_id = user_id;
+        this.email = email;
+        this.password = password;
+        this.full_name = full_name;
+        this.phone_number = phone_number;
+        
+        
+        this.updated_at = updated_at;
+    }
 
     // Constructor để tạo User mới, tự động tạo user_id từ email
     public Users(String email, String password,

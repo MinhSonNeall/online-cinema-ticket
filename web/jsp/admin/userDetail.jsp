@@ -1,12 +1,17 @@
+<%-- 
+Document   : userDetail
+Created on : Jun 26, 2025, 1:22:52 AM
+Author     : HP
+--%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Manage User Accounts</title>
+<title>User Detail</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 <style>
 * {
@@ -167,65 +172,103 @@ text-decoration: none;
 text-decoration: underline;
 }
 
-/* Search Section */
-.search-section {
+/* User Detail Card */
+.user-detail-card {
 background: white;
-padding: 25px;
 border-radius: 15px;
 box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+overflow: hidden;
 margin-bottom: 30px;
 }
 
-.search-section h3 {
-color: #2c3e50;
-margin-bottom: 20px;
-font-size: 20px;
+.card-header {
+background: linear-gradient(135deg, #3498db, #2980b9);
+color: white;
+padding: 25px;
+text-align: center;
+}
+
+.card-header h2 {
+font-size: 24px;
+margin-bottom: 10px;
+}
+
+.card-header .user-avatar {
+width: 80px;
+height: 80px;
+background: rgba(255,255,255,0.2);
+border-radius: 50%;
+display: flex;
+align-items: center;
+justify-content: center;
+margin: 0 auto 15px;
+font-size: 36px;
+}
+
+.card-body {
+padding: 30px;
+}
+
+.user-info-grid {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+gap: 25px;
+}
+
+.info-item {
+background: #f8f9fa;
+padding: 20px;
+border-radius: 10px;
+border-left: 4px solid #3498db;
+transition: all 0.3s ease;
+}
+
+.info-item:hover {
+transform: translateY(-2px);
+box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.info-label {
+color: #7f8c8d;
+font-size: 14px;
+font-weight: 500;
+text-transform: uppercase;
+letter-spacing: 0.5px;
+margin-bottom: 8px;
 display: flex;
 align-items: center;
 }
 
-.search-section h3 i {
-margin-right: 10px;
+.info-label i {
+margin-right: 8px;
 color: #3498db;
 }
 
-.search-form {
-display: grid;
-grid-template-columns: 1fr 2fr auto auto;
-gap: 15px;
-align-items: end;
-}
-
-.form-group {
-display: flex;
-flex-direction: column;
-}
-
-.form-group label {
+.info-value {
 color: #2c3e50;
-font-weight: 500;
-margin-bottom: 5px;
-font-size: 14px;
+font-size: 16px;
+font-weight: 600;
+word-break: break-all;
 }
 
-.form-group select,
-.form-group input[type="text"] {
-padding: 12px 15px;
-border: 2px solid #e1e8ed;
-border-radius: 8px;
-font-size: 14px;
-transition: all 0.3s ease;
+/* Action Buttons */
+.action-section {
+background: white;
+padding: 25px;
+border-radius: 15px;
+box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+text-align: center;
 }
 
-.form-group select:focus,
-.form-group input[type="text"]:focus {
-outline: none;
-border-color: #3498db;
-box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+.action-buttons {
+display: flex;
+gap: 15px;
+justify-content: center;
+flex-wrap: wrap;
 }
 
 .btn {
-padding: 12px 20px;
+padding: 12px 25px;
 border: none;
 border-radius: 8px;
 font-size: 14px;
@@ -249,6 +292,7 @@ color: white;
 .btn-primary:hover {
 background: #2980b9;
 transform: translateY(-2px);
+box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
 }
 
 .btn-secondary {
@@ -258,119 +302,65 @@ color: white;
 
 .btn-secondary:hover {
 background: #7f8c8d;
-}
-
-/* Message */
-.message {
-padding: 15px 20px;
-border-radius: 8px;
-margin-bottom: 20px;
-}
-
-.message.success {
-background: #d4edda;
-color: #155724;
-border: 1px solid #c3e6cb;
-}
-
-.message.error {
-background: #f8d7da;
-color: #721c24;
-border: 1px solid #f5c6cb;
-}
-
-/* Table Section */
-.table-section {
-background: white;
-border-radius: 15px;
-box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-overflow: hidden;
-}
-
-.table-header {
-background: #f8f9fa;
-padding: 20px 25px;
-border-bottom: 1px solid #e1e8ed;
-}
-
-.table-header h3 {
-color: #2c3e50;
-font-size: 18px;
-display: flex;
-align-items: center;
-}
-
-.table-header h3 i {
-margin-right: 10px;
-color: #3498db;
-}
-
-.table-container {
-overflow-x: auto;
-}
-
-table {
-width: 100%;
-border-collapse: collapse;
-}
-
-thead {
-background: #f8f9fa;
-}
-
-th {
-padding: 15px 20px;
-text-align: left;
-font-weight: 600;
-color: #2c3e50;
-border-bottom: 2px solid #e1e8ed;
-}
-
-td {
-padding: 15px 20px;
-border-bottom: 1px solid #e1e8ed;
-color: #2c3e50;
-}
-
-tbody tr:hover {
-background: #f8f9fa;
-}
-
-.action-buttons {
-display: flex;
-gap: 8px;
-}
-
-.btn-sm {
-padding: 6px 12px;
-font-size: 12px;
-}
-
-.btn-info {
-background: #17a2b8;
-color: white;
-}
-
-.btn-info:hover {
-background: #138496;
+transform: translateY(-2px);
 }
 
 .btn-warning {
-background: #ffc107;
-color: #212529;
-}
-
-.btn-warning:hover {
-background: #e0a800;
-}
-
-.btn-danger {
-background: #dc3545;
+background: #f39c12;
 color: white;
 }
 
-.btn-danger:hover {
-background: #c82333;
+.btn-warning:hover {
+background: #e67e22;
+transform: translateY(-2px);
+}
+
+/* Not Found Message */
+.not-found {
+background: white;
+padding: 50px;
+border-radius: 15px;
+box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+text-align: center;
+}
+
+.not-found-icon {
+font-size: 80px;
+color: #e74c3c;
+margin-bottom: 20px;
+}
+
+.not-found h2 {
+color: #2c3e50;
+font-size: 24px;
+margin-bottom: 15px;
+}
+
+.not-found p {
+color: #7f8c8d;
+font-size: 16px;
+margin-bottom: 25px;
+}
+
+/* Status Badge */
+.status-badge {
+display: inline-block;
+padding: 6px 12px;
+border-radius: 20px;
+font-size: 12px;
+font-weight: 600;
+text-transform: uppercase;
+letter-spacing: 0.5px;
+}
+
+.status-active {
+background: #d4edda;
+color: #155724;
+}
+
+.status-inactive {
+background: #f8d7da;
+color: #721c24;
 }
 
 /* Responsive Design */
@@ -396,15 +386,16 @@ min-height: auto;
 margin-left: 0;
 padding: 20px;
 }
-.search-form {
+.user-info-grid {
 grid-template-columns: 1fr;
+}
+.action-buttons {
+flex-direction: column;
+align-items: center;
 }
 .header {
 flex-direction: column;
 text-align: center;
-}
-.action-buttons {
-flex-direction: column;
 }
 }
 </style>
@@ -416,6 +407,7 @@ flex-direction: column;
 <div class="logo">
 <h2><i class="fas fa-chart-line"></i> Staff Dashboard</h2>
 </div>
+
 <!-- User Info Section -->
 <div class="welcome-user">
 <i class="fas fa-user-circle" style="font-size: 48px; margin-bottom: 10px;"></i>
@@ -428,11 +420,12 @@ flex-direction: column;
 </div>
 </div>
 </div>
+
 <!-- Management Menu -->
 <div class="nav-section">
 <div class="nav-title">Management</div>
 <ul class="nav-links">
-<li><a href="ManageUserAccount" class="active"><i class="fas fa-users"></i> User Accounts</a></li>
+<li><a href="http://localhost:9999/OnlineCinemaTicket/admin/ManageUserAccount" class="active"><i class="fas fa-users"></i> User Accounts</a></li>
 <li><a href="http://localhost:9999/OnlineCinemaTicket/admin/ManageMovie"><i class="fas fa-film"></i> Movies</a></li>
 <li><a href="http://localhost:9999/OnlineCinemaTicket/admin/ManageShowtime"><i class="fas fa-clock"></i> Showtimes</a></li>
 <li><a href="http://localhost:9999/OnlineCinemaTicket/admin/ManageRoomSeat"><i class="fas fa-chair"></i> Rooms & Seats</a></li>
@@ -440,6 +433,7 @@ flex-direction: column;
 <li><a href="http://localhost:9999/OnlineCinemaTicket/admin/ManageCombo"><i class="fas fa-utensils"></i> Combo Food</a></li>
 </ul>
 </div>
+
 <a href="ManageUserAccount?service=update&email=${sessionScope.user.email}" class="logout-btn">
 <i class="fas fa-user-cog"></i> Change Profile
 </a>
@@ -448,96 +442,151 @@ flex-direction: column;
 <i class="fas fa-sign-out-alt"></i> Logout
 </a>
 </div>
+
 <!-- Main Content -->
 <div class="main-content">
 <div class="header">
-<h1><i class="fas fa-users"></i> Manage User Accounts</h1>
-</div>
-<!-- Breadcrumb -->
-<div class="breadcrumb">
-<a href="adminController"><i class="fas fa-home"></i> Dashboard</a> 
-<span> / </span>
-<span>User Accounts</span>
-</div>
-<!-- Search Section -->
-<div class="search-section">
-<h3><i class="fas fa-search"></i> Search Users</h3>
-<form action="ManageUserAccount" class="search-form">
-<input type="hidden" name="service" value="list">
-<div class="form-group">
-<label for="searchBy">Search By:</label>
-<select name="searchBy" id="searchBy">
-<option value="email">Email</option>
-<option value="full_name">Full name</option>
-</select>
-</div>
-<div class="form-group">
-<label for="searchValue">Search Value:</label>
-<input type="text" name="searchValue" id="searchValue" placeholder="Enter search term...">
-</div>
-<button type="submit" name="submit" value="Search" class="btn btn-primary">
-<i class="fas fa-search"></i> Search
-</button>
-<button type="reset" class="btn btn-secondary">
-<i class="fas fa-times"></i> Clear
-</button>
-</form>
+<h1><i class="fas fa-user-circle"></i> User Details</h1>
 </div>
 
-<!-- Message Display -->
-<c:if test="${not empty message}">
-<div class="message ${message.startsWith('User deleted successfully') ? 'success' : 'error'}">
-<i class="fas fa-info-circle"></i> ${message}
+<!-- Breadcrumb -->
+<div class="breadcrumb">
+<a href="http://localhost:9999/OnlineCinemaTicket/jsp/admindashboard.jsp"><i class="fas fa-home"></i> Dashboard</a> 
+<span> / </span>
+<a href="ManageUserAccount"><i class="fas fa-users"></i> User Accounts</a>
+<span> / </span>
+<span>User Details</span>
+</div>
+
+<c:set var="userDetails" value="${requestScope.userDetail}" />
+<c:if test="${not empty userDetails}">
+<c:set var="user" value="${userDetails.get(0)}" />
+
+<!-- User Detail Card -->
+<div class="user-detail-card">
+<div class="card-header">
+<div class="user-avatar">
+<i class="fas fa-user"></i>
+</div>
+<h2><c:out value="${user.full_name}" /></h2>
+<p><c:out value="${user.email}" /></p>
+</div>
+<div class="card-body">
+<div class="user-info-grid">
+<div class="info-item">
+<div class="info-label">
+<i class="fas fa-id-card"></i>
+User ID
+</div>
+<div class="info-value">
+<c:out value="${user.user_id}" />
+</div>
+</div>
+
+<div class="info-item">
+<div class="info-label">
+<i class="fas fa-envelope"></i>
+Email Address
+</div>
+<div class="info-value">
+<c:out value="${user.email}" />
+</div>
+</div>
+
+<div class="info-item">
+<div class="info-label">
+<i class="fas fa-user"></i>
+Full Name
+</div>
+<div class="info-value">
+<c:out value="${user.full_name}" />
+</div>
+</div>
+
+<div class="info-item">
+<div class="info-label">
+<i class="fas fa-phone"></i>
+Phone Number
+</div>
+<div class="info-value">
+<c:choose>
+<c:when test="${not empty user.phone_number}">
+<c:out value="${user.phone_number}" />
+</c:when>
+<c:otherwise>
+<span style="color: #95a5a6; font-style: italic;">Not provided</span>
+</c:otherwise>
+</c:choose>
+</div>
+</div>
+
+<div class="info-item">
+<div class="info-label">
+<i class="fas fa-user-tag"></i>
+Role
+</div>
+<div class="info-value">
+<span class="status-badge ${user.role == 'ADMIN' ? 'status-active' : 'status-inactive'}">
+<c:out value="${user.role}" />
+</span>
+</div>
+</div>
+
+<div class="info-item">
+<div class="info-label">
+<i class="fas fa-clock"></i>
+Last Updated
+</div>
+<div class="info-value">
+<c:choose>
+<c:when test="${not empty user.updated_at}">
+<fmt:formatDate value="${user.updated_at}" pattern="MMM dd, yyyy 'at' HH:mm:ss" />
+</c:when>
+<c:otherwise>
+<span style="color: #95a5a6; font-style: italic;">Not available</span>
+</c:otherwise>
+</c:choose>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Action Buttons -->
+<div class="action-section">
+<h3 style="color: #2c3e50; margin-bottom: 20px;">
+<i class="fas fa-cogs"></i> Available Actions
+</h3>
+<div class="action-buttons">
+<a href="ManageUserAccount" class="btn btn-primary">
+<i class="fas fa-arrow-left"></i> Back to Manage Users
+</a>
+<a href="ManageUserAccount?service=update&email=${user.email}" class="btn btn-warning">
+<i class="fas fa-edit"></i> Edit User
+</a>
+<a href="#" class="btn btn-secondary" onclick="window.print()">
+<i class="fas fa-print"></i> Print Details
+</a>
+</div>
+</div>
+
+</c:if>
+
+<c:if test="${empty userDetails}">
+<!-- Not Found Message -->
+<div class="not-found">
+<div class="not-found-icon">
+<i class="fas fa-user-slash"></i>
+</div>
+<h2>User Not Found</h2>
+<p>The requested user could not be found in the system. Please check the user ID and try again.</p>
+<a href="ManageUserAccount" class="btn btn-primary">
+<i class="fas fa-arrow-left"></i> Back to Manage Users
+</a>
 </div>
 </c:if>
 
-<!-- Table Section -->
-<div class="table-section">
-<div class="table-header">
-<h3><i class="fas fa-table"></i> User List</h3>
-</div>
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th><i class="fas fa-envelope"></i> Email</th>
-<th><i class="fas fa-user"></i> Full Name</th>
-<th><i class="fas fa-cogs"></i> Actions</th>
-</tr>
-</thead>
-<tbody>
-<c:forEach var="user" items="${userList}">
-<tr>
-<td>${user.email}</td>
-<td>${user.full_name}</td>
-<td>
-<div class="action-buttons">
-<a href="ManageUserAccount?service=update&email=${user.email}" class="btn btn-info btn-sm">
-<i class="fas fa-edit"></i> Update
-</a>
-<a href="#" class="btn btn-danger btn-sm" onclick="confirmDelete('${user.email}')">
-<i class="fas fa-trash"></i> Delete
-</a>
-<a href="ManageUserAccount?service=detail&email=${user.email}" class="btn btn-warning btn-sm">
-<i class="fas fa-eye"></i> Details
-</a>
-</div>
-</td>
-</tr>
-</c:forEach>
-</tbody>
-</table>
 </div>
 </div>
-</div>
-</div>
-
-<script>
-function confirmDelete(email) {
-if (confirm('Are you sure you want to delete user: ' + email + '?')) {
-window.location.href = 'ManageUserAccount?service=delete&email=' + email;
-}
-}
-</script>
 </body>
 </html>
