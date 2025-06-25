@@ -3,6 +3,8 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package Model;
+import Entity.DateItem;
+import Entity.Location;
 import Entity.Movies;
 import Entity.Seats;
 import Entity.Showtimes;
@@ -10,7 +12,10 @@ import java.security.Timestamp;
 import java.sql.ResultSet;
 import java.sql.PreparedStatement;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.List;
 import jdk.jfr.Timespan;
 /**
  *
@@ -102,14 +107,116 @@ public class DaoMovie extends DBContext{
     }
     
     
-    public ArrayList<Showtimes> getShowtimes(String movieId, String cinemaName) {
+    public Movies getMovieByIdMovieDetails(String movieId) {
+        Movies movie = null;
+        String sql = "SELECT \n"
+                + "    m.movie_id,\n"
+                + "    m.title,\n"
+                + "    m.description,\n"
+                + "    m.trailer_url,\n"
+                + "    m.poster_url,\n"
+                + "    m.duration,\n"
+                + "    m.age_restriction,\n"
+                + "    s.start_time,\n"
+                + "    GROUP_CONCAT(g.name SEPARATOR ', ') AS genres\n"
+                + "FROM \n"
+                + "    movies m\n"
+                + "    JOIN showtimes s ON m.movie_id = s.movie_id\n"
+                + "    JOIN movie_genres ms ON m.movie_id = ms.movie_id\n"
+                + "    JOIN genres g ON ms.genre_id = g.genre_id\n"
+                + "WHERE \n"
+                + "    m.movie_id = ?\n"
+                + "GROUP BY \n"
+                + "    m.movie_id, m.title, m.description, m.trailer_url, m.poster_url, m.duration, m.age_restriction, s.start_time";
+        try {
+            connection = getConnection();
+            ps = connection.prepareStatement(sql);
+            ps.setString(1, movieId);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                movie = new Movies(
+                        rs.getString("movie_id"),
+                        rs.getString("title"),
+                        rs.getString("description"),
+                        rs.getString("trailer_url"),
+                        rs.getString("poster_url"),
+                        rs.getInt("duration"),
+                        rs.getInt("age_restriction"),
+                        rs.getString("start_time"),
+                        rs.getString("genres")
+                );
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            closeConnection(connection, ps, rs);
+        }
+        return movie;
+    }
+    
+    public List<DateItem> getDayOfMoview(String movieId) {
+        List<DateItem> dateList = new ArrayList<>();
+        String sql = "SELECT MIN(start_time) as start_time, MAX(end_time) as end_time FROM movie_ticketing.showtimes WHERE movie_id = ?";
+        LocalDate getDateNoew = LocalDate.now();
+        try {
+            connection = getConnection();
+            ps = connection.prepareStatement(sql);
+            ps.setString(1, movieId);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                  String start =  rs.getString("start_time");
+                  String end =   rs.getString("end_time");
+                  
+                  if(start == null || end == null) {
+                      return dateList;
+                  }
+                  
+                  LocalDate startDate = LocalDate.parse(start.split(" ")[0]);
+                  LocalDate endate = LocalDate.parse(end.split(" ")[0]);
+                  
+                  LocalDate beginDay = getDateNoew.isBefore(startDate) ? startDate : getDateNoew;
+                  if(getDateNoew.isAfter(endate)) {
+                      return  dateList;
+                  }
+                  
+                  long dayBeetwent = ChronoUnit.DAYS.between(beginDay, endate) + 1;
+
+                  
+                  for (int i = 0; i < dayBeetwent; i++) {
+                    LocalDate date = beginDay.plusDays(i);
+                    DateItem item = new DateItem();
+                    item.setDay(String.format("%02d", date.getDayOfMonth()));
+                    item.setDayName(getVietnameseDayName(date.getDayOfWeek().getValue()));
+                    item.setActive(date.equals(getDateNoew)); // Đặt ngày đầu tiên là active
+                    item.setFullDate(date.toString());
+                    dateList.add(item);
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            closeConnection(connection, ps, rs);
+        }
+        return dateList;
+    }
+    
+    
+    private String getVietnameseDayName(int dayOfWeek) {
+        String[] days = {"T2", "T3", "T4", "T5", "T6", "T7", "CN"};
+        return days[dayOfWeek - 1]; // Điều chỉnh cho chỉ số bắt đầu từ 1
+    }
+    
+    
+    
+    
+    public ArrayList<Showtimes> getShowtimes(String movieId) {
         ArrayList<Showtimes> showtimes = new ArrayList<>();
         String sqlSetTimeZone = "SET SESSION time_zone = '+07:00'";
         String sql = "SELECT s.showtime_id, s.start_time, s.ticket_price " +
                     "FROM movie_ticketing.showtimes s " +
                     "JOIN movie_ticketing.rooms r ON s.room_id = r.room_id " +
                     "JOIN movie_ticketing.cinemas c ON r.cinema_id = c.cinema_id " +
-                    "WHERE s.movie_id = ? AND c.name = ? " +
+                    "WHERE s.movie_id = ? " +
                     "AND NOW() BETWEEN s.start_time AND s.end_time";
         connection = null;
         PreparedStatement ps = null;
@@ -124,7 +231,6 @@ public class DaoMovie extends DBContext{
             // Truy vấn chính
             ps = connection.prepareStatement(sql);
             ps.setString(1, movieId);
-            ps.setString(2, cinemaName);
             rs = ps.executeQuery();
 
             // Debug: Kiểm tra số lượng suất chiếu
@@ -143,7 +249,6 @@ public class DaoMovie extends DBContext{
 
                 showtimes.add(new Showtimes(showtimeId, time, formattedPrice, remainingSeats));
             }
-            System.out.println("Số lượng suất chiếu cho movie_id = " + movieId + " tại " + cinemaName + ": " + count);
         } catch (Exception ex) {
             ex.printStackTrace();
         } finally {
@@ -151,6 +256,39 @@ public class DaoMovie extends DBContext{
         }
         return showtimes;
     }
+    
+    
+    public List<Location> getCinemasByMovieAndDate(String movieId, LocalDate selectedDate) {
+    List<Location> locationList = new ArrayList<>();
+    String sql = "SELECT DISTINCT c.name " +
+                 "FROM showtimes s " +
+                 "JOIN rooms r ON s.room_id = r.room_id " +
+                 "JOIN cinemas c ON r.cinema_id = c.cinema_id " +
+                 "WHERE s.movie_id = ? AND DATE(s.start_time) <= ? AND DATE(s.end_time) >= ?";
+
+    try {
+        connection = getConnection();
+        ps = connection.prepareStatement(sql);
+        ps.setString(1, movieId);
+        ps.setString(2, selectedDate.toString()); 
+        ps.setString(3, selectedDate.toString());
+        rs = ps.executeQuery();
+
+        boolean isFirst = true;
+        while (rs.next()) {
+            Location location = new Location();
+            location.setName(rs.getString("name"));
+            location.setActive(isFirst); // Đặt rạp đầu tiên là active
+            locationList.add(location);
+            isFirst = false;
+        }
+    } catch (Exception ex) {
+        ex.printStackTrace();
+    } finally {
+        closeConnection(connection, ps, rs);
+    }
+    return locationList;
+}
     
     
     

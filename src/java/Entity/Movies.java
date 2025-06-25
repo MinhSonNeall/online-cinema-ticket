@@ -32,6 +32,7 @@ public class Movies {
     private Timestamp created_at;
     private Timestamp updated_at;
     private String genere_name;
+    private String start_time_movie;
 
     // Constructor mặc định
     public Movies() {
@@ -78,6 +79,19 @@ public class Movies {
         this.poster_url = poster_url;
         this.trailer_url = trailer_url;
     }
+
+    public Movies(String movie_id, String title, String description, String trailer_url, String poster_url, int duration, int age_restriction, String start_time_movie,String genere_name) {
+        this.movie_id = movie_id;
+        this.title = title;
+        this.description = description;
+        this.trailer_url = trailer_url;
+        this.poster_url = poster_url;
+        this.duration = duration;
+        this.age_restriction = age_restriction;
+        this.start_time_movie = start_time_movie;
+        this.genere_name = genere_name;
+    }
+    
     
     
 
@@ -92,7 +106,16 @@ public class Movies {
         this.age_restriction = age_restriction;
         this.release_date = release_date;
     }
+
+    public String getStart_time_movie() {
+        return start_time_movie;
+    }
+
+    public void setStart_time_movie(String start_time_movie) {
+        this.start_time_movie = start_time_movie;
+    }
  
+    
     
     public String getGenere_name() {
         return genere_name;

@@ -253,6 +253,7 @@ body {
 .location-tab.active {
     transform: translateY(-3px);
     box-shadow: var(--shadow-glow);
+    color: white;
 }
 
 .location-tab > * {
@@ -674,59 +675,34 @@ movie-grid {
         <div class="container">
         <!-- Date Selector -->
         <section class="section">
-            <h3 class="section-title">📅 Chọn ngày</h3>
+            <h3 class="section-title">📅 Chọn ngày chiếu</h3>
             <div class="date-grid">
-                <c:forEach var="date" items="${dateList}">
-                    <div class="date-item ${date.active ? 'active' : ''}">
+                <c:forEach var="date" items="${dateListTesst}">
+                    <a href="${pageContext.request.contextPath}/ListMovieDetailController?movieId=${movieId}&selectedDate=${date.fullDate}"
+                       class="date-item ${date.active ? 'active' : ''}">
                         <div class="date-num">${date.day}</div>
                         <div class="date-day">${date.dayName}</div>
-                    </div>
+                    </a>
                 </c:forEach>
-                <!-- Static example -->
-                <div class="date-item active">
-                    <div class="date-num">01</div>
-                    <div class="date-day">CN</div>
-                </div>
-                <div class="date-item">
-                    <div class="date-num">02</div>
-                    <div class="date-day">T2</div>
-                </div>
-                <div class="date-item">
-                    <div class="date-num">03</div>
-                    <div class="date-day">T3</div>
-                </div>
-                <div class="date-item">
-                    <div class="date-num">04</div>
-                    <div class="date-day">T4</div>
-                </div>
-                <div class="date-item">
-                    <div class="date-num">05</div>
-                    <div class="date-day">T5</div>
-                </div>
-                <div class="date-item">
-                    <div class="date-num">06</div>
-                    <div class="date-day">T6</div>
-                </div>
-                <div class="date-item">
-                    <div class="date-num">07</div>
-                    <div class="date-day">T7</div>
-                </div>
             </div>
         </section>
 
         <!-- Location Selector -->
         <section class="section">
             <h3 class="section-title">📍 Chọn địa điểm</h3>
-            <div class="location-tabs">
-                <c:forEach var="location" items="${locationList}">
-                    <button class="location-tab ${location.active ? 'active' : ''}">${location.name}</button>
-                </c:forEach>
-                <!-- Static example -->
-                <button class="location-tab active">Hồ Chí Minh</button>
-                <button class="location-tab">Hà Nội</button>
-                <button class="location-tab">Đà Nẵng</button>
-                <button class="location-tab">Cần Thơ</button>
-                <button class="location-tab">Hải Phòng</button>
+            <div class="location-tabs" id="locationTabs">
+                <c:choose>
+                    <c:when test="${not empty locationList}">
+                        <c:forEach var="location" items="${locationList}">
+                            <button class="location-tab ${location.active ? 'active' : ''}">
+                                ${location.name}
+                            </button>
+                        </c:forEach>
+                    </c:when>
+                    <c:otherwise>
+                        <p>Không có rạp chiếu cho ngày này</p>
+                    </c:otherwise>
+                </c:choose>
             </div>
         </section>
 
@@ -736,7 +712,7 @@ movie-grid {
             <div class="showtime-container">
                 <div class="movie-card">
                     <div class="movie-poster">
-                        <img src="https://via.placeholder.com/120x180/ff6b6b/ffffff?text=PHIM" alt="Movie Poster" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;">
+                        <img src="${pageContext.request.contextPath}${poster}" alt="${movieTitle}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;">
                     </div>
                     <div class="movie-info">
                         <h4 class="movie-title">Chi tiết: ${movieTitle != null ? movieTitle : 'Avengers: Endgame'}</h4>
