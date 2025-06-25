@@ -13,13 +13,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 
 /**
  *
  * @author Cuong
  */
-public class ListMovieController extends HttpServlet {
+@WebServlet(name = "MovieDetailController", urlPatterns = {"/MovieDetailController"})
+public class MovieDetailController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -38,10 +38,10 @@ public class ListMovieController extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ListMovieController</title>");            
+            out.println("<title>Servlet MovieDetailController</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ListMovieController at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet MovieDetailController at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -59,26 +59,16 @@ public class ListMovieController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        DaoMovie daoMovie = new DaoMovie();
-        ArrayList<Movies> movieList = daoMovie.getAllMovies();
-        
-        if (movieList == null) {
-        System.out.println("movieList is null");
-        } else {
-        System.out.println("movieList size: " + movieList.size());
-        }
-        movieList.forEach(movie -> {
-    if (movie.getTitle().equals("Lilo & Stitch")) {
-        // Sử dụng request.getContextPath() để đảm bảo URL đúng
-        movie.setPoster_url(request.getContextPath() + "/resources/images/disney-unveils-new-poster-for-lilo-stitch.jpg");
-        movie.setTrailer_url(request.getContextPath() + "/resources/videos/test1.mp4");
-    }
-    });
-        // Đặt danh sách phim vào request attribute
-        request.setAttribute("movieList", movieList);
+        String movieId = request.getParameter("movieId");
 
-        // Chuyển tiếp đến JSP
-        request.getRequestDispatcher("/jsp/Movie/index.jsp").forward(request, response);
+        DaoMovie daoMovie = new DaoMovie();
+        Movies movie = daoMovie.getMovieByIdMovieDetails(movieId);
+        if (movie == null) {
+            response.sendRedirect("error.jsp");
+            return;
+        }
+        request.setAttribute("movieDetails", movie);
+        request.getRequestDispatcher("/jsp/Movie/moviedetail.jsp").forward(request, response);
     }
 
     /**

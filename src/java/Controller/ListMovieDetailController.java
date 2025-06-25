@@ -4,6 +4,8 @@
  */
 package Controller;
 
+import Entity.DateItem;
+import Entity.Location;
 import Entity.Movies;
 import Entity.Seats;
 import Entity.Showtimes;
@@ -15,7 +17,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -63,7 +67,7 @@ public class ListMovieDetailController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String movieId = request.getParameter("movieId");
-        String cinemaName = "bac giang";
+        String selectedDateStr = request.getParameter("selectedDate");
 
         DaoMovie daoMovie = new DaoMovie();
         Movies movie = daoMovie.getMovieById(movieId);
@@ -73,7 +77,7 @@ public class ListMovieDetailController extends HttpServlet {
         }
 
         // Lấy danh sách suất chiếu
-        ArrayList<Showtimes> showtimeList = daoMovie.getShowtimes(movieId, cinemaName);
+        ArrayList<Showtimes> showtimeList = daoMovie.getShowtimes(movieId);
         if (showtimeList.isEmpty()) {
             System.out.println("movieList is null");
             request.setAttribute("errorMessage", "Không có suất chiếu nào tại rạp CGV Hùng Vương Plaza vào ngày 01/06/2025.");
@@ -85,12 +89,30 @@ public class ListMovieDetailController extends HttpServlet {
         Showtimes defaultShowtime = showtimeList.get(0);
         ArrayList<Seats> seatList = daoMovie.getSeats(defaultShowtime.getShowtimeId());
         int remainingSeats = daoMovie.getRemainingSeats(defaultShowtime.getShowtimeId());
-
+        List<DateItem> dateListTesst = daoMovie.getDayOfMoview(movieId);
+        
+        LocalDate selectedDate;
+        if(selectedDateStr != null && !selectedDateStr.isEmpty()){
+            selectedDate = LocalDate.parse(selectedDateStr);
+        }else{
+            selectedDate = LocalDate.now();
+        }
+        List<Location> locationList = daoMovie.getCinemasByMovieAndDate(movieId, selectedDate);
+        
+        for (DateItem dateItem : dateListTesst) {
+            LocalDate itemDate = LocalDate.of(selectedDate.getYear(), selectedDate.getMonth(), Integer.parseInt(dateItem.getDay()));
+            dateItem.setActive(itemDate.equals(selectedDate));
+        }
+        
+        request.setAttribute("selectedDate", selectedDate.toString());
+        request.setAttribute("locationList", locationList);
+        request.setAttribute("dateListTesst", dateListTesst);
         request.setAttribute("movieId", movieId);
         request.setAttribute("movieTitle", movie.getTitle());
         request.setAttribute("movieDuration", movie.getDuration());
         request.setAttribute("movieAge", movie.getAge_restriction());
         request.setAttribute("showtimeList", showtimeList);
+        request.setAttribute("poster", movie.getPoster_url());
         request.setAttribute("seatList", seatList);
         request.setAttribute("remainingSeats", remainingSeats);
         request.getRequestDispatcher("/jsp/Movie/listmovedetail.jsp").forward(request, response);
