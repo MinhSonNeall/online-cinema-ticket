@@ -49,7 +49,7 @@ public class LogoutController extends HttpServlet {
         response.addCookie(roleCookie);
         
         
-        response.sendRedirect("/jsp/Landingpage.jsp");
+        response.sendRedirect("ListMovieController");
     } 
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

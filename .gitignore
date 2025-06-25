@@ -1,3 +1,7 @@
-
-/dist/
+dist/
 build.xml
+build/
+
+nbproject/private/
+tmp/
+/web/WEB-INF/lib
