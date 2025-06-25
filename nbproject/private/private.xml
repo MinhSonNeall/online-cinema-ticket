@@ -3,29 +3,14 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/HP/Documents/NetBeansProjects/OnlineCinemaTicket/web/jsp/authenticationFailed.jsp</file>
-            <file>file:/C:/Users/HP/Documents/NetBeansProjects/OnlineCinemaTicket/web/css/style.css</file>
-            <file>file:/C:/Users/HP/Documents/NetBeansProjects/OnlineCinemaTicket/src/java/Controller/loginController.java</file>
-            <file>file:/C:/Users/HP/Documents/NetBeansProjects/OnlineCinemaTicket/src/java/GoogleLogin/GoogleAccount.java</file>
-            <file>file:/C:/Users/HP/Documents/NetBeansProjects/OnlineCinemaTicket/src/java/GoogleLogin/LoginGoogleController.java</file>
-            <file>file:/C:/Users/HP/Documents/NetBeansProjects/OnlineCinemaTicket/src/java/Controller/admin/adminController.java</file>
-            <file>file:/C:/Users/HP/Documents/NetBeansProjects/OnlineCinemaTicket/web/jsp/Movie/index.jsp</file>
-            <file>file:/C:/Users/HP/Documents/NetBeansProjects/OnlineCinemaTicket/web/jsp/navigator/footer.jsp</file>
-            <file>file:/C:/Users/HP/Documents/NetBeansProjects/OnlineCinemaTicket/src/java/Entity/Users.java</file>
-            <file>file:/C:/Users/HP/Documents/NetBeansProjects/OnlineCinemaTicket/web/WEB-INF/web.xml</file>
-            <file>file:/C:/Users/HP/Documents/NetBeansProjects/OnlineCinemaTicket/web/css/stylelogin.css</file>
-            <file>file:/C:/Users/HP/Documents/NetBeansProjects/OnlineCinemaTicket/web/jsp/login.jsp</file>
-            <file>file:/C:/Users/HP/Documents/NetBeansProjects/OnlineCinemaTicket/src/java/Controller/RegisterController.java</file>
-            <file>file:/C:/Users/HP/Documents/NetBeansProjects/OnlineCinemaTicket/src/java/GoogleLogin/GoogleLogin.java</file>
+            <file>file:/C:/Users/HP/Documents/NetBeansProjects/OnlineCinemaTicket/src/java/Filter/AdminFilter.java</file>
+            <file>file:/C:/Users/HP/Documents/NetBeansProjects/OnlineCinemaTicket/src/java/Controller/admin/ManageUserAccountServlet.java</file>
             <file>file:/C:/Users/HP/Documents/NetBeansProjects/OnlineCinemaTicket/src/java/Model/DaoUser.java</file>
-            <file>file:/C:/Users/HP/Documents/NetBeansProjects/OnlineCinemaTicket/src/java/Controller/VerifyEmailOTPController.java</file>
-            <file>file:/C:/Users/HP/Documents/NetBeansProjects/OnlineCinemaTicket/web/jsp/navigator/header.jsp</file>
+            <file>file:/C:/Users/HP/Documents/NetBeansProjects/OnlineCinemaTicket/web/jsp/admin/manageUserAccount.jsp</file>
+            <file>file:/C:/Users/HP/Documents/NetBeansProjects/OnlineCinemaTicket/web/jsp/admin/userDetail.jsp</file>
             <file>file:/C:/Users/HP/Documents/NetBeansProjects/OnlineCinemaTicket/web/jsp/admindashboard.jsp</file>
-            <file>file:/C:/Users/HP/Documents/NetBeansProjects/OnlineCinemaTicket/web/jsp/verifyRegisOTP.jsp</file>
-            <file>file:/C:/Users/HP/Documents/NetBeansProjects/OnlineCinemaTicket/src/java/Controller/ListMovieController.java</file>
-            <file>file:/C:/Users/HP/Documents/NetBeansProjects/OnlineCinemaTicket/web/jsp/registerCustomer.jsp</file>
-            <file>file:/C:/Users/HP/Documents/NetBeansProjects/OnlineCinemaTicket/src/java/Controller/ListMovieDetailController.java</file>
-            <file>file:/C:/Users/HP/Documents/NetBeansProjects/OnlineCinemaTicket/src/java/Controller/LogoutController.java</file>
+            <file>file:/C:/Users/HP/Documents/NetBeansProjects/OnlineCinemaTicket/src/java/Model/DaoMovie.java</file>
+            <file>file:/C:/Users/HP/Documents/NetBeansProjects/OnlineCinemaTicket/web/jsp/admin/updateCustomer.jsp</file>
         </group>
     </open-files>
 </project-private>

@@ -348,9 +348,7 @@
             </p>
             
             <div class="action-buttons">
-                <a href="${pageContext.request.contextPath}/loginController" class="btn btn-primary">
-                    🔐 Đăng nhập ngay
-                </a>
+                
                 <a href="${pageContext.request.contextPath}/ListMovieController" class="btn btn-secondary">
                     🏠 Về trang chủ
                 </a>
