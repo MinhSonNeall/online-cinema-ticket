@@ -16,12 +16,6 @@
         <servlet-name>ListMovieController</servlet-name>
         <url-pattern>/ListMovieController</url-pattern>
     </servlet-mapping>
-<<<<<<< HEAD
-=======
-    <servlet-mapping>
-        <servlet-name>default</servlet-name>
-        <url-pattern>/resources/*</url-pattern>
-    </servlet-mapping>
->>>>>>> master
+
 </web-app>
 
