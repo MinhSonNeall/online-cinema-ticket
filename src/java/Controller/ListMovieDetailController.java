@@ -4,10 +4,14 @@
  */
 package Controller;
 
+import Entity.Cinemas;
 import Entity.DateItem;
+import Entity.InfomationMovie;
 import Entity.Location;
 import Entity.Movies;
 import Entity.Seats;
+import Entity.ShowSeat;
+import Entity.ShowtimeSlot;
 import Entity.Showtimes;
 import Model.DaoMovie;
 import jakarta.servlet.ServletException;
@@ -68,14 +72,17 @@ public class ListMovieDetailController extends HttpServlet {
             throws ServletException, IOException {
         String movieId = request.getParameter("movieId");
         String selectedDateStr = request.getParameter("selectedDate");
-
+        String selectedCinemaId = request.getParameter("room_id");
+        String selectedCityName = request.getParameter("cityName");
+        String selectedSlotId = request.getParameter("slot_id");
         DaoMovie daoMovie = new DaoMovie();
         Movies movie = daoMovie.getMovieById(movieId);
         if (movie == null) {
             response.sendRedirect("error.jsp");
             return;
         }
-
+        
+        InfomationMovie infomationMovie = daoMovie.getInfomation(movieId, selectedCityName, selectedDateStr,selectedCinemaId,selectedSlotId);
         // Lấy danh sách suất chiếu
         ArrayList<Showtimes> showtimeList = daoMovie.getShowtimes(movieId);
         if (showtimeList.isEmpty()) {
@@ -84,11 +91,22 @@ public class ListMovieDetailController extends HttpServlet {
             request.getRequestDispatcher("/jsp/Movie/index.jsp").forward(request, response);
             return;
         }
+        
+        List<ShowtimeSlot> showtimeListOf = new ArrayList<>();
+            if (movieId != null && selectedCityName != null && selectedDateStr != null) {
+                showtimeListOf = daoMovie.getTimeSlot(movieId, selectedCityName, selectedDateStr,selectedCinemaId);
+            }else {
+                System.out.println("kh co du lieu");
+            }
+            
+        List<ShowSeat> showSeatList = new ArrayList<>();
+            if (movieId != null && selectedCityName != null && selectedDateStr != null) {
+                showSeatList = daoMovie.getShowSeat(movieId, selectedCityName, selectedDateStr,selectedCinemaId,selectedSlotId);
+            }else {
+                System.out.println("kh co du lieu");
+            }
 
-        // Lấy suất chiếu đầu tiên làm mặc định
-        Showtimes defaultShowtime = showtimeList.get(0);
-        ArrayList<Seats> seatList = daoMovie.getSeats(defaultShowtime.getShowtimeId());
-        int remainingSeats = daoMovie.getRemainingSeats(defaultShowtime.getShowtimeId());
+        
         List<DateItem> dateListTesst = daoMovie.getDayOfMoview(movieId);
         
         LocalDate selectedDate;
@@ -98,12 +116,17 @@ public class ListMovieDetailController extends HttpServlet {
             selectedDate = LocalDate.now();
         }
         List<Location> locationList = daoMovie.getCinemasByMovieAndDate(movieId, selectedDate);
-        
+        List<Cinemas> listCinema = daoMovie.GetCinemaByCity(movieId, selectedCityName);
+
         for (DateItem dateItem : dateListTesst) {
             LocalDate itemDate = LocalDate.of(selectedDate.getYear(), selectedDate.getMonth(), Integer.parseInt(dateItem.getDay()));
             dateItem.setActive(itemDate.equals(selectedDate));
         }
         
+        request.setAttribute("infomationMovie", infomationMovie);
+        request.setAttribute("showSeatList", showSeatList);
+        request.setAttribute("listCinema", listCinema);
+        request.setAttribute("showtimeListOf", showtimeListOf);
         request.setAttribute("selectedDate", selectedDate.toString());
         request.setAttribute("locationList", locationList);
         request.setAttribute("dateListTesst", dateListTesst);
@@ -113,8 +136,6 @@ public class ListMovieDetailController extends HttpServlet {
         request.setAttribute("movieAge", movie.getAge_restriction());
         request.setAttribute("showtimeList", showtimeList);
         request.setAttribute("poster", movie.getPoster_url());
-        request.setAttribute("seatList", seatList);
-        request.setAttribute("remainingSeats", remainingSeats);
         request.getRequestDispatcher("/jsp/Movie/listmovedetail.jsp").forward(request, response);
     }
 

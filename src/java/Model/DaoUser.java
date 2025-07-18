@@ -113,10 +113,11 @@ public class DaoUser extends DBContext {
     public Vector<Users> getSpecificuserData(String searchBy, String searchValue) {
         Vector<Users> data = new Vector<>();
         String sql = "SELECT * FROM movie_ticketing.users where "+searchBy+" like ?";
+        String sqlUpdated = sql.replaceAll("\\s+", " ").trim();
 
         try {
             connection = getConnection();
-            ps = connection.prepareStatement(sql);
+            ps = connection.prepareStatement(sqlUpdated);
             ps.setString(1, "%"+searchValue+"%");
             rs = ps.executeQuery();
             while (rs.next()) {

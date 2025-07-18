@@ -27,7 +27,7 @@ public class ManageUserAccountServlet extends HttpServlet {
         if (searchBy == null || searchValue == null || searchBy.isEmpty() || searchValue.isEmpty()) {
             data = dao.listAllUser();
         } else {
-            data = dao.getSpecificuserData(searchBy, searchValue);
+            data = dao.getSpecificuserData(searchBy, searchValue.replaceAll("\\s+", " ").trim());
             request.setAttribute("userList", data);
         request.getRequestDispatcher("/jsp/admin/manageUserAccount.jsp").forward(request, response);
         }
