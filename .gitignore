@@ -4,4 +4,3 @@ build/
 nbproject/private/
 tmp/
 /web/WEB-INF/lib
-dist/
