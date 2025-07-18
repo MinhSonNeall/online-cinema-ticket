@@ -3,10 +3,14 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package Model;
+import Entity.Cinemas;
 import Entity.DateItem;
+import Entity.InfomationMovie;
 import Entity.Location;
 import Entity.Movies;
 import Entity.Seats;
+import Entity.ShowSeat;
+import Entity.ShowtimeSlot;
 import Entity.Showtimes;
 import java.security.Timestamp;
 import java.sql.ResultSet;
@@ -107,7 +111,7 @@ public class DaoMovie extends DBContext{
     }
     
     
-    public Movies getMovieByIdMovieDetails(String movieId) {
+        public Movies getMovieByIdMovieDetails(String movieId) {
         Movies movie = null;
         String sql = "SELECT \n"
                 + "    m.movie_id,\n"
@@ -152,6 +156,112 @@ public class DaoMovie extends DBContext{
             closeConnection(connection, ps, rs);
         }
         return movie;
+    }
+
+    
+    public List<ShowtimeSlot> getTimeSlot(String movie_id,String cityname, String date,String room_id) {
+        List<ShowtimeSlot> showtimeslotList = new ArrayList();
+        String sql = "select sl.start_time,sl.end_time,se.price,sl.slot_id,c.city,r.room_id, count(se.seat_id) as seat_avaiable from showtimes s\n" +
+"join rooms r on s.room_id = r.room_id\n" +
+"join cinemas c on r.cinema_id = c.cinema_id\n" +
+"join showtime_slots sl on s.showtime_id = sl.showtime_id\n" +
+"join seats se on sl.slot_id = se.slot_id\n" +
+"where s.movie_id = ? and c.city = ? and sl.date = ? and r.room_id = ? and se.check_seat != 1\n" +
+"group by sl.start_time,sl.end_time,se.price,sl.slot_id,c.city,r.room_id";
+        try {
+            connection = getConnection();
+            ps = connection.prepareStatement(sql);
+            ps.setString(1, movie_id);
+            ps.setString(2, cityname);
+            ps.setString(3, date);
+            ps.setString(4, room_id);
+            
+            rs = ps.executeQuery();
+            while(rs.next()) {
+                String starttime =  rs.getString("start_time");
+                String endtime = rs.getString("end_time");
+                String seat_avaiable = rs.getString("seat_avaiable");
+                String price = rs.getString("price");
+                String slot_id = rs.getString("slot_id");
+                String city = rs.getString("city");
+                String room_id_input = rs.getString("room_id");
+                showtimeslotList.add(new ShowtimeSlot(starttime, endtime,seat_avaiable,price,slot_id,city,room_id_input));
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            closeConnection(connection, ps, rs);
+        }
+        return showtimeslotList;
+    }
+    
+    
+    public InfomationMovie getInfomation(String movie_id,String cityname, String date,String room_id,String slot_id) {
+        InfomationMovie infomationMovie = null;
+        String sql = "select distinct s.showtime_id,c.name,sl.start_time,sl.end_time,se.price, count(se.seat_id) as avaiable_seat from showtimes s\n" +
+"join rooms r on s.room_id = r.room_id\n" +
+"join cinemas c on r.cinema_id = c.cinema_id\n" +
+"join showtime_slots sl on s.showtime_id = sl.showtime_id\n" +
+"join seats se on sl.slot_id = se.slot_id\n" +
+"where s.movie_id = ? and c.city = ? and sl.date = ? and r.room_id = ? and sl.slot_id = ? and se.check_seat != 1\n" +
+"group by c.name,sl.start_time,sl.end_time,se.price";
+        try {
+            connection = getConnection();
+            ps = connection.prepareStatement(sql);
+            ps.setString(1, movie_id);
+            ps.setString(2, cityname);
+            ps.setString(3, date);
+            ps.setString(4, room_id);
+            ps.setString(5, slot_id);
+            
+            rs = ps.executeQuery();
+            if(rs.next()) {
+                String name =  rs.getString("name");
+                String starttime = rs.getString("start_time");
+                String endtime = rs.getString("end_time");
+                String avaiable = rs.getString("avaiable_seat");
+                String price = rs.getString("price");
+                String showtime = rs.getString("showtime_id");
+                infomationMovie = new InfomationMovie(name, starttime, endtime, avaiable,showtime);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            closeConnection(connection, ps, rs);
+        }
+        return infomationMovie;
+    }
+    
+    public List<ShowSeat> getShowSeat(String movie_id,String cityname, String date,String room_id,String slot_id) {
+        List<ShowSeat> showSeatList = new ArrayList();
+        String sql = "select se.seat_number,se.check_seat,se.price from showtimes s\n" +
+"join rooms r on s.room_id = r.room_id\n" +
+"join cinemas c on r.cinema_id = c.cinema_id\n" +
+"join showtime_slots sl on s.showtime_id = sl.showtime_id\n" +
+"join seats se on sl.slot_id = se.slot_id\n" +
+"where s.movie_id = ? and c.city = ? and sl.date = ? and r.room_id = ? and sl.slot_id = ?;";
+        try {
+            connection = getConnection();
+            ps = connection.prepareStatement(sql);
+            ps.setString(1, movie_id);
+            ps.setString(2, cityname);
+            ps.setString(3, date);
+            ps.setString(4, room_id);
+            ps.setString(5, slot_id);
+            
+            rs = ps.executeQuery();
+            while(rs.next()) {
+                String seat_number =  rs.getString("seat_number");
+                String check_seat = rs.getString("check_seat");
+                String price = rs.getString("price");
+                showSeatList.add(new ShowSeat(seat_number, check_seat,price));
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            closeConnection(connection, ps, rs);
+        }
+        return showSeatList;
     }
     
     public List<DateItem> getDayOfMoview(String movieId) {
@@ -260,7 +370,7 @@ public class DaoMovie extends DBContext{
     
     public List<Location> getCinemasByMovieAndDate(String movieId, LocalDate selectedDate) {
     List<Location> locationList = new ArrayList<>();
-    String sql = "SELECT DISTINCT c.name " +
+    String sql = "SELECT DISTINCT c.city " +
                  "FROM showtimes s " +
                  "JOIN rooms r ON s.room_id = r.room_id " +
                  "JOIN cinemas c ON r.cinema_id = c.cinema_id " +
@@ -274,13 +384,12 @@ public class DaoMovie extends DBContext{
         ps.setString(3, selectedDate.toString());
         rs = ps.executeQuery();
 
-        boolean isFirst = true;
+//        boolean isFirst = true;
         while (rs.next()) {
             Location location = new Location();
-            location.setName(rs.getString("name"));
-            location.setActive(isFirst); // Đặt rạp đầu tiên là active
+            location.setName(rs.getString("city"));
+//            location.setActive(isFirst); // Đặt rạp đầu tiên là active
             locationList.add(location);
-            isFirst = false;
         }
     } catch (Exception ex) {
         ex.printStackTrace();
@@ -288,6 +397,36 @@ public class DaoMovie extends DBContext{
         closeConnection(connection, ps, rs);
     }
     return locationList;
+}
+    
+    
+    public List<Cinemas> GetCinemaByCity(String movieId, String selectedCityName) {
+    List<Cinemas> listCinema = new ArrayList<>();
+    String sql = "select c.name,r.room_id,c.city from showtimes s\n" +
+"join rooms r on s.room_id = r.room_id\n" +
+"join cinemas c on r.cinema_id = c.cinema_id\n" +
+"where s.movie_id = ? and c.city = ?";
+
+    try {
+        connection = getConnection();
+        ps = connection.prepareStatement(sql);
+        ps.setString(1, movieId);
+        ps.setString(2, selectedCityName); 
+        rs = ps.executeQuery();
+
+        while (rs.next()) {
+            Cinemas cinemas = new Cinemas();
+            cinemas.setName(rs.getString("name"));
+            cinemas.setCinema_id(rs.getString("room_id"));
+            cinemas.setCity(rs.getString("city"));
+            listCinema.add(cinemas);
+        }
+    } catch (Exception ex) {
+        ex.printStackTrace();
+    } finally {
+        closeConnection(connection, ps, rs);
+    }
+    return listCinema;
 }
     
     

@@ -374,7 +374,7 @@
     </style>
 </head>
 <body>
-    <a href="jsp/Movie/index.jsp" class="logo">🎬 CinePlex</a>
+    <a href="ListMovieController" class="logo">🎬 CinePlex</a>
     
     <!-- Main Content -->
     <main class="main-content">
@@ -445,7 +445,7 @@
             
             <div class="login-links">
                 <a href="#" class="login-link">Quên mật khẩu?</a>
-                <a href="jsp/registerCustomer.jsp" class="register-link">Chưa có tài khoản? Đăng ký ngay</a>
+                <a href="RegisterController" class="register-link">Chưa có tài khoản? Đăng ký ngay</a>
             </div>
         </div>
     </main>

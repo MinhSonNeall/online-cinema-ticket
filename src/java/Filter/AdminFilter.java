@@ -169,7 +169,7 @@ public class AdminFilter implements Filter {
         // Nếu yêu cầu không thuộc các URL được bảo vệ (không bắt đầu bằng "/Manage" và không phải "/adminController"),
         // HOẶC nếu người dùng đã được xác thực và có vai trò ADMIN,
         // thì cho phép yêu cầu tiếp tục đi qua chuỗi Filter và đến tài nguyên đích (Servlet/JSP/resource)
-        chain.doFilter(request, response);
+//        chain.doFilter(request, response);
         
         Throwable problem = null;
         try {
