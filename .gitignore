@@ -1,6 +1,44 @@
+# Java build artifacts
 dist/
-build.xml
 build/
+build.xml
+
+# NetBeans project files
+nbproject/
 nbproject/private/
+
+# Temporary directories
 tmp/
-/web/WEB-INF/lib
+
+# Web application libraries
+web/WEB-INF/lib/
+
+# Common Java ignores
+*.class
+*.jar
+*.war
+*.ear
+
+# IDE and editor files
+.idea/
+*.iml
+.vscode/
+*.swp
+*~
+
+# Log files
+*.log
+logs/
+
+# Environment and configuration files
+.env
+*.properties
+config/
+
+# Maven/Gradle build directories
+target/
+out/
+
+# OS generated files
+.DS_Store
+Thumbs.db
