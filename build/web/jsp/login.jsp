@@ -374,7 +374,7 @@
     </style>
 </head>
 <body>
-    <a href="jsp/Movie/index.jsp" class="logo">🎬 CinePlex</a>
+    <a href="ListMovieController" class="logo">🎬 CinePlex</a>
     
     <!-- Main Content -->
     <main class="main-content">

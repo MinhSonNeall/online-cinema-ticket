@@ -16,6 +16,5 @@
         <servlet-name>ListMovieController</servlet-name>
         <url-pattern>/ListMovieController</url-pattern>
     </servlet-mapping>
-
 </web-app>
 
