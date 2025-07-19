@@ -22,9 +22,6 @@
                     <file>${file.reference.httpcore-4.4.9.jar-1}</file>
                 </library>
                 <library dirs="200">
-                    <file>${file.reference.jakarta.activation-2.0.1.jar-1}</file>
-                </library>
-                <library dirs="200">
                     <file>${file.reference.jakarta.mail-2.0.1.jar-1}</file>
                 </library>
                 <library dirs="200">
