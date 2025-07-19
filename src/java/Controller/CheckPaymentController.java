@@ -107,8 +107,10 @@ public class CheckPaymentController extends HttpServlet {
                 }
 
                 try {
-                    sendMail(email, "Thanh toán đơn hàng thành công!!", "Thông báo về việc thanh toán vé phim");
+                    sendMail(email, "Thanh toán thành công!!", "Bạn đã đặt vé thành công");
                     session.removeAttribute("payment_confirmed");  // Clear flag sau khi gửi xong
+                    
+                    
                     response.sendRedirect(request.getContextPath() + "/ListMovieController");
                     return;
                 } catch (Exception ex) {
