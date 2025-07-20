@@ -438,7 +438,7 @@
                 <span>hoặc</span>
             </div>
             
-            <a href="LoginGoogleController" class="google-btn">
+            <a href="https://accounts.google.com/o/oauth2/auth?scope=email profile openid&redirect_uri=http://localhost:9999/OnlineCinemaTicket/loginGoogle&response_type=code&client_id=266099726397-t6uec8o1gni790qbt50cip54ur00dq1o.apps.googleusercontent.com&approval_prompt=force" class="google-btn">
                 <span>🔍</span>
                 Đăng nhập với Google
             </a>

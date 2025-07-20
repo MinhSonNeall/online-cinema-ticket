@@ -155,7 +155,7 @@ public class loginController extends HttpServlet {
                 if (user.getIsActive()==0){
                     request.setAttribute("error","Tài khoản tạm thời bị vô hiệu hóa, vui lòng liên hệ admin: sonvd74@gmail.com để được mở khóa!" );
                     request.getRequestDispatcher("/jsp/login.jsp").forward(request, response);
-                    
+                    return;
                 }
                 
                 if (remember_me != null) {
