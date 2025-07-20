@@ -22,14 +22,17 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.concurrent.TimeUnit; // Import TimeUnit for cooldown calculation
 
 /**
  *
  * @author HP
  */
-@WebServlet(name="VerifyEmailController", urlPatterns={"/verifyEmailOTP"})
+@WebServlet(name="VerifyEmailController", urlPatterns={"/verifyEmailOTP", "/resendOtp"})
 public class VerifyEmailOTPController extends HttpServlet {
    
+    private static final long OTP_COOLDOWN_MINUTES = 5; // 5 minutes cooldown
+
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
      * @param request servlet request
@@ -65,7 +68,42 @@ public class VerifyEmailOTPController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        request.getRequestDispatcher("/jsp/verifyRegisOTP.jsp").forward(request, response);
+        String path = request.getServletPath();
+        HttpSession session = request.getSession();
+        DaoUser daoUser = new DaoUser(); // Instantiate DaoUser
+
+        if ("/resendOtp".equals(path)) {
+            String email = (String) session.getAttribute("email");
+            if (email == null) {
+                // Email not in session, redirect to registration or login
+                response.sendRedirect(request.getContextPath() + "/RegisterController"); // Or registerCustomer.jsp
+                return;
+            }
+
+            Long resendCooldown = (Long) session.getAttribute("resendCooldown");
+            long currentTime = System.currentTimeMillis();
+
+            if (resendCooldown != null && currentTime < resendCooldown) {
+                long remainingTime = TimeUnit.MILLISECONDS.toSeconds(resendCooldown - currentTime);
+                request.setAttribute("er", "Vui lòng chờ " + (remainingTime / 60) + " phút " + (remainingTime % 60) + " giây trước khi gửi lại OTP.");
+            } else {
+                // Generate new OTP using DaoUser
+                String newOtp = daoUser.generateOTP();
+                session.setAttribute("otp", newOtp);
+                
+                // Set new cooldown
+                long newCooldownEndTime = currentTime + TimeUnit.MINUTES.toMillis(OTP_COOLDOWN_MINUTES);
+                session.setAttribute("resendCooldown", newCooldownEndTime);
+
+                // Send email using DaoUser
+                daoUser.sendVerificationEmail(email, newOtp); 
+                
+                request.setAttribute("message", "Mã OTP mới đã được gửi đến email của bạn.");
+            }
+            request.getRequestDispatcher("/jsp/verifyRegisOTP.jsp").forward(request, response);
+        } else {
+            request.getRequestDispatcher("/jsp/verifyRegisOTP.jsp").forward(request, response);
+        }
     } 
 
     /** 
@@ -102,7 +140,7 @@ public class VerifyEmailOTPController extends HttpServlet {
                 Users.Roles role = Users.Roles.valueOf(roleStr.toUpperCase());
                 
                 // Parse Timestamp strings
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSSS");
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSSS"); // Reverted to SSSSSSS for nanoseconds
                 Timestamp createdAt = null;
                 Timestamp updatedAt = null;
                 
@@ -127,8 +165,9 @@ public class VerifyEmailOTPController extends HttpServlet {
                     session.removeAttribute("role");
                     session.removeAttribute("createdAt");
                     session.removeAttribute("updatedAt");
+                    session.removeAttribute("resendCooldown"); // Clear cooldown on successful registration
                     
-                    session.setAttribute("successMessage", "Account created successfully! Please login."); // Use session attribute
+                    session.setAttribute("success", "Account created successfully! Please login."); // Use session attribute
                     response.sendRedirect(request.getContextPath() + "/loginController"); // Redirect to loginController
                 } else {
                     // Failed to create user (e.g., database error)
@@ -155,5 +194,4 @@ public class VerifyEmailOTPController extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
 }

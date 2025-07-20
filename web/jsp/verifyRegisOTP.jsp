@@ -58,11 +58,58 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="row mt-3">
+                                    <div class="col-12 text-center">
+                                        <button id="resendOtpButton" class="btn btn-link link-secondary text-decoration-none" type="button">Gửi lại mã OTP</button>
+                                        <span id="countdown" class="text-muted ms-2"></span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const resendButton = document.getElementById('resendOtpButton');
+                const countdownSpan = document.getElementById('countdown');
+                const cooldownEndTime = parseInt('${sessionScope.resendCooldown != null ? sessionScope.resendCooldown : 0}');
+
+                function updateCountdown() {
+                    const now = new Date().getTime();
+                    const distance = cooldownEndTime - now;
+
+                    if (distance < 0) {
+                        resendButton.disabled = false;
+                        resendButton.textContent = 'Gửi lại mã OTP';
+                        countdownSpan.textContent = '';
+                        clearInterval(countdownInterval);
+                        return;
+                    }
+
+                    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                    countdownSpan.textContent = `(${minutes}m ${seconds}s)`;
+                    resendButton.disabled = true;
+                    resendButton.textContent = 'Vui lòng chờ...';
+                }
+
+                let countdownInterval;
+                if (cooldownEndTime > new Date().getTime()) {
+                    updateCountdown();
+                    countdownInterval = setInterval(updateCountdown, 1000);
+                } else {
+                    resendButton.disabled = false;
+                }
+
+                resendButton.addEventListener('click', function() {
+                    if (!resendButton.disabled) {
+                        window.location.href = '<c:url value="/resendOtp"/>';
+                    }
+                });
+            });
+        </script>
     </body>
 </html>

@@ -92,14 +92,14 @@ public class DaoUser extends DBContext {
                 String full_name = rs.getString("full_name");
                 String phone_number = rs.getString("phone_number");
                 String roletype = rs.getString("role");
-                String password=rs.getString("password");
+                String password = rs.getString("password");
                 Roles role = Roles.valueOf(roletype.toUpperCase());
                 Timestamp created_at = rs.getTimestamp("created_at");
                 Timestamp updated_at = rs.getTimestamp("updated_at");
-
+                int isactive = rs.getInt("IsActive");
                 // Truyền null cho password vì không lấy từ database
                 Users user = new Users(user_id, user_email, password, full_name,
-                        phone_number, role, created_at, updated_at);
+                        phone_number, role, created_at, updated_at,isactive);
                 data.add(user);
             }
         } catch (Exception ex) {
@@ -110,15 +110,16 @@ public class DaoUser extends DBContext {
 
         return data;
     }
+
     public Vector<Users> getSpecificuserData(String searchBy, String searchValue) {
         Vector<Users> data = new Vector<>();
-        String sql = "SELECT * FROM movie_ticketing.users where "+searchBy+" like ?";
+        String sql = "SELECT * FROM movie_ticketing.users where " + searchBy + " like ? and role = 'Customer'";
         String sqlUpdated = sql.replaceAll("\\s+", " ").trim();
 
         try {
             connection = getConnection();
             ps = connection.prepareStatement(sqlUpdated);
-            ps.setString(1, "%"+searchValue+"%");
+            ps.setString(1, "%" + searchValue + "%");
             rs = ps.executeQuery();
             while (rs.next()) {
                 String user_id = rs.getString("user_id");
@@ -126,14 +127,14 @@ public class DaoUser extends DBContext {
                 String full_name = rs.getString("full_name");
                 String phone_number = rs.getString("phone_number");
                 String roletype = rs.getString("role");
-                String password=rs.getString("password");
+                String password = rs.getString("password");
                 Roles role = Roles.valueOf(roletype.toUpperCase());
                 Timestamp created_at = rs.getTimestamp("created_at");
                 Timestamp updated_at = rs.getTimestamp("updated_at");
+                int isActive = rs.getInt("IsActive");
 
-                
                 Users user = new Users(user_id, user_email, password, full_name,
-                        phone_number, role, created_at, updated_at);
+                        phone_number, role, created_at, updated_at,isActive);
                 data.add(user);
             }
         } catch (Exception ex) {
@@ -144,8 +145,6 @@ public class DaoUser extends DBContext {
 
         return data;
     }
-
- 
 
     public Vector<Users> listAllUser() {
         Vector<Users> list = new Vector<>();
@@ -164,8 +163,9 @@ public class DaoUser extends DBContext {
                 Roles role = Roles.valueOf(roletype.toUpperCase());
                 Timestamp created_at = rs.getTimestamp("created_at");
                 Timestamp updated_at = rs.getTimestamp("updated_at");
+                int isActive = rs.getInt("IsActive");
                 Users user = new Users(user_id, user_email, null, full_name,
-                        phone_number, role, created_at, updated_at);
+                        phone_number, role, created_at, updated_at,isActive);
                 list.add(user);
             }
         } catch (Exception ex) {
@@ -181,6 +181,37 @@ public class DaoUser extends DBContext {
         int otp = 100000 + random.nextInt(900000); // Generate 6-digit OTP
         return String.valueOf(otp);
         // Apppassword xgfs dqfr pdpy icrr
+
+    }
+
+    public Vector<Users> listUser() {
+        Vector<Users> userList = new Vector<>();
+        String sql = "select * from users";
+        try {
+            connection = getConnection();
+            ps=connection.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                String user_id = rs.getString("user_id");
+                String user_email = rs.getString("email");
+                String full_name = rs.getString("full_name");
+                String phone_number = rs.getString("phone_number");
+                String roletype = rs.getString("role");
+                Roles role = Roles.valueOf(roletype.toUpperCase());
+                Timestamp created_at = rs.getTimestamp("created_at");
+                Timestamp updated_at = rs.getTimestamp("updated_at");
+                int isActive = rs.getInt("IsActive");
+                Users user = new Users(user_id, user_email, null, full_name,
+                        phone_number, role, created_at, updated_at,isActive);
+                userList.add(user);
+            }
+        }catch (Exception ex) {
+            ex.printStackTrace();
+        }finally {
+            closeConnection(connection, ps, rs);
+        }
+        
+        return userList;
 
     }
 
@@ -216,7 +247,7 @@ public class DaoUser extends DBContext {
     }
 
     public boolean createUser(Users user) {
-        String sql = "INSERT INTO movie_ticketing.users (user_id, email, password, full_name, phone_number, role, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO movie_ticketing.users (user_id, email, password, full_name, phone_number, role, created_at, updated_at,IsActive) VALUES (?, ?, ?, ?, ?, ?, ?, ?,1)";
         try {
             connection = getConnection();
             ps = connection.prepareStatement(sql);
@@ -240,10 +271,10 @@ public class DaoUser extends DBContext {
         }
     }
 
-    public Vector<Users> listCustomer(String searchBy , String searchValue) {
+    public Vector<Users> listCustomer(String searchBy, String searchValue) {
         Vector<Users> users = new Vector<>();
-        String sql="select * from movie_ticketing.users where ? like ?";
-         try {
+        String sql = "select * from movie_ticketing.users where ? like ?";
+        try {
             connection = getConnection();
             ps = connection.prepareStatement(sql);
             ps.setString(1, searchBy);
@@ -253,16 +284,16 @@ public class DaoUser extends DBContext {
                 String user_id = rs.getString("user_id");
                 String user_email = rs.getString("email");
                 String full_name = rs.getString("full_name");
-                String password=rs.getString("password");
+                String password = rs.getString("password");
                 String phone_number = rs.getString("phone_number");
                 String roletype = rs.getString("role");
                 Roles role = Roles.valueOf(roletype.toUpperCase());
                 Timestamp created_at = rs.getTimestamp("created_at");
                 Timestamp updated_at = rs.getTimestamp("updated_at");
-
+                int isActive = rs.getInt("IsActive");
                 // Truyền null cho password vì không lấy từ database
                 Users user = new Users(user_id, user_email, password, full_name,
-                        phone_number, role, created_at, updated_at);
+                        phone_number, role, created_at, updated_at,isActive);
                 users.add(user);
             }
         } catch (Exception ex) {
@@ -270,37 +301,54 @@ public class DaoUser extends DBContext {
         } finally {
             closeConnection(connection, ps, rs);
         }
-        
+
         return users;
     }
-
-public int updateCustomer(Users user) {
-    int n = 0;
-    String sql = "UPDATE movie_ticketing.users SET email =?, full_name =?, phone_number =?, password =? WHERE email =?";
-    try {
-        connection = getConnection();
-        PreparedStatement ps = connection.prepareStatement(sql);
-        ps.setString(1, user.getEmail());
-        ps.setString(2, user.getFull_name());
-        ps.setString(3, user.getPhone_number());
-        ps.setString(4, user.getPassword());
-        ps.setString(5, user.getEmail());
-
-        n = ps.executeUpdate();
-    } catch (Exception ex) {
-        Logger.getLogger(DaoUser.class.getName()).log(Level.SEVERE, null, ex);
-    } finally {
-        closeConnection(connection, ps, null);
+    public int changeActive(String email, int isActive){
+        String sql ="UPDATE movie_ticketing.users SET IsActive = ? WHERE email = ?";
+        int n=0;
+        try{
+            connection=getConnection();
+            ps=connection.prepareStatement(sql);
+            ps.setInt(1, isActive);
+            ps.setString(2, email);
+            n=ps.executeUpdate();
+        }
+        catch (Exception ex) {
+            Logger.getLogger(DaoUser.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            closeConnection(connection, ps, null);
+        }
+        return n;
+        
     }
-    return n;
-}
+    public int updateCustomer(Users user) {
+        int n = 0;
+        String sql = "UPDATE movie_ticketing.users SET email =?, full_name =?, phone_number =?, password =? WHERE email =?";
+        try {
+            connection = getConnection();
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, user.getEmail());
+            ps.setString(2, user.getFull_name());
+            ps.setString(3, user.getPhone_number());
+            ps.setString(4, user.getPassword());
+            ps.setString(5, user.getEmail());
+
+            n = ps.executeUpdate();
+        } catch (Exception ex) {
+            Logger.getLogger(DaoUser.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            closeConnection(connection, ps, null);
+        }
+        return n;
+    }
 
     public boolean deleteCustomer(String email) {
         String sql = "DELETE FROM movie_ticketing.users WHERE email = ?";
         try {
-            
-                connection = getConnection();
-            
+
+            connection = getConnection();
+
             ps = connection.prepareStatement(sql);
             ps.setString(1, email);
 
@@ -314,5 +362,5 @@ public int updateCustomer(Users user) {
             closeConnection(connection, ps, rs);
         }
     }
-    
+
 }
