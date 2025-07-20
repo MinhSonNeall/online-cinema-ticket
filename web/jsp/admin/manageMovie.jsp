@@ -446,7 +446,67 @@ flex-direction: column;
 <span> / </span>
 <span>Movies</span>
 </div>
-<%-- TODO: Implement movie management functionality here --%>
+<div class="search-section">
+    <h3><i class="fas fa-search"></i> Search Movies</h3>
+    <form action="manageMovie" method="get" class="search-form">
+        <input type="hidden" name="service" value="searchMovie"/>
+        <div class="form-group">
+            <label for="searchTitle">Movie Title</label>
+            <input type="text" id="searchTitle" name="title" placeholder="Enter movie title" value="${requestScope.searchTitle != null ? requestScope.searchTitle : ''}">
+        </div>
+        <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> Search</button>
+        <a href="manageMovie?service=listAllMovies" class="btn btn-secondary"><i class="fas fa-sync-alt"></i> Reset</a>
+    </form>
+</div>
+
+<div class="table-section">
+    <div class="table-header">
+        <h3><i class="fas fa-film"></i> All Movies</h3>
+        <a href="manageMovie?service=addMovieForm" class="btn btn-primary"><i class="fas fa-plus"></i> Add New Movie</a>
+    </div>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Title</th>
+                    <th>Director</th>
+                    <th>Release Date</th>
+                    <th>Duration (min)</th>
+                    <th>Active</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <c:forEach var="movie" items="${requestScope.moviesList}">
+                    <tr>
+                        <td>${movie.movieId}</td>
+                        <td>${movie.title}</td>
+                        <td>${movie.director}</td>
+                        <td>${movie.releaseDate}</td>
+                        <td>${movie.duration}</td>
+                        <td>
+                            <c:choose>
+                                <c:when test="${movie.isActive}">Yes</c:when>
+                                <c:otherwise>No</c:otherwise>
+                            </c:choose>
+                        </td>
+                        <td class="action-buttons">
+                            <a href="manageMovie?service=movieDetail&id=${movie.movieId}" class="btn btn-info btn-sm"><i class="fas fa-eye"></i> Detail</a>
+                            <a href="manageMovie?service=editMovieForm&id=${movie.movieId}" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i> Edit</a>
+                            <a href="manageMovie?service=deleteMovie&id=${movie.movieId}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this movie?');"><i class="fas fa-trash-alt"></i> Delete</a>
+                        </td>
+                    </tr>
+                </c:forEach>
+                <c:if test="${empty requestScope.moviesList}">
+                    <tr>
+                        <td colspan="7" style="text-align: center;">No movies found.</td>
+                    </tr>
+                </c:if>
+            </tbody>
+        </table>
+    </div>
+</div>
 </div>
 </div>
 </body>

@@ -478,14 +478,14 @@
 
                                 <div class="detail-row">
                                     <span class="detail-label">Đạo diễn:</span>
-                                    <div class="detail-value directors-list">Madeline Sharafian, Adrian Molina, Domee Shi</div>
+                                    <div class="detail-value directors-list">${movieDetails.director}</div>
                                 </div>
 
 
                                 <div class="detail-row">
                                     <span class="detail-label">Thể loại:</span>
                                     <div class="detail-value">
-                                        <span class="genre-tag">${movieDetails.genere_name}</span>
+                                        <span class="genre-tag">${movieDetails.genre_name}</span>
                                     </div>
                                 </div>
 
