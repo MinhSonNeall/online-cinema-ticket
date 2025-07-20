@@ -70,19 +70,20 @@ public class ManageUserAccountServlet extends HttpServlet {
         }
     }
 
-    private void deleteUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private void changeUserStatus(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String email = request.getParameter("email");
+        int isActive = Integer.parseInt(request.getParameter("isActive")); // Get the new status
 
         DaoUser dao = new DaoUser();
-        boolean deleted = dao.deleteCustomer(email);
+        int updated = dao.changeActive(email, isActive);
 
-        if (deleted) {
+        if (updated > 0) {
             // Set a success message
-            request.getSession().setAttribute("message", "User deleted successfully");
+            request.getSession().setAttribute("message", "User status updated successfully");
 
         } else {
             // Set an error message
-            request.getSession().setAttribute("message", "Failed to delete user");
+            request.getSession().setAttribute("message", "Failed to update user status");
         }
 
         // Redirect to the list of users
@@ -110,8 +111,9 @@ public class ManageUserAccountServlet extends HttpServlet {
                     case "update":
                         updateUser(request, response);
                         break;
-                    case "delete":
-                        deleteUser(request, response);
+                    case "changeStatus":
+                        changeUserStatus(request, response);
+                        break;
                     case "detail":
                         showDetail(request,response);
 

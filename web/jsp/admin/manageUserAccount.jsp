@@ -486,7 +486,7 @@ flex-direction: column;
 
 <!-- Message Display -->
 <c:if test="${not empty message}">
-<div class="message ${message.startsWith('User deleted successfully') ? 'success' : 'error'}">
+<div class="message ${message.startsWith('User status updated successfully') ? 'success' : 'error'}">
 <i class="fas fa-info-circle"></i> ${message}
 </div>
 </c:if>
@@ -502,6 +502,7 @@ flex-direction: column;
 <tr>
 <th><i class="fas fa-envelope"></i> Email</th>
 <th><i class="fas fa-user"></i> Full Name</th>
+<th><i class="fas fa-toggle-on"></i> Active Status</th>
 <th><i class="fas fa-cogs"></i> Actions</th>
 </tr>
 </thead>
@@ -511,12 +512,23 @@ flex-direction: column;
 <td>${user.email}</td>
 <td>${user.full_name}</td>
 <td>
+<c:choose>
+<c:when test="${user.isActive == 1}">
+<span style="color: green; font-weight: bold;">Active</span>
+</c:when>
+<c:otherwise>
+<span style="color: red; font-weight: bold;">De-active</span>
+</c:otherwise>
+</c:choose>
+</td>
+<td>
 <div class="action-buttons">
 <a href="ManageUserAccount?service=update&email=${user.email}" class="btn btn-info btn-sm">
 <i class="fas fa-edit"></i> Update
 </a>
-<a href="#" class="btn btn-danger btn-sm" onclick="confirmDelete('${user.email}')">
-<i class="fas fa-trash"></i> Delete
+<c:set var="newStatus" value="${user.isActive == 1 ? 0 : 1}" />
+<a href="#" class="btn ${user.isActive == 1 ? 'btn-danger' : 'btn-success'} btn-sm" data-email="${user.email}" data-newstatus="${newStatus}" onclick="confirmChangeStatus(event)">
+<i class="fas fa-toggle-on"></i> ${user.isActive == 1 ? 'De-active' : 'Active'}
 </a>
 <a href="ManageUserAccount?service=detail&email=${user.email}" class="btn btn-warning btn-sm">
 <i class="fas fa-eye"></i> Details
@@ -533,11 +545,15 @@ flex-direction: column;
 </div>
 
 <script>
-function confirmDelete(email) {
-if (confirm('Are you sure you want to delete user: ' + email + '?')) {
-window.location.href = 'ManageUserAccount?service=delete&email=' + email;
-}
-}
+    function confirmChangeStatus(event) {
+        event.preventDefault(); // Prevent default link behavior
+        var email = event.currentTarget.dataset.email;
+        var newStatus = parseInt(event.currentTarget.dataset.newstatus);
+        var actionText = newStatus === 1 ? 'activate' : 'de-activate';
+        if (confirm('Are you sure you want to ' + actionText + ' user: ' + email + '?')) {
+            window.location.href = 'ManageUserAccount?service=changeStatus&email=' + email + '&isActive=' + newStatus;
+        }
+    }
 </script>
 </body>
 </html>

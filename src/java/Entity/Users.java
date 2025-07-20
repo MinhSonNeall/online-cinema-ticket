@@ -21,6 +21,7 @@ public class Users {
         ADMIN
     }
 
+    private int IsActive;
     private String user_id;     // Đổi tên biến
     private String email;
     private String password;
@@ -37,8 +38,9 @@ public class Users {
     // Constructor với tất cả các trường, bao gồm user_id
     public Users(String user_id, String email, String password,
             String full_name, String phone_number, Roles role,
-            Timestamp created_at, Timestamp updated_at) {
+            Timestamp created_at, Timestamp updated_at , int isActive) {
         this.user_id = user_id;
+        this.IsActive=isActive;
         this.email = email;
         this.password = password;
         this.full_name = full_name;
@@ -56,14 +58,16 @@ public class Users {
         this.full_name = full_name;
         this.phone_number = phone_number;
         
-        
+        this.IsActive=1;
         this.updated_at = updated_at;
     }
 
+     
     // Constructor để tạo User mới, tự động tạo user_id từ email
     public Users(String email, String password,
             String full_name, String phone_number, Roles role,
             Timestamp created_at, Timestamp updated_at) {
+        this.IsActive=1;
         this.user_id = UUID.nameUUIDFromBytes(email.getBytes()).toString(); // Generate UUID from email
         this.email = email;
         this.password = password;
@@ -81,6 +85,12 @@ public class Users {
 
     public void setUser_id(String user_id) {
         this.user_id = user_id;
+    }
+    public int getIsActive(){
+        return IsActive;
+    }
+    public void setIsActive(int IsActive){
+        this.IsActive=IsActive;
     }
 
     public String getEmail() {
