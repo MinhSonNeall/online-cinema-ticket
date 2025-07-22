@@ -8,7 +8,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Manage Rooms & Seats</title>
+<title>Manage Cinemas</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/manageMovie.css">
 <style>
@@ -418,6 +418,17 @@ flex-direction: column;
 <div class="logo">
 <h2><i class="fas fa-chart-line"></i> Staff Dashboard</h2>
 </div>
+    <div class="welcome-user">
+            <i class="fas fa-user-circle" style="font-size: 48px; margin-bottom: 10px;"></i>
+            <p>Welcome, ${sessionScope.user.full_name}</p>
+            <div class="profile-dropdown">
+                <div class="profile-info">
+                    <div class="profile-name">${sessionScope.user.full_name}</div>
+                    <div class="profile-role">${sessionScope.user.role}</div>
+                    <div class="profile-email">${sessionScope.user.email}</div>
+                </div>
+            </div>
+        </div>
 <!-- Management Menu -->
 <div class="nav-section">
 <div class="nav-title">Management</div>
@@ -425,7 +436,7 @@ flex-direction: column;
 <li><a href="ManageUserAccount"><i class="fas fa-users"></i> User Accounts</a></li>
 <li><a href="ManageMovie"><i class="fas fa-film"></i> Movies</a></li>
 <li><a href="ManageShowtime"><i class="fas fa-clock"></i> Showtimes</a></li>
-<li><a href="ManageRoomSeat" class="active"><i class="fas fa-chair"></i> Rooms & Seats</a></li>
+<li><a href="ManageRoomSeat" class="active"><i class="fas fa-chair"></i> Cinemas</a></li>
 <li><a href="ManageTicketPrice"><i class="fas fa-tag"></i> Ticket Prices</a></li>
 <li><a href="ManageCombo"><i class="fas fa-utensils"></i> Combo Food</a></li>
 </ul>
@@ -440,12 +451,12 @@ flex-direction: column;
 </div>
 <div class="main-content">
 <div class="header">
-<h1><i class="fas fa-chair"></i> Manage Rooms & Seats</h1>
+<h1><i class="fas fa-chair"></i> Manage Cinemas</h1>
 </div>
 <div class="breadcrumb">
 <a href="adminController"><i class="fas fa-home"></i> Dashboard</a>
 <span> / </span>
-<span>Rooms & Seats</span>
+<span>Cinemas</span>
 </div>
 <div class="table-section">
 <div class="table-header">

@@ -239,7 +239,7 @@ text-align: center;
                 <li><a href="http://localhost:9999/OnlineCinemaTicket/admin/ManageUserAccount"><i class="fas fa-users"></i> User Accounts</a></li>
                 <li><a href="http://localhost:9999/OnlineCinemaTicket/admin/ManageMovie"><i class="fas fa-film"></i> Movies</a></li>
                 <li><a href="http://localhost:9999/OnlineCinemaTicket/admin/ManageShowtime" class="active"><i class="fas fa-clock"></i> Showtimes</a></li>
-                <li><a href="http://localhost:9999/OnlineCinemaTicket/admin/ManageRoomSeat"><i class="fas fa-chair"></i> Rooms & Seats</a></li>
+                <li><a href="http://localhost:9999/OnlineCinemaTicket/admin/ManageRoomSeat"><i class="fas fa-chair"></i> CinemasCinemas</a></li>
                 <li><a href="http://localhost:9999/OnlineCinemaTicket/admin/ManageTicketPrice"><i class="fas fa-tag"></i> Ticket Prices</a></li>
                 <li><a href="http://localhost:9999/OnlineCinemaTicket/admin/ManageCombo"><i class="fas fa-utensils"></i> Combo Food</a></li>
             </ul>

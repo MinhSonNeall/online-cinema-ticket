@@ -11,6 +11,9 @@ import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class DaoShowtime extends DBContext {
 
@@ -205,5 +208,60 @@ public class DaoShowtime extends DBContext {
         } finally {
             closeConnection(connection, ps, null);
         }
+    }
+    
+    public List<Map<String, Object>> getShowtimeSlotsByShowtimeId(String showtimeId) {
+        List<Map<String, Object>> slots = new ArrayList<>();
+        String sql = "SELECT slot_id, date, start_time, end_time FROM showtime_slots WHERE showtime_id = ? ORDER BY date, start_time";
+        
+        try {
+            connection = getConnection();
+            ps = connection.prepareStatement(sql);
+            ps.setString(1, showtimeId);
+            rs = ps.executeQuery();
+            
+            while (rs.next()) {
+                Map<String, Object> slot = new HashMap<>();
+                slot.put("slot_id", rs.getString("slot_id"));
+                slot.put("date", rs.getString("date"));
+                slot.put("start_time", rs.getString("start_time"));
+                slot.put("end_time", rs.getString("end_time"));
+                slots.add(slot);
+            }
+            
+            System.out.println("Debug - Found " + slots.size() + " slots for showtime ID: " + showtimeId);
+        } catch (Exception e) {
+            System.out.println("Error getting showtime slots: " + e.getMessage());
+            Logger.getLogger(DaoShowtime.class.getName()).log(Level.SEVERE, "Error getting showtime slots: " + e.getMessage(), e);
+        } finally {
+            closeConnection(connection, ps, rs);
+        }
+        
+        return slots;
+    }
+    
+    public int countShowtimeSlotsByShowtimeId(String showtimeId) {
+        int count = 0;
+        String sql = "SELECT COUNT(*) as slot_count FROM showtime_slots WHERE showtime_id = ?";
+        
+        try {
+            connection = getConnection();
+            ps = connection.prepareStatement(sql);
+            ps.setString(1, showtimeId);
+            rs = ps.executeQuery();
+            
+            if (rs.next()) {
+                count = rs.getInt("slot_count");
+            }
+            
+            System.out.println("Debug - Counted " + count + " slots for showtime ID: " + showtimeId);
+        } catch (Exception e) {
+            System.out.println("Error counting showtime slots: " + e.getMessage());
+            Logger.getLogger(DaoShowtime.class.getName()).log(Level.SEVERE, "Error counting showtime slots: " + e.getMessage(), e);
+        } finally {
+            closeConnection(connection, ps, rs);
+        }
+        
+        return count;
     }
 } 

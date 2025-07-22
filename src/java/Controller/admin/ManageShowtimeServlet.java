@@ -21,6 +21,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.math.BigDecimal;
+import java.util.Map;
 
 @WebServlet(name = "ManageShowtimeServlet", urlPatterns = {"/ManageShowtime"})
 public class ManageShowtimeServlet extends HttpServlet {
@@ -44,6 +45,9 @@ public class ManageShowtimeServlet extends HttpServlet {
             case "add-slot":
                 showAddSlotForm(request, response);
                 break;
+            case "view-slots":
+                viewShowtimeSlots(request, response);
+                break;
             case "get-rooms":
                 getRoomsByCinema(request, response);
                 break;
@@ -55,6 +59,9 @@ public class ManageShowtimeServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
+        if (action==null){
+            action="list";
+        }
         switch (action) {
             case "add":
                 addShowtime(request, response);
@@ -65,6 +72,9 @@ public class ManageShowtimeServlet extends HttpServlet {
             case "add-slot":
                 addShowtimeSlot(request, response);
                 break;
+            case "list":
+                    listShowtimes(request, response);
+                    break;
         }
     }
 
@@ -375,5 +385,21 @@ public class ManageShowtimeServlet extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
         response.getWriter().write(jsonResponse);
         System.out.println("Debug - JSON response sent to client");
+    }
+
+    // Phương thức để hiển thị danh sách showtime_slots theo showtime_id
+    private void viewShowtimeSlots(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String showtimeId = request.getParameter("id");
+        System.out.println("Debug - viewShowtimeSlots called with showtimeId: " + showtimeId);
+        
+        DaoShowtime daoShowtime = new DaoShowtime();
+        Showtimes showtime = daoShowtime.getShowtimeById(showtimeId);
+        List<Map<String, Object>> slots = daoShowtime.getShowtimeSlotsByShowtimeId(showtimeId);
+        
+        request.setAttribute("showtime", showtime);
+        request.setAttribute("slots", slots);
+        request.setAttribute("slotCount", slots.size());
+        
+        request.getRequestDispatcher("/jsp/admin/viewShowtimeSlots.jsp").forward(request, response);
     }
 }

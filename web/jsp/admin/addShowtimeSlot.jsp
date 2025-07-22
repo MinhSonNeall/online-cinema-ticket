@@ -269,7 +269,7 @@ text-align: center;
                 <li><a href="http://localhost:9999/OnlineCinemaTicket/admin/ManageUserAccount"><i class="fas fa-users"></i> User Accounts</a></li>
                 <li><a href="http://localhost:9999/OnlineCinemaTicket/admin/ManageMovie"><i class="fas fa-film"></i> Movies</a></li>
                 <li><a href="http://localhost:9999/OnlineCinemaTicket/admin/ManageShowtime" class="active"><i class="fas fa-clock"></i> Showtimes</a></li>
-                <li><a href="http://localhost:9999/OnlineCinemaTicket/admin/ManageRoomSeat"><i class="fas fa-chair"></i> Rooms & Seats</a></li>
+                <li><a href="http://localhost:9999/OnlineCinemaTicket/admin/ManageRoomSeat"><i class="fas fa-chair"></i> CinemasCinemas</a></li>
                 <li><a href="http://localhost:9999/OnlineCinemaTicket/admin/ManageTicketPrice"><i class="fas fa-tag"></i> Ticket Prices</a></li>
                 <li><a href="http://localhost:9999/OnlineCinemaTicket/admin/ManageCombo"><i class="fas fa-utensils"></i> Combo Food</a></li>
             </ul>
@@ -307,14 +307,14 @@ text-align: center;
                 <p><strong>Rạp:</strong> ${showtime.cinema_name}</p>
                 <p><strong>Phòng:</strong> ${showtime.room_name}</p>
                 <p><strong>Thời gian áp dụng:</strong> <fmt:formatDate value="${showtime.start_time}" pattern="dd/MM/yyyy" /> đến <fmt:formatDate value="${showtime.end_time}" pattern="dd/MM/yyyy" /></p>
-            </div>
+        </div>
 
-            <form action="${pageContext.request.contextPath}/ManageShowtime?action=add-slot" method="post">
-                <input type="hidden" name="showtimeId" value="${showtime.showtime_id}">
+        <form action="${pageContext.request.contextPath}/ManageShowtime?action=add-slot" method="post">
+            <input type="hidden" name="showtimeId" value="${showtime.showtime_id}">
 
-                <div class="form-group">
-                    <label for="date">Ngày chiếu:</label>
-                    <input type="date" class="form-control" id="date" name="date" required>
+            <div class="form-group">
+                <label for="date">Ngày chiếu:</label>
+                <input type="date" class="form-control" id="date" name="date" required>
                     <small class="form-text text-muted">Ngày phải nằm trong khoảng từ <fmt:formatDate value="${showtime.start_time}" pattern="dd/MM/yyyy" /> đến <fmt:formatDate value="${showtime.end_time}" pattern="dd/MM/yyyy" /></small>
                 </div>
                 
@@ -322,21 +322,21 @@ text-align: center;
                     <label for="slotStartTime">Giờ bắt đầu:</label>
                     <input type="time" class="form-control" id="slotStartTime" name="slotStartTime" step="1" required>
                     <small class="form-text text-muted">Bạn có thể nhập theo định dạng 24h (19:00:00) hoặc AM/PM (7:00:00PM). Hệ thống sẽ tự động chuyển đổi sang định dạng 24h.</small>
-                </div>
+            </div>
                 
-                <div class="form-group">
+            <div class="form-group">
                     <label for="slotEndTime">Giờ kết thúc:</label>
                     <input type="time" class="form-control" id="slotEndTime" name="slotEndTime" step="1" required>
                     <small class="form-text text-muted">Bạn có thể nhập theo định dạng 24h (21:30:00) hoặc AM/PM (9:30:00PM). Hệ thống sẽ tự động chuyển đổi sang định dạng 24h.</small>
-                </div>
+            </div>
                 
-                <div class="form-group">
+            <div class="form-group">
                     <button type="submit" class="btn btn-primary"><i class="fas fa-plus"></i> Thêm Suất Chiếu và Tạo Ghế</button>
                     <a href="${pageContext.request.contextPath}/ManageShowtime" class="btn btn-secondary"><i class="fas fa-times"></i> Hủy</a>
-                </div>
-            </form>
+            </div>
+        </form>
         </div>
     </div>
-</div>
+    </div>
 </body>
 </html> 

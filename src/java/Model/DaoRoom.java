@@ -92,4 +92,97 @@ public class DaoRoom extends DBContext {
         }
         return rooms;
     }
+    
+    public int getMaxRoomId() {
+        int maxId = 0;
+        String sql = "SELECT MAX(CAST(room_id AS UNSIGNED)) as max_id FROM Rooms";
+        try {
+            connection = getConnection();
+            ps = connection.prepareStatement(sql);
+            rs = ps.executeQuery();
+            if (rs.next() && rs.getString("max_id") != null) {
+                maxId = rs.getInt("max_id");
+                System.out.println("Debug - Found max room ID: " + maxId);
+            } else {
+                System.out.println("Debug - No rooms found, starting with ID 1");
+            }
+        } catch (Exception e) {
+            System.out.println("Error getting max room ID: " + e.getMessage());
+            Logger.getLogger(DaoRoom.class.getName()).log(Level.SEVERE, "Error getting max room ID: " + e.getMessage(), e);
+        } finally {
+            closeConnection(connection, ps, rs);
+        }
+        return maxId;
+    }
+    
+    public boolean addRoom(Rooms room) {
+        String sql = "INSERT INTO Rooms (room_id, cinema_id, name, total_seats) VALUES (?, ?, ?, ?)";
+        try {
+            connection = getConnection();
+            ps = connection.prepareStatement(sql);
+            ps.setString(1, room.getRoom_id());
+            ps.setString(2, room.getCinema_id());
+            ps.setString(3, room.getName());
+            ps.setInt(4, room.getTotal_seats());
+            
+            int rowsAffected = ps.executeUpdate();
+            return rowsAffected > 0;
+        } catch (Exception e) {
+            Logger.getLogger(DaoRoom.class.getName()).log(Level.SEVERE, "Error adding room: " + e.getMessage(), e);
+            return false;
+        } finally {
+            closeConnection(connection, ps, null);
+        }
+    }
+    
+    public boolean updateRoom(Rooms room) {
+        String sql = "UPDATE Rooms SET cinema_id = ?, name = ?, total_seats = ? WHERE room_id = ?";
+        try {
+            connection = getConnection();
+            ps = connection.prepareStatement(sql);
+            ps.setString(1, room.getCinema_id());
+            ps.setString(2, room.getName());
+            ps.setInt(3, room.getTotal_seats());
+            ps.setString(4, room.getRoom_id());
+            
+            int rowsAffected = ps.executeUpdate();
+            return rowsAffected > 0;
+        } catch (Exception e) {
+            Logger.getLogger(DaoRoom.class.getName()).log(Level.SEVERE, "Error updating room: " + e.getMessage(), e);
+            return false;
+        } finally {
+            closeConnection(connection, ps, null);
+        }
+    }
+    
+    public boolean deleteRoom(String roomId) {
+        // Kiểm tra xem phòng có đang được sử dụng trong showtimes không
+        String checkSql = "SELECT COUNT(*) as count FROM Showtimes WHERE room_id = ?";
+        try {
+            connection = getConnection();
+            ps = connection.prepareStatement(checkSql);
+            ps.setString(1, roomId);
+            rs = ps.executeQuery();
+            
+            if (rs.next() && rs.getInt("count") > 0) {
+                // Nếu phòng đang được sử dụng, không cho phép xóa
+                Logger.getLogger(DaoRoom.class.getName()).log(Level.WARNING, 
+                    "Cannot delete room ID " + roomId + " because it is being used in showtimes");
+                return false;
+            }
+            
+            // Nếu không có showtime nào sử dụng phòng, tiến hành xóa
+            String sql = "DELETE FROM Rooms WHERE room_id = ?";
+            ps = connection.prepareStatement(sql);
+            ps.setString(1, roomId);
+            
+            int rowsAffected = ps.executeUpdate();
+            return rowsAffected > 0;
+        } catch (Exception e) {
+            Logger.getLogger(DaoRoom.class.getName()).log(Level.SEVERE, "Error deleting room: " + e.getMessage(), e);
+            return false;
+        } finally {
+            closeConnection(connection, ps, rs);
+        }
+    }
 }
