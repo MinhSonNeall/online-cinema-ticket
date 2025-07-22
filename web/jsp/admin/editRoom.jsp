@@ -8,7 +8,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Add New Room - ${cinema.name}</title>
+<title>Edit Room - ${room.name}</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 <style>
 * {
@@ -402,7 +402,7 @@ flex-direction: column;
     
     <div class="main-content">
         <div class="header">
-            <h1><i class="fas fa-plus-circle"></i> Add New Room</h1>
+            <h1><i class="fas fa-edit"></i> Edit Room</h1>
         </div>
         
         <div class="breadcrumb">
@@ -412,7 +412,7 @@ flex-direction: column;
                 ${cinema.name}
             </a>
             <i class="fas fa-chevron-right"></i>
-            <span>Add New Room</span>
+            <span>Edit Room</span>
         </div>
         
         <div class="cinema-info-card">
@@ -426,24 +426,25 @@ flex-direction: column;
         <div class="form-section">
             <h2><i class="fas fa-door-open"></i> Room Information</h2>
             
-            <form action="${pageContext.request.contextPath}/ManageRoomSeat?service=saveRoom" method="post">
+            <form action="${pageContext.request.contextPath}/ManageRoomSeat?service=updateRoom" method="post">
+                <input type="hidden" name="roomId" value="${room.room_id}">
                 <input type="hidden" name="cinemaId" value="${cinema.cinema_id}">
                 
                 <div class="form-group">
                     <label for="name">Room Name:</label>
-                    <input type="text" id="name" name="name" required>
+                    <input type="text" id="name" name="name" value="${room.name}" required>
                     <div class="hint">Enter the name or number of the room (e.g. "Room 1", "VIP Room")</div>
                 </div>
                 
                 <div class="form-group">
                     <label for="totalSeats">Total Seats:</label>
-                    <input type="number" id="totalSeats" name="totalSeats" min="1" max="500" required>
+                    <input type="number" id="totalSeats" name="totalSeats" min="1" max="500" value="${room.total_seats}" required>
                     <div class="hint">Enter the total number of seats in this room</div>
                 </div>
                 
                 <div class="form-actions">
                     <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-save"></i> Save Room
+                        <i class="fas fa-save"></i> Update Room
                     </button>
                     <a href="${pageContext.request.contextPath}/ManageRoomSeat?service=viewRooms&cinemaId=${cinema.cinema_id}" class="btn btn-secondary">
                         <i class="fas fa-times"></i> Cancel
