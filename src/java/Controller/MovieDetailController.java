@@ -64,7 +64,7 @@ public class MovieDetailController extends HttpServlet {
         DaoMovie daoMovie = new DaoMovie();
         Movies movie = daoMovie.getMovieByIdMovieDetails(movieId);
         if (movie == null) {
-            response.sendRedirect("error.jsp");
+            response.sendRedirect(request.getContextPath()+"/jsp/error.jsp");
             return;
         }
         request.setAttribute("movieDetails", movie);

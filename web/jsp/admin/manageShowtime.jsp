@@ -1,4 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<c:if test="${sessionScope.user.role != 'ADMIN'}">
+    <c:redirect url="/jsp/authenticationFailed.jsp"/>
+</c:if>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -7,6 +10,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Manage Showtimes</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/manageMovie.css">
 <style>
 * {
 margin: 0;
@@ -443,7 +447,43 @@ flex-direction: column;
 <span> / </span>
 <span>Showtimes</span>
 </div>
-<%-- TODO: Implement showtime management functionality here --%>
+<div class="table-section">
+<div class="table-header">
+<h3>All Showtimes</h3>
+<a href="ManageShowtime?service=addShowtime" class="btn btn-primary"><i class="fas fa-plus"></i> Add New Showtime</a>
+</div>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Movie</th>
+<th>Room</th>
+<th>Start Time</th>
+<th>End Time</th>
+<th>Ticket Price</th>
+<th>Actions</th>
+</tr>
+</thead>
+<tbody>
+<c:forEach var="showtime" items="${requestScope.showtimes}">
+<tr>
+<td>${showtime.showtime_id}</td>
+<td>${showtime.movie.title}</td>
+<td>${showtime.room.name}</td>
+<td>${showtime.start_time}</td>
+<td>${showtime.end_time}</td>
+<td>${showtime.ticket_price}</td>
+<td class="action-buttons">
+<a href="ManageShowtime?service=editShowtime&id=${showtime.showtime_id}" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i> Edit</a>
+<a href="ManageShowtime?service=deleteShowtime&id=${showtime.showtime_id}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')"><i class="fas fa-trash-alt"></i> Delete</a>
+</td>
+</tr>
+</c:forEach>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 </div>
 </body>

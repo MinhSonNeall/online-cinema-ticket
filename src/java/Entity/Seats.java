@@ -4,6 +4,8 @@
  */
 package Entity;
 
+import java.math.BigDecimal;
+
 /**
  *
  * @author HP
@@ -19,12 +21,12 @@ public class Seats { // Tên class giữ nguyên là 'Seats'
     private String room_id;
     private String seat_number;
     private Type type; // Sử dụng Enum Type
+    private BigDecimal price;
     
     
     private String seatId;
     private String name;
     private String types;
-    private double price;
     private boolean booked;
     private boolean selected;
 
@@ -33,11 +35,12 @@ public class Seats { // Tên class giữ nguyên là 'Seats'
     }
 
     // Constructor với tất cả các trường
-    public Seats(String seat_id, String room_id, String seat_number, Type type) {
+    public Seats(String seat_id, String room_id, String seat_number, Type type, BigDecimal price) {
         this.seat_id = seat_id;
         this.room_id = room_id;
         this.seat_number = seat_number;
         this.type = type;
+        this.price = price;
     }
 
     
@@ -46,7 +49,7 @@ public class Seats { // Tên class giữ nguyên là 'Seats'
         this.seatId = seatId;
         this.name = name;
         this.types = types;
-        this.price = price;
+        this.price = BigDecimal.valueOf(price);
         this.booked = booked;
         this.selected = selected;
     }
@@ -54,7 +57,7 @@ public class Seats { // Tên class giữ nguyên là 'Seats'
     public String getSeatId() { return seatId; }
     public String getName() { return name; }
     public String getTypes() { return types; }
-    public double getPrice() { return price; }
+    public double getPrice() { return price.doubleValue(); }
     public boolean isBooked() { return booked; }
     public boolean isSelected() { return selected; }
     // Getters và Setters
@@ -91,6 +94,11 @@ public class Seats { // Tên class giữ nguyên là 'Seats'
         this.type = type;
     }
 
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+
     @Override
     public String toString() {
         return "Seats{" +
@@ -98,6 +106,7 @@ public class Seats { // Tên class giữ nguyên là 'Seats'
                ", room_id='" + room_id + '\'' +
                ", seat_number='" + seat_number + '\'' +
                ", type=" + type +
+               ", price=" + price +
                '}';
     }
 }

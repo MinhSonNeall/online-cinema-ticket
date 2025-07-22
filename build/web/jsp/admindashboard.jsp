@@ -340,11 +340,11 @@ Back to Login
 <div class="nav-title">Management</div>
 <ul class="nav-links">
 <li><a href="ManageUserAccount"><i class="fas fa-users"></i> User Accounts</a></li>
-<li><a href="http://localhost:9999/OnlineCinemaTicket/admin/ManageMovie"><i class="fas fa-film"></i> Movies</a></li>
-<li><a href="http://localhost:9999/OnlineCinemaTicket/admin/ManageShowtime"><i class="fas fa-clock"></i> Showtimes</a></li>
-<li><a href="http://localhost:9999/OnlineCinemaTicket/admin/ManageRoomSeat"><i class="fas fa-chair"></i> Rooms & Seats</a></li>
-<li><a href="http://localhost:9999/OnlineCinemaTicket/admin/ManageTicketPrice"><i class="fas fa-tag"></i> Ticket Prices</a></li>
-<li><a href="http://localhost:9999/OnlineCinemaTicket/admin/ManageCombo"><i class="fas fa-utensils"></i> Combo Food</a></li>
+<li><a href="ManageMovie"><i class="fas fa-film"></i> Movies</a></li>
+<li><a href="http://localhost:9999/OnlineCinemaTicket/ManageShowtime"><i class="fas fa-clock"></i> Showtimes</a></li>
+<li><a href="http://localhost:9999/OnlineCinemaTicket/ManageRoomSeat"><i class="fas fa-chair"></i> Rooms & Seats</a></li>
+<li><a href="http://localhost:9999/OnlineCinemaTicket/ManageTicketPrice"><i class="fas fa-tag"></i> Ticket Prices</a></li>
+<li><a href="http://localhost:9999/OnlineCinemaTicket/ManageCombo"><i class="fas fa-utensils"></i> Combo Food</a></li>
 </ul>
 </div>
 <a href="#" class="logout-btn">
@@ -374,7 +374,7 @@ Manage Users <i class="fas fa-arrow-right"></i>
 <div class="dashboard-card">
 <h3><i class="fas fa-film"></i> Movies</h3>
 <p>Manage movie listings and details.</p>
-<form action="http://localhost:9999/OnlineCinemaTicket/admin/ManageMovie" method="post">
+<form action="ManageMovie" method="post">
 <button type="submit" class="card-link">
 Manage Movies <i class="fas fa-arrow-right"></i>
 </button>

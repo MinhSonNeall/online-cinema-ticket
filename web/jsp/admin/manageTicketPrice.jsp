@@ -10,6 +10,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Manage Ticket Prices</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/manageMovie.css">
 <style>
 * {
 margin: 0;
@@ -421,12 +422,12 @@ flex-direction: column;
 <div class="nav-section">
 <div class="nav-title">Management</div>
 <ul class="nav-links">
-<li><a href="http://localhost:9999/OnlineCinemaTicket/admin/ManageUserAccount"><i class="fas fa-users"></i> User Accounts</a></li>
-<li><a href="http://localhost:9999/OnlineCinemaTicket/admin/ManageMovie"><i class="fas fa-film"></i> Movies</a></li>
-<li><a href="http://localhost:9999/OnlineCinemaTicket/admin/ManageShowtime"><i class="fas fa-clock"></i> Showtimes</a></li>
-<li><a href="http://localhost:9999/OnlineCinemaTicket/admin/ManageRoomSeat"><i class="fas fa-chair"></i> Rooms & Seats</a></li>
-<li><a href="http://localhost:9999/OnlineCinemaTicket/admin/ManageTicketPrice" class="active"><i class="fas fa-tag"></i> Ticket Prices</a></li>
-<li><a href="http://localhost:9999/OnlineCinemaTicket/admin/ManageCombo"><i class="fas fa-utensils"></i> Combo Food</a></li>
+<li><a href="ManageUserAccount"><i class="fas fa-users"></i> User Accounts</a></li>
+<li><a href="ManageMovie"><i class="fas fa-film"></i> Movies</a></li>
+<li><a href="ManageShowtime"><i class="fas fa-clock"></i> Showtimes</a></li>
+<li><a href="ManageRoomSeat"><i class="fas fa-chair"></i> Rooms & Seats</a></li>
+<li><a href="ManageTicketPrice" class="active"><i class="fas fa-tag"></i> Ticket Prices</a></li>
+<li><a href="ManageCombo"><i class="fas fa-utensils"></i> Combo Food</a></li>
 </ul>
 </div>
 <a href="#" class="logout-btn">
@@ -442,11 +443,39 @@ flex-direction: column;
 <h1><i class="fas fa-tag"></i> Manage Ticket Prices</h1>
 </div>
 <div class="breadcrumb">
-<a href="http://localhost:9999/OnlineCinemaTicket/jsp/admindashboard.jsp"><i class="fas fa-home"></i> Dashboard</a>
+<a href="adminController"><i class="fas fa-home"></i> Dashboard</a>
 <span> / </span>
 <span>Ticket Prices</span>
 </div>
-<%-- TODO: Implement ticket price management functionality here --%>
+<div class="table-section">
+<div class="table-header">
+<h3>All Ticket Prices</h3>
+</div>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Seat Type</th>
+<th>Price</th>
+<th>Actions</th>
+</tr>
+</thead>
+<tbody>
+<c:forEach var="price" items="${requestScope.ticketPrices}">
+<tr>
+<td>${price.price_id}</td>
+<td>${price.seat_type}</td>
+<td>${price.price}</td>
+<td class="action-buttons">
+<a href="ManageTicketPrice?service=editPrice&id=${price.price_id}" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i> Edit</a>
+</td>
+</tr>
+</c:forEach>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 </div>
 </body>
