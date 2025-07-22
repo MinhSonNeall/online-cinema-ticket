@@ -471,8 +471,8 @@
                                 <div class="detail-row">
                                     <span class="detail-label">Phân loại:</span>
                                     <div class="detail-value">
-                                        <span class="rating-badge">${movieDetails.age_restriction}</span>
-                                        <span>Phim phổ biến với mọi độ tuổi</span>
+                                        <span class="rating-badge">Phim phù hợp với người trên ${movieDetails.age_restriction} tuổi.</span>
+                                        
                                     </div>
                                 </div>
 
@@ -485,7 +485,7 @@
                                 <div class="detail-row">
                                     <span class="detail-label">Thể loại:</span>
                                     <div class="detail-value">
-                                        <span class="genre-tag">${movieDetails.genre_name}</span>
+                                        <span class="genre-tag">${movieDetails.genere_name}</span>
                                     </div>
                                 </div>
 

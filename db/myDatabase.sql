@@ -156,9 +156,9 @@ CREATE TABLE `movies` (
   `trailer_url` varchar(255) DEFAULT NULL,
   `poster_url` varchar(255) DEFAULT NULL,
   `duration` int NOT NULL,
-  `age_restriction` int NOT NULL,
+  `age_restriction` varchar(10) DEFAULT NULL,
   `release_date` date DEFAULT NULL,
-  `status` enum('now_showing','coming_soon') NOT NULL,
+  `status` enum('now_showing','coming_soon','stop_showing') NOT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`movie_id`)

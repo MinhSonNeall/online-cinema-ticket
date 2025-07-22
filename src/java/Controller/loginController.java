@@ -82,7 +82,7 @@ public class loginController extends HttpServlet {
                             session.setAttribute("user", users.get(0)); // Lưu user đầu tiên
                         }
                         Users user=users.get(0);
-                if (user.getIsActive()==1||user.getIsActive()==0){
+                if (user.getIsActive()==0){
                     request.setAttribute("error","Tài khoản tạm thời bị vô hiệu hóa, vui lòng liên hệ admin: sonvd74@gmail.com để được mở khóa!" );
                     request.getRequestDispatcher("/jsp/login.jsp").forward(request, response);
                     return;

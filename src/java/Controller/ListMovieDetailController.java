@@ -78,7 +78,7 @@ public class ListMovieDetailController extends HttpServlet {
         DaoMovie daoMovie = new DaoMovie();
         Movies movie = daoMovie.getMovieById(movieId);
         if (movie == null) {
-            response.sendRedirect("error.jsp");
+            response.sendRedirect("/jsp/error.jsp");
             return;
         }
         
@@ -150,7 +150,7 @@ public class ListMovieDetailController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-                processRequest(request, response);
+        processRequest(request, response);
     }
 
     /**

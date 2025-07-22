@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package Model;
+
 import Entity.Cinemas;
 import Entity.DateItem;
 import Entity.InfomationMovie;
@@ -26,26 +27,63 @@ import java.sql.Statement; // Import java.sql.Statement
  *
  * @author Cuong
  */
+import java.sql.Timestamp;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.sql.Connection;
+import java.time.LocalDateTime;
+
 public class DaoMovie extends DBContext {
 
     PreparedStatement ps;
     ResultSet rs;
 
+    public String getLastMovieId() {
+        String sql = "SELECT movie_id FROM movies ORDER BY movie_id DESC LIMIT 1";
+        Connection connection = null;
+        try {
+            connection = getConnection();
+            ps = connection.prepareStatement(sql);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getString("movie_id");
+            }
+        } catch (Exception e) {
+            Logger.getLogger(DaoMovie.class.getName()).log(Level.SEVERE, "Error getting last movie ID: " + e.getMessage(), e);
+        } finally {
+            closeConnection(connection, ps, rs);
+        }
+        return null;
+    }
+
     public ArrayList<Movies> getAllMovies() {
         ArrayList<Movies> list = new ArrayList<>();
         String sql = "SELECT \n"
-                + "    m.*, \n"
-                + "    GROUP_CONCAT(g.name SEPARATOR ', ') AS genres\n"
+                + "    m.movie_id,\n"
+                + "    m.title,\n"
+                + "    m.description,\n"
+                + "    m.trailer_url,\n"
+                + "    m.poster_url,\n"
+                + "    m.duration,\n"
+                + "    m.age_restriction,\n"
+                + "    \n"
+                + "    GROUP_CONCAT(DISTINCT g.name SEPARATOR ', ') AS genres,\n"
+                + "    GROUP_CONCAT(DISTINCT p.name SEPARATOR ', ') AS producers\n"
                 + "FROM \n"
-                + "    movie_ticketing.movies m\n"
+                + "    movies m\n"
+                + "\n"
                 + "JOIN \n"
-                + "    movie_ticketing.movie_genres mg ON m.movie_id = mg.movie_id\n"
+                + "    movie_genres ms ON m.movie_id = ms.movie_id\n"
                 + "JOIN \n"
-                + "    movie_ticketing.genres g ON mg.genre_id = g.genre_id\n"
+                + "    genres g ON ms.genre_id = g.genre_id\n"
+                + "LEFT JOIN \n"
+                + "    movie_producers mp ON m.movie_id = mp.movie_id\n"
+                + "LEFT JOIN \n"
+                + "    producers p ON mp.producer_id = p.producer_id\n"
                 + "WHERE \n"
                 + "    m.status = 'now_showing'\n"
                 + "GROUP BY \n"
-                + "    m.movie_id;";
+                + "    m.movie_id, m.title, m.description, m.trailer_url, m.poster_url, m.duration, m.age_restriction;";
         try {
             Movies movie = null;
             connection = getConnection();
@@ -57,11 +95,72 @@ public class DaoMovie extends DBContext {
                         rs.getString("title"),
                         rs.getString("description"),
                         rs.getInt("duration"),
-                        rs.getInt("age_restriction"),
+                        rs.getString("age_restriction"),
                         rs.getString("poster_url"),
                         rs.getString("trailer_url"),
-                        rs.getString("genres")
+                        rs.getString("genres"),
+                        rs.getString("producers")
                 );
+                list.add(movie);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            closeConnection(connection, ps, rs);
+        }
+        return list;
+    }
+
+    public ArrayList<Movies> getAllMoviesForAdmin() {
+        ArrayList<Movies> list = new ArrayList<>();
+        String sql = "	SELECT\n"
+                + "		m.movie_id,\n"
+                + "		m.title,\n"
+                + "		m.description,\n"
+                + "		m.trailer_url,\n"
+                + "		m.poster_url,\n"
+                + "		m.duration,\n"
+                + "		m.age_restriction,m.release_date,\n"
+                + "               m.status,\n" // Added status column
+                + "		\n"
+                + "		GROUP_CONCAT(DISTINCT g.name SEPARATOR ', ') AS genres,\n"
+                + "		GROUP_CONCAT(DISTINCT p.name SEPARATOR ', ') AS producers\n"
+                + "	FROM \n"
+                + "		movies m\n"
+                + "	\n"
+                + "	JOIN \n"
+                + "		movie_genres ms ON m.movie_id = ms.movie_id\n"
+                + "	JOIN \n"
+                + "		genres g ON ms.genre_id = g.genre_id\n"
+                + "	LEFT JOIN \n"
+                + "		movie_producers mp ON m.movie_id = mp.movie_id\n"
+                + "	LEFT JOIN \n"
+                + "		producers p ON mp.producer_id = p.producer_id\n"
+                + "	GROUP BY \n"
+                + "		m.movie_id, m.title, m.description, m.trailer_url, m.poster_url, m.duration, m.age_restriction,m.release_date, m.status;"; // Added status to GROUP BY
+        try {
+            Movies movie = null;
+            connection = getConnection();
+            ps = connection.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                movie = new Movies(
+                        rs.getString("movie_id"),
+                        rs.getString("title"),
+                        rs.getString("description"),
+                        rs.getInt("duration"),
+                        rs.getString("age_restriction"),
+                        rs.getString("poster_url"),
+                        rs.getString("trailer_url"),
+                        rs.getString("genres"),
+                        rs.getString("producers"),
+                        rs.getDate("release_date")
+                );
+                try {
+                    movie.setStatus(Movies.Status.valueOf(rs.getString("status").toUpperCase()));
+                } catch (IllegalArgumentException e) {
+                    movie.setStatus(Movies.Status.COMING_SOON); // Default status if invalid
+                }
                 list.add(movie);
             }
         } catch (Exception ex) {
@@ -98,7 +197,7 @@ public class DaoMovie extends DBContext {
                         rs.getString("title"),
                         rs.getString("description"),
                         rs.getInt("duration"),
-                        rs.getInt("age_restriction"),
+                        rs.getString("age_restriction"),
                         rs.getString("poster_url"),
                         rs.getString("trailer_url")
                 );
@@ -111,9 +210,73 @@ public class DaoMovie extends DBContext {
         return movie;
     }
 
+    public Movies detailMovieForAdmin(String movieId) {
+        Movies movie = null;
+        String sql = "SELECT\n"
+                + "    m.movie_id,\n"
+                + "    m.title,\n"
+                + "    m.description,\n"
+                + "    m.trailer_url,\n"
+                + "    m.poster_url,\n"
+                + "    m.duration,\n"
+                + "    m.age_restriction,\n"
+                + "    m.release_date,\n"
+                + "    m.status,\n"
+                + "    m.created_at,\n"
+                + "    m.updated_at,\n"
+                + "    GROUP_CONCAT(DISTINCT g.name SEPARATOR ', ') AS genres,\n"
+                + "    GROUP_CONCAT(DISTINCT p.name SEPARATOR ', ') AS producers\n"
+                + "FROM \n"
+                + "    movies m\n"
+                + "JOIN \n"
+                + "    movie_genres ms ON m.movie_id = ms.movie_id\n"
+                + "JOIN \n"
+                + "    genres g ON ms.genre_id = g.genre_id\n"
+                + "LEFT JOIN \n"
+                + "    movie_producers mp ON m.movie_id = mp.movie_id\n"
+                + "LEFT JOIN \n"
+                + "    producers p ON mp.producer_id = p.producer_id\n"
+                + "WHERE \n"
+                + "    m.movie_id LIKE ?\n"
+                + "GROUP BY \n"
+                + "    m.movie_id, m.title, m.description, m.trailer_url, m.poster_url, m.duration, m.age_restriction, m.release_date, m.status, m.created_at, m.updated_at;";
+        try {
+            connection = getConnection();
+            ps = connection.prepareStatement(sql);
+            ps.setString(1, movieId);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                movie = new Movies(
+                        rs.getString("movie_id"),
+                        rs.getString("title"),
+                        rs.getString("description"),
+                        rs.getInt("duration"),
+                        rs.getString("age_restriction"),
+                        rs.getString("poster_url"),
+                        rs.getString("trailer_url"),
+                        rs.getString("genres"), // genres
+                        rs.getString("producers"), // producers
+                        rs.getDate("release_date")
+                );
+                movie.setCreated_at(rs.getTimestamp("created_at"));
+                movie.setUpdated_at(rs.getTimestamp("updated_at"));
+                try {
+                    movie.setStatus(Movies.Status.valueOf(rs.getString("status").toUpperCase()));
+                } catch (IllegalArgumentException e) {
+                    movie.setStatus(Movies.Status.COMING_SOON); // Default status if invalid
+                }
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(DaoMovie.class.getName()).log(Level.SEVERE, "Error getting movie details for admin: " + ex.getMessage(), ex);
+        } finally {
+            closeConnection(connection, ps, rs);
+        }
+        return movie;
+    }
+
     public Movies getMovieByIdMovieDetails(String movieId) {
         Movies movie = null;
-        String sql = "SELECT \n"
+        String sql = "SELECT\n"
                 + "    m.movie_id,\n"
                 + "    m.title,\n"
                 + "    m.description,\n"
@@ -122,16 +285,24 @@ public class DaoMovie extends DBContext {
                 + "    m.duration,\n"
                 + "    m.age_restriction,\n"
                 + "    s.start_time,\n"
-                + "    GROUP_CONCAT(g.name SEPARATOR ', ') AS genres\n"
+                + "    GROUP_CONCAT(DISTINCT g.name SEPARATOR ', ') AS genres,\n"
+                + "    GROUP_CONCAT(DISTINCT p.name SEPARATOR ', ') AS producers\n"
                 + "FROM \n"
                 + "    movies m\n"
-                + "    JOIN showtimes s ON m.movie_id = s.movie_id\n"
-                + "    JOIN movie_genres ms ON m.movie_id = ms.movie_id\n"
-                + "    JOIN genres g ON ms.genre_id = g.genre_id\n"
+                + "JOIN \n"
+                + "    showtimes s ON m.movie_id = s.movie_id\n"
+                + "JOIN \n"
+                + "    movie_genres ms ON m.movie_id = ms.movie_id\n"
+                + "JOIN \n"
+                + "    genres g ON ms.genre_id = g.genre_id\n"
+                + "LEFT JOIN \n"
+                + "    movie_producers mp ON m.movie_id = mp.movie_id\n"
+                + "LEFT JOIN \n"
+                + "    producers p ON mp.producer_id = p.producer_id\n"
                 + "WHERE \n"
-                + "    m.movie_id = ?\n"
+                + "    m.movie_id like ?\n"
                 + "GROUP BY \n"
-                + "    m.movie_id, m.title, m.description, m.trailer_url, m.poster_url, m.duration, m.age_restriction, s.start_time";
+                + "    m.movie_id, m.title, m.description, m.trailer_url, m.poster_url, m.duration, m.age_restriction, s.start_time;";
         try {
             connection = getConnection();
             ps = connection.prepareStatement(sql);
@@ -145,9 +316,10 @@ public class DaoMovie extends DBContext {
                         rs.getString("trailer_url"),
                         rs.getString("poster_url"),
                         rs.getInt("duration"),
-                        rs.getInt("age_restriction"),
+                        rs.getString("age_restriction"),
                         rs.getString("start_time"),
-                        rs.getString("genres")
+                        rs.getString("genres"),
+                        rs.getString("producers")
                 );
             }
         } catch (Exception ex) {
@@ -479,32 +651,37 @@ public class DaoMovie extends DBContext {
 
     // Add new movie method
     public boolean addMovie(Movies movie) {
-        String sql = "INSERT INTO movie_ticketing.movies (title, description, trailer_url, poster_url, duration, age_restriction, release_date, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO movie_ticketing.movies (movie_id, title, description, trailer_url, poster_url, duration, age_restriction, release_date, status, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        Connection connection = null;
         try {
             connection = getConnection();
             ps = connection.prepareStatement(sql);
-            ps.setString(1, movie.getTitle());
-            ps.setString(2, movie.getDescription());
-            ps.setString(3, movie.getTrailer_url());
-            ps.setString(4, movie.getPoster_url());
-            ps.setInt(5, movie.getDuration());
-            ps.setInt(6, movie.getAge_restriction());
-            ps.setDate(7, movie.getRelease_date());
-            ps.setString(8, movie.getStatus().name().toLowerCase()); // Convert enum to string
+            ps.setString(1, movie.getMovie_id());
+            ps.setString(2, movie.getTitle());
+            ps.setString(3, movie.getDescription());
+            ps.setString(4, movie.getTrailer_url());
+            ps.setString(5, movie.getPoster_url());
+            ps.setInt(6, movie.getDuration());
+            ps.setString(7, movie.getAge_restriction());
+            ps.setDate(8, movie.getRelease_date());
+            ps.setString(9, movie.getStatus().name().toLowerCase()); // Convert enum to string
+            ps.setTimestamp(10, movie.getCreated_at());
+            ps.setTimestamp(11, movie.getUpdated_at());
 
             int result = ps.executeUpdate();
             return result > 0;
         } catch (Exception ex) {
-            ex.printStackTrace();
+            Logger.getLogger(DaoMovie.class.getName()).log(Level.SEVERE, "Error adding movie: " + ex.getMessage(), ex);
+            return false;
         } finally {
             closeConnection(connection, ps, null);
         }
-        return false;
     }
 
-    // Delete movie (soft delete by setting status to 'inactive')
+
     public boolean deleteMovie(String movieId) {
-        String sql = "UPDATE movie_ticketing.movies SET status = 'inactive' WHERE movie_id = ?";
+        String sql = "delete from movies where movie_id =?";
+        Connection connection = null;
         try {
             connection = getConnection();
             ps = connection.prepareStatement(sql);
@@ -513,47 +690,128 @@ public class DaoMovie extends DBContext {
             int result = ps.executeUpdate();
             return result > 0;
         } catch (Exception ex) {
-            ex.printStackTrace();
+            Logger.getLogger(DaoMovie.class.getName()).log(Level.SEVERE, "Error deleting movie: " + ex.getMessage(), ex);
+            return false;
         } finally {
             closeConnection(connection, ps, null);
         }
-        return false;
+    }
+
+    public boolean updateMovie(Movies movie) {
+        String sql = "UPDATE movies SET title = ?, description = ?, trailer_url = ?, poster_url = ?, duration = ?, age_restriction = ?, release_date = ?, updated_at = ? WHERE movie_id = ?";
+        Connection connection = null;
+        try {
+            connection = getConnection();
+            ps = connection.prepareStatement(sql);
+            ps.setString(1, movie.getTitle());
+            ps.setString(2, movie.getDescription());
+            ps.setString(3, movie.getTrailer_url());
+            ps.setString(4, movie.getPoster_url());
+            ps.setInt(5, movie.getDuration());
+            ps.setString(6, movie.getAge_restriction());
+            ps.setDate(7, movie.getRelease_date());
+            ps.setTimestamp(8, Timestamp.valueOf(LocalDateTime.now())); // Update updated_at
+            ps.setString(9, movie.getMovie_id());
+
+            int result = ps.executeUpdate();
+            return result > 0;
+        } catch (Exception ex) {
+            Logger.getLogger(DaoMovie.class.getName()).log(Level.SEVERE, "Error updating movie: " + ex.getMessage(), ex);
+            return false;
+        } finally {
+            closeConnection(connection, ps, null);
+        }
+    }
+
+    public boolean updateMovieStatus(String movieId, String newStatus) {
+        String sql = "UPDATE movie_ticketing.movies SET status = ?, updated_at = ? WHERE movie_id = ?";
+        Connection connection = null;
+        try {
+            connection = getConnection();
+            ps = connection.prepareStatement(sql);
+            ps.setString(1, newStatus.toLowerCase());
+            ps.setTimestamp(2, Timestamp.valueOf(LocalDateTime.now()));
+            ps.setString(3, movieId);
+            int rowsAffected = ps.executeUpdate();
+            return rowsAffected > 0;
+        } catch (Exception e) {
+            Logger.getLogger(DaoMovie.class.getName()).log(Level.SEVERE, "Error updating movie status: " + e.getMessage(), e);
+            return false;
+        } finally {
+            closeConnection(connection, ps, null);
+        }
     }
 
     // Search movies by title
     public List<Movies> searchMoviesByTitle(String title) {
-        List<Movies> list = new ArrayList<>();
-        String sql = "SELECT * FROM movie_ticketing.movies WHERE title LIKE ? ORDER BY movie_id DESC";
-        try {
-            connection = getConnection();
-            ps = connection.prepareStatement(sql);
-            ps.setString(1, "%" + title + "%");
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                Movies movie = new Movies(
-                        rs.getString("movie_id"),
-                        rs.getString("title"),
-                        rs.getString("description"),
-                        rs.getString("trailer_url"),
-                        rs.getString("poster_url"),
-                        rs.getInt("duration"),
-                        rs.getInt("age_restriction"),
-                        rs.getDate("release_date")
-                );
-                // Manually set status if needed, as it's an enum
-                try {
-                    movie.setStatus(Movies.Status.valueOf(rs.getString("status").toUpperCase()));
-                } catch (IllegalArgumentException e) {
-                    // Handle invalid status string, e.g., set a default
-                    movie.setStatus(Movies.Status.NOW_SHOWING); 
-                }
-                list.add(movie);
+    List<Movies> movies = new ArrayList<>();
+    Connection connection = null;
+    PreparedStatement ps = null;
+    ResultSet rs = null;
+    
+    String sql = "SELECT\n"
+            + "    m.movie_id,\n"
+            + "    m.title,\n"
+            + "    m.description,\n"
+            + "    m.trailer_url,\n"
+            + "    m.poster_url,\n"
+            + "    m.duration,\n"
+            + "    m.age_restriction,\n"
+            + "    m.release_date,\n"
+            + "    m.status,\n"
+            + "    m.created_at,\n"
+            + "    m.updated_at,\n"
+            + "    GROUP_CONCAT(DISTINCT g.name SEPARATOR ', ') AS genres,\n"
+            + "    GROUP_CONCAT(DISTINCT p.name SEPARATOR ', ') AS producers\n"
+            + "FROM \n"
+            + "    movies m\n"
+            + "JOIN \n"
+            + "    movie_genres ms ON m.movie_id = ms.movie_id\n"
+            + "JOIN \n"
+            + "    genres g ON ms.genre_id = g.genre_id\n"
+            + "LEFT JOIN \n"
+            + "    movie_producers mp ON m.movie_id = mp.movie_id\n"
+            + "LEFT JOIN \n"
+            + "    producers p ON mp.producer_id = p.producer_id\n"
+            + "WHERE \n"
+            + "    m.title LIKE ?\n"
+            + "GROUP BY \n"
+            + "    m.movie_id, m.title, m.description, m.trailer_url, m.poster_url, m.duration, m.age_restriction, m.release_date, m.status, m.created_at, m.updated_at;";
+    
+    try {
+        connection = getConnection();
+        ps = connection.prepareStatement(sql);
+        ps.setString(1, "%" + title + "%");
+        rs = ps.executeQuery();
+        
+        while (rs.next()) {
+            Movies movie = new Movies(
+                    rs.getString("movie_id"),
+                    rs.getString("title"),
+                    rs.getString("description"),
+                    rs.getInt("duration"),
+                    rs.getString("age_restriction"),
+                    rs.getString("poster_url"),
+                    rs.getString("trailer_url"),
+                    rs.getString("genres"),
+                    rs.getString("producers"),
+                    rs.getDate("release_date")
+            );
+            movie.setCreated_at(rs.getTimestamp("created_at"));
+            movie.setUpdated_at(rs.getTimestamp("updated_at"));
+            try {
+                movie.setStatus(Movies.Status.valueOf(rs.getString("status").toUpperCase()));
+            } catch (IllegalArgumentException e) {
+                movie.setStatus(Movies.Status.COMING_SOON); // Default status if invalid
             }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        } finally {
-            closeConnection(connection, ps, rs);
+            movies.add(movie);
         }
-        return list;
+    } catch (Exception ex) {
+        Logger.getLogger(DaoMovie.class.getName()).log(Level.SEVERE, "Error searching movies by title: " + ex.getMessage(), ex);
+    } finally {
+        closeConnection(connection, ps, rs);
     }
+    
+    return movies;
+}
 }
