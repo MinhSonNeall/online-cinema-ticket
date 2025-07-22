@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <c:if test="${sessionScope.user.role != 'ADMIN'}">
     <c:redirect url="/jsp/authenticationFailed.jsp"/>
 </c:if>
@@ -8,7 +9,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Thêm Đợt Chiếu Mới</title>
+<title>Chỉnh Sửa Đợt Chiếu</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 <style>
 * {
@@ -158,6 +159,15 @@ outline: none;
 border-color: #3498db;
 box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
 }
+.form-control-plaintext {
+width: 100%;
+padding: 12px 15px;
+background-color: #f8f9fa;
+border: 1px solid #e1e8ed;
+border-radius: 8px;
+font-size: 14px;
+color: #6c757d;
+}
 .btn {
 padding: 12px 20px;
 border: none;
@@ -254,112 +264,52 @@ text-align: center;
     </div>
     <div class="main-content">
         <div class="header">
-            <h1><i class="fas fa-plus-circle"></i> Thêm Đợt Chiếu Mới</h1>
+            <h1><i class="fas fa-edit"></i> Chỉnh Sửa Đợt Chiếu</h1>
             <a href="${pageContext.request.contextPath}/ManageShowtime" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Quay lại</a>
         </div>
-        
-        <c:if test="${not empty error}">
-            <div class="alert alert-danger" style="background: #f8d7da; color: #721c24; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
-                <i class="fas fa-exclamation-circle"></i> ${error}
-            </div>
-        </c:if>
-        
         <div class="form-section">
-            <form action="${pageContext.request.contextPath}/ManageShowtime?action=add" method="post">
+            <form action="${pageContext.request.contextPath}/ManageShowtime?action=edit" method="post">
+                <input type="hidden" name="showtimeId" value="${showtime.showtime_id}">
+                
                 <div class="form-group">
-                    <label for="movieId">Chọn phim:</label>
-                    <select name="movieId" id="movieId" class="form-control" required>
-                        <option value="">-- Vui lòng chọn phim --</option>
-                        <c:forEach var="movie" items="${movieList}">
-                            <option value="${movie.movie_id}">${movie.title}</option>
-                        </c:forEach>
-                    </select>
+                    <label>ID Đợt chiếu:</label>
+                    <input type="text" class="form-control-plaintext" value="${showtime.showtime_id}" readonly>
                 </div>
-
+                
                 <div class="form-group">
-                    <label for="cinemaId">Chọn rạp:</label>
-                    <select name="cinemaId" id="cinemaId" class="form-control" required onchange="loadRooms()">
-                        <option value="">-- Vui lòng chọn rạp --</option>
-                        <c:forEach var="cinema" items="${cinemaList}">
-                            <option value="${cinema.cinema_id}">${cinema.name} - ${cinema.address}</option>
-                        </c:forEach>
-                    </select>
+                    <label>Tên Phim:</label>
+                    <input type="text" class="form-control-plaintext" value="${showtime.movie_title}" readonly>
                 </div>
-
+                
                 <div class="form-group">
-                    <label for="roomId">Chọn phòng:</label>
-                    <select name="roomId" id="roomId" class="form-control" required disabled>
-                        <option value="">-- Vui lòng chọn rạp trước --</option>
-                    </select>
+                    <label>Rạp:</label>
+                    <input type="text" class="form-control-plaintext" value="${showtime.cinema_name}" readonly>
                 </div>
-
+                
+                <div class="form-group">
+                    <label>Phòng:</label>
+                    <input type="text" class="form-control-plaintext" value="${showtime.room_name}" readonly>
+                </div>
+                
                 <div class="form-group">
                     <label for="startTime">Ngày bắt đầu đợt chiếu:</label>
-                    <input type="date" class="form-control" id="startTime" name="startTime" required>
+                    <input type="date" class="form-control" id="startTime" name="startTime" 
+                           value="<fmt:formatDate value='${showtime.start_time}' pattern='yyyy-MM-dd' />" required>
                 </div>
-
+                
                 <div class="form-group">
                     <label for="endTime">Ngày kết thúc đợt chiếu:</label>
-                    <input type="date" class="form-control" id="endTime" name="endTime" required>
+                    <input type="date" class="form-control" id="endTime" name="endTime" 
+                           value="<fmt:formatDate value='${showtime.end_time}' pattern='yyyy-MM-dd' />" required>
                 </div>
-
+                
                 <div class="form-group">
-                    <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Lưu Đợt Chiếu</button>
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Lưu Thay Đổi</button>
                     <a href="${pageContext.request.contextPath}/ManageShowtime" class="btn btn-secondary"><i class="fas fa-times"></i> Hủy</a>
                 </div>
             </form>
         </div>
     </div>
 </div>
-
-<script>
-function loadRooms() {
-    const cinemaId = document.getElementById('cinemaId').value;
-    const roomSelect = document.getElementById('roomId');
-    
-    console.log("loadRooms called with cinemaId:", cinemaId);
-    
-    // Reset room select
-    roomSelect.innerHTML = '<option value="">-- Đang tải danh sách phòng --</option>';
-    roomSelect.disabled = true;
-    
-    if (cinemaId) {
-        // Gọi API để lấy danh sách phòng theo rạp
-        const url = '${pageContext.request.contextPath}/ManageShowtime?action=get-rooms&cinemaId=' + cinemaId;
-        console.log("Fetching rooms from URL:", url);
-        
-        fetch(url)
-            .then(response => {
-                console.log("Response status:", response.status);
-                return response.json();
-            })
-            .then(data => {
-                console.log("Received data:", data);
-                roomSelect.innerHTML = '';
-                if (data.length === 0) {
-                    console.log("No rooms found for cinema ID:", cinemaId);
-                    roomSelect.innerHTML = '<option value="">-- Không có phòng nào --</option>';
-                } else {
-                    roomSelect.innerHTML = '<option value="">-- Vui lòng chọn phòng --</option>';
-                    data.forEach(room => {
-                        console.log("Adding room:", room);
-                        const option = document.createElement('option');
-                        option.value = room.room_id;
-                        option.textContent = room.name;
-                        roomSelect.appendChild(option);
-                    });
-                    console.log("Added", data.length, "rooms to select");
-                }
-                roomSelect.disabled = false;
-            })
-            .catch(error => {
-                console.error('Error loading rooms:', error);
-                roomSelect.innerHTML = '<option value="">-- Lỗi khi tải danh sách phòng --</option>';
-            });
-    } else {
-        roomSelect.innerHTML = '<option value="">-- Vui lòng chọn rạp trước --</option>';
-    }
-}
-</script>
 </body>
 </html> 

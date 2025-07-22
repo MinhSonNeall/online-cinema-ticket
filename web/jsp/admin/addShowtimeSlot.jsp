@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <c:if test="${sessionScope.user.role != 'ADMIN'}">
     <c:redirect url="/jsp/authenticationFailed.jsp"/>
 </c:if>
@@ -8,7 +9,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Thêm Đợt Chiếu Mới</title>
+<title>Thêm Suất Chiếu</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 <style>
 * {
@@ -136,6 +137,25 @@ border-radius: 15px;
 box-shadow: 0 5px 15px rgba(0,0,0,0.05);
 padding: 30px;
 }
+.info-card {
+background: #f8f9fa;
+border-radius: 10px;
+padding: 20px;
+margin-bottom: 25px;
+border-left: 4px solid #3498db;
+}
+.info-card h5 {
+color: #2c3e50;
+margin-bottom: 15px;
+font-size: 18px;
+}
+.info-card p {
+margin-bottom: 10px;
+color: #2c3e50;
+}
+.info-card strong {
+color: #3498db;
+}
 .form-group {
 margin-bottom: 20px;
 }
@@ -187,6 +207,16 @@ color: white;
 }
 .btn-secondary:hover {
 background: #7f8c8d;
+}
+.alert {
+padding: 15px 20px;
+border-radius: 8px;
+margin-bottom: 20px;
+}
+.alert-danger {
+background: #f8d7da;
+color: #721c24;
+border: 1px solid #f5c6cb;
 }
 @media (max-width: 1024px) {
 .sidebar {
@@ -254,112 +284,59 @@ text-align: center;
     </div>
     <div class="main-content">
         <div class="header">
-            <h1><i class="fas fa-plus-circle"></i> Thêm Đợt Chiếu Mới</h1>
+            <h1><i class="fas fa-plus-circle"></i> Thêm Suất Chiếu</h1>
             <a href="${pageContext.request.contextPath}/ManageShowtime" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Quay lại</a>
         </div>
         
         <c:if test="${not empty error}">
-            <div class="alert alert-danger" style="background: #f8d7da; color: #721c24; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
+            <div class="alert alert-danger">
                 <i class="fas fa-exclamation-circle"></i> ${error}
             </div>
         </c:if>
         
+        <c:if test="${not empty success}">
+            <div class="alert alert-success">
+                <i class="fas fa-check-circle"></i> ${success}
+            </div>
+        </c:if>
+        
         <div class="form-section">
-            <form action="${pageContext.request.contextPath}/ManageShowtime?action=add" method="post">
-                <div class="form-group">
-                    <label for="movieId">Chọn phim:</label>
-                    <select name="movieId" id="movieId" class="form-control" required>
-                        <option value="">-- Vui lòng chọn phim --</option>
-                        <c:forEach var="movie" items="${movieList}">
-                            <option value="${movie.movie_id}">${movie.title}</option>
-                        </c:forEach>
-                    </select>
-                </div>
+            <div class="info-card">
+                <h5><i class="fas fa-info-circle"></i> Thông tin Đợt chiếu</h5>
+                <p><strong>Phim:</strong> ${showtime.movie_title}</p>
+                <p><strong>Rạp:</strong> ${showtime.cinema_name}</p>
+                <p><strong>Phòng:</strong> ${showtime.room_name}</p>
+                <p><strong>Thời gian áp dụng:</strong> <fmt:formatDate value="${showtime.start_time}" pattern="dd/MM/yyyy" /> đến <fmt:formatDate value="${showtime.end_time}" pattern="dd/MM/yyyy" /></p>
+            </div>
+
+            <form action="${pageContext.request.contextPath}/ManageShowtime?action=add-slot" method="post">
+                <input type="hidden" name="showtimeId" value="${showtime.showtime_id}">
 
                 <div class="form-group">
-                    <label for="cinemaId">Chọn rạp:</label>
-                    <select name="cinemaId" id="cinemaId" class="form-control" required onchange="loadRooms()">
-                        <option value="">-- Vui lòng chọn rạp --</option>
-                        <c:forEach var="cinema" items="${cinemaList}">
-                            <option value="${cinema.cinema_id}">${cinema.name} - ${cinema.address}</option>
-                        </c:forEach>
-                    </select>
+                    <label for="date">Ngày chiếu:</label>
+                    <input type="date" class="form-control" id="date" name="date" required>
+                    <small class="form-text text-muted">Ngày phải nằm trong khoảng từ <fmt:formatDate value="${showtime.start_time}" pattern="dd/MM/yyyy" /> đến <fmt:formatDate value="${showtime.end_time}" pattern="dd/MM/yyyy" /></small>
                 </div>
-
+                
                 <div class="form-group">
-                    <label for="roomId">Chọn phòng:</label>
-                    <select name="roomId" id="roomId" class="form-control" required disabled>
-                        <option value="">-- Vui lòng chọn rạp trước --</option>
-                    </select>
+                    <label for="slotStartTime">Giờ bắt đầu:</label>
+                    <input type="time" class="form-control" id="slotStartTime" name="slotStartTime" step="1" required>
+                    <small class="form-text text-muted">Bạn có thể nhập theo định dạng 24h (19:00:00) hoặc AM/PM (7:00:00PM). Hệ thống sẽ tự động chuyển đổi sang định dạng 24h.</small>
                 </div>
-
+                
                 <div class="form-group">
-                    <label for="startTime">Ngày bắt đầu đợt chiếu:</label>
-                    <input type="date" class="form-control" id="startTime" name="startTime" required>
+                    <label for="slotEndTime">Giờ kết thúc:</label>
+                    <input type="time" class="form-control" id="slotEndTime" name="slotEndTime" step="1" required>
+                    <small class="form-text text-muted">Bạn có thể nhập theo định dạng 24h (21:30:00) hoặc AM/PM (9:30:00PM). Hệ thống sẽ tự động chuyển đổi sang định dạng 24h.</small>
                 </div>
-
+                
                 <div class="form-group">
-                    <label for="endTime">Ngày kết thúc đợt chiếu:</label>
-                    <input type="date" class="form-control" id="endTime" name="endTime" required>
-                </div>
-
-                <div class="form-group">
-                    <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Lưu Đợt Chiếu</button>
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-plus"></i> Thêm Suất Chiếu và Tạo Ghế</button>
                     <a href="${pageContext.request.contextPath}/ManageShowtime" class="btn btn-secondary"><i class="fas fa-times"></i> Hủy</a>
                 </div>
             </form>
         </div>
     </div>
 </div>
-
-<script>
-function loadRooms() {
-    const cinemaId = document.getElementById('cinemaId').value;
-    const roomSelect = document.getElementById('roomId');
-    
-    console.log("loadRooms called with cinemaId:", cinemaId);
-    
-    // Reset room select
-    roomSelect.innerHTML = '<option value="">-- Đang tải danh sách phòng --</option>';
-    roomSelect.disabled = true;
-    
-    if (cinemaId) {
-        // Gọi API để lấy danh sách phòng theo rạp
-        const url = '${pageContext.request.contextPath}/ManageShowtime?action=get-rooms&cinemaId=' + cinemaId;
-        console.log("Fetching rooms from URL:", url);
-        
-        fetch(url)
-            .then(response => {
-                console.log("Response status:", response.status);
-                return response.json();
-            })
-            .then(data => {
-                console.log("Received data:", data);
-                roomSelect.innerHTML = '';
-                if (data.length === 0) {
-                    console.log("No rooms found for cinema ID:", cinemaId);
-                    roomSelect.innerHTML = '<option value="">-- Không có phòng nào --</option>';
-                } else {
-                    roomSelect.innerHTML = '<option value="">-- Vui lòng chọn phòng --</option>';
-                    data.forEach(room => {
-                        console.log("Adding room:", room);
-                        const option = document.createElement('option');
-                        option.value = room.room_id;
-                        option.textContent = room.name;
-                        roomSelect.appendChild(option);
-                    });
-                    console.log("Added", data.length, "rooms to select");
-                }
-                roomSelect.disabled = false;
-            })
-            .catch(error => {
-                console.error('Error loading rooms:', error);
-                roomSelect.innerHTML = '<option value="">-- Lỗi khi tải danh sách phòng --</option>';
-            });
-    } else {
-        roomSelect.innerHTML = '<option value="">-- Vui lòng chọn rạp trước --</option>';
-    }
-}
-</script>
 </body>
 </html> 

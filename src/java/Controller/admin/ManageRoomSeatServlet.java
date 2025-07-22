@@ -49,7 +49,7 @@ public class ManageRoomSeatServlet extends HttpServlet {
                 break;
             case "deleteRoom":
                 String deleteRoomId = request.getParameter("id");
-                daoRoom.deleteRoom(deleteRoomId);
+                //daoRoom.deleteRoom(deleteRoomId);
                 response.sendRedirect(request.getContextPath() + "/admin/ManageRoomSeat?service=listAll");
                 break;
             default:
