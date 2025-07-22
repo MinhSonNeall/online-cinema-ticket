@@ -21,6 +21,7 @@ public class Showtimes { // Tên class giữ nguyên là 'Showtimes'
     private BigDecimal ticket_price;
     private String movie_title; // For display
     private String room_name;   // For display
+    private String cinema_name; // For display
     
     private String showtimeId;
     private String time;
@@ -120,6 +121,14 @@ public class Showtimes { // Tên class giữ nguyên là 'Showtimes'
 
     public void setRoom_name(String room_name) {
         this.room_name = room_name;
+    }
+
+    public String getCinema_name() {
+        return cinema_name;
+    }
+
+    public void setCinema_name(String cinema_name) {
+        this.cinema_name = cinema_name;
     }
 
     @Override
