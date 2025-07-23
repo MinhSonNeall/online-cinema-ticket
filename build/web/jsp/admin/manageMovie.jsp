@@ -442,12 +442,315 @@ flex-direction: column;
 <h1><i class="fas fa-film"></i> Manage Movies</h1>
 </div>
 <div class="breadcrumb">
-<a href="http://localhost:9999/OnlineCinemaTicket/jsp/admindashboard.jsp"><i class="fas fa-home"></i> Dashboard</a>
+<a href="adminController"><i class="fas fa-home"></i> Dashboard</a>
 <span> / </span>
 <span>Movies</span>
 </div>
-<%-- TODO: Implement movie management functionality here --%>
+<div class="search-section">
+    <h3><i class="fas fa-search"></i> Search Movies</h3>
+    <form action="ManageMovie" method="get" class="search-form">
+        <input type="hidden" name="service" value="searchMovie"/>
+        <div class="form-group">
+            <label for="searchTitle">Movie Title</label>
+            <input type="text" id="searchTitle" name="title" placeholder="Enter movie title" value="${requestScope.searchTitle != null ? requestScope.searchTitle : ''}">
+        </div>
+        <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> Search</button>
+        <a href="manageMovie?service=listAllMovies" class="btn btn-secondary"><i class="fas fa-sync-alt"></i> Reset</a>
+    </form>
+</div>
+
+<c:if test="${not empty sessionScope.successMessage}">
+    <div class="message success">
+        <i class="fas fa-check-circle"></i>
+        ${sessionScope.successMessage}
+    </div>
+   
+</c:if>
+
+<c:if test="${not empty sessionScope.errorMessage}">
+    <div class="message error">
+        <i class="fas fa-exclamation-circle"></i>
+        ${sessionScope.errorMessage}
+    </div>
+    
+</c:if>
+
+<div class="table-section">
+    <div class="table-header">
+        <h3><i class="fas fa-film"></i> All Movies</h3>
+        <a href="ManageMovie?service=addMovieForm" class="btn btn-primary"><i class="fas fa-plus"></i> Add New Movie</a>
+    </div>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Title</th>
+                    <th>Director</th>
+                    <th>Release Date</th>
+                    <th>Duration (min)</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <c:forEach var="movie" items="${requestScope.moviesList}">
+                    <tr>
+                        <td>${movie.movie_id}</td>
+                        <td>${movie.title}</td>
+                        <td>${movie.director}</td>
+                        <td>${movie.release_date}</td>
+                        <td>${movie.duration}</td>
+                        <td>
+                            <a href="ManageMovie?service=changeMovieStatus&movieId=${movie.movie_id}&currentStatus=${movie.status}" 
+                               class="status-toggle-btn status-${movie.status.name().toLowerCase()}">
+                                <c:choose>
+                                    <c:when test="${movie.status == 'NOW_SHOWING'}">
+                                        <i class="fas fa-circle-play"></i> Now Showing
+                                    </c:when>
+                                    <c:when test="${movie.status == 'COMING_SOON'}">
+                                        <i class="fas fa-hourglass-start"></i> Coming Soon
+                                    </c:when>
+                                    <c:otherwise>
+                                        ${movie.status}
+                                    </c:otherwise>
+                                </c:choose>
+                            </a>
+                        </td>
+                        <td class="action-buttons">
+                            <button type="button" class="btn btn-info btn-sm" onclick="showMovieDetail('${movie.movie_id}')"><i class="fas fa-eye"></i> Detail</button>
+                            <a href="ManageMovie?service=editMovieForm&id=${movie.movie_id}" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i> Edit</a>
+                            <a href="ManageMovie?service=deleteMovie&id=${movie.movie_id}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this movie?');"><i class="fas fa-trash-alt"></i> Delete</a>
+                        </td>
+                    </tr>
+                </c:forEach>
+                <c:if test="${empty requestScope.moviesList}">
+                    <tr>
+                        <td colspan="7" style="text-align: center;">No movies found.</td>
+                    </tr>
+                </c:if>
+            </tbody>
+        </table>    
+    </div>
 </div>
 </div>
+</div>
+<style>
+    .status-toggle-btn {
+        display: inline-flex;
+        align-items: center;
+        padding: 5px 10px;
+        border-radius: 5px;
+        font-weight: bold;
+        text-decoration: none;
+        color: white;
+        transition: background-color 0.3s ease;
+    }
+    .status-toggle-btn i {
+        margin-right: 5px;
+    }
+    .status-now_showing {
+        background-color: #28a745; /* Green */
+    }
+    .status-now_showing:hover {
+        background-color: #218838;
+    }
+    .status-coming_soon {
+        background-color: #ffc107; /* Yellow */
+        color: #333;
+    }
+    .status-coming_soon:hover {
+        background-color: #e0a800;
+    }
+</style>
 </body>
+<div id="movieDetailModal" class="modal">
+    <div class="modal-content">
+        <span class="close-button">&times;</span>
+        <h2 id="modalMovieTitle"></h2>
+        <div class="modal-body">
+            <div class="modal-poster-container">
+                <img id="modalMoviePoster" src="" alt="Movie Poster" class="modal-poster-image">
+            </div>
+            <div class="modal-info">
+                <p><strong>Description:</strong> <span id="modalMovieDescription"></span></p>
+                <p><strong>Age Restriction:</strong> <span id="modalMovieAgeRestriction"></span></p>
+                <p><strong>Director:</strong> <span id="modalMovieDirector"></span></p>
+                <p><strong>Genre:</strong> <span id="modalMovieGenre"></span></p>
+                <p><strong>Release Date:</strong> <span id="modalMovieReleaseDate"></span></p>
+                <p><strong>Duration:</strong> <span id="modalMovieDuration"></span> minutes</p>
+                <p><strong>Status:</strong> <span id="modalMovieStatus"></span></p>
+                <p><strong>Created At:</strong> <span id="modalMovieCreatedAt"></span></p>
+                <p><strong>Updated At:</strong> <span id="modalMovieUpdatedAt"></span></p>
+                <p><strong>Trailer:</strong> <a id="modalMovieTrailer" href="#" target="_blank">Watch Trailer</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Modal Styles */
+    .modal {
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        z-index: 1001; /* Sit on top */
+        left: 0;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgba(0,0,0,0.7); /* Black w/ opacity */
+        padding-top: 60px;
+    }
+
+    .modal-content {
+        background-color: #1a1a2e;
+        margin: 5% auto; /* 15% from the top and centered */
+        padding: 30px;
+        border: 1px solid #888;
+        width: 80%; /* Could be more or less, depending on screen size */
+        max-width: 900px;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(255, 107, 107, 0.3);
+        position: relative;
+        color: #fff;
+    }
+
+    .close-button {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+        position: absolute;
+        top: 15px;
+        right: 25px;
+    }
+
+    .close-button:hover,
+    .close-button:focus {
+        color: #ff6b6b;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .modal-body {
+        display: flex;
+        gap: 30px;
+        margin-top: 20px;
+    }
+
+    .modal-poster-container {
+        flex-shrink: 0;
+        width: 300px;
+    }
+
+    .modal-poster-image {
+        width: 100%;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+
+    .modal-info {
+        flex-grow: 1;
+    }
+
+    .modal-info p {
+        margin-bottom: 10px;
+        font-size: 1.1em;
+    }
+
+    .modal-info strong {
+        color: #feca57;
+    }
+
+    #modalMovieTitle {
+        font-size: 2em;
+        color: #ff6b6b;
+        margin-bottom: 15px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        padding-bottom: 10px;
+    }
+
+    #modalMovieTrailer {
+        color: #48dbfb;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    #modalMovieTrailer:hover {
+        text-decoration: underline;
+    }
+
+    @media (max-width: 768px) {
+        .modal-body {
+            flex-direction: column;
+            align-items: center;
+        }
+        .modal-poster-container {
+            width: 80%;
+            max-width: 250px;
+        }
+        .modal-content {
+            width: 95%;
+            margin: 20px auto;
+        }
+    }
+</style>
+
+<script>
+    function showMovieDetail(movieId) {
+        fetch('ManageMovie?service=movieDetail&id=' + movieId)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok ' + response.statusText);
+                }
+                return response.json();
+            })
+            .then(movieDetail => {
+                document.getElementById('modalMovieTitle').textContent = movieDetail.title;
+                document.getElementById('modalMoviePoster').src = '${pageContext.request.contextPath}' + movieDetail.poster_url;
+                document.getElementById('modalMovieDescription').textContent = movieDetail.description;
+                document.getElementById('modalMovieAgeRestriction').textContent = movieDetail.age_restriction;
+                document.getElementById('modalMovieDirector').textContent = movieDetail.director;
+                document.getElementById('modalMovieGenre').textContent = movieDetail.genere_name;
+                document.getElementById('modalMovieReleaseDate').textContent = movieDetail.release_date;
+                document.getElementById('modalMovieDuration').textContent = movieDetail.duration;
+                document.getElementById('modalMovieStatus').textContent = movieDetail.status;
+                document.getElementById('modalMovieCreatedAt').textContent = movieDetail.created_at;
+                document.getElementById('modalMovieUpdatedAt').textContent = movieDetail.updated_at;
+                
+                const trailerLink = document.getElementById('modalMovieTrailer');
+                if (movieDetail.trailer_url) {
+                    trailerLink.href = '${pageContext.request.contextPath}' + movieDetail.trailer_url;
+                    trailerLink.style.display = 'inline';
+                } else {
+                    trailerLink.style.display = 'none';
+                }
+
+                document.getElementById('movieDetailModal').style.display = 'block';
+            })
+            .catch(error => {
+                console.error('Error fetching movie details:', error);
+                alert('Failed to load movie details. Please try again.');
+            });
+    }
+
+    // Get the modal
+    var modal = document.getElementById("movieDetailModal");
+
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close-button")[0];
+
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function() {
+        modal.style.display = "none";
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+</script>
 </html>

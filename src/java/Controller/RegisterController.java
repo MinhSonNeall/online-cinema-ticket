@@ -71,7 +71,7 @@ public class RegisterController extends HttpServlet {
 
         // Kiểm tra email đã tồn tại
         DaoUser daoUser = new DaoUser();
-        Vector<Users> list = daoUser.listAllUser();
+        Vector<Users> list = daoUser.listUser();
         boolean emailExists = false;
 
         for (Users c : list) {

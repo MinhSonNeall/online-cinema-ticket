@@ -81,6 +81,12 @@ public class loginController extends HttpServlet {
                         if (!users.isEmpty()) {
                             session.setAttribute("user", users.get(0)); // Lưu user đầu tiên
                         }
+                        Users user=users.get(0);
+                if (user.getIsActive()==0){
+                    request.setAttribute("error","Tài khoản tạm thời bị vô hiệu hóa, vui lòng liên hệ admin: sonvd74@gmail.com để được mở khóa!" );
+                    request.getRequestDispatcher("/jsp/login.jsp").forward(request, response);
+                    return;
+                }
                         switch (role) {
                             case ADMIN:
                                 response.sendRedirect("adminController");
@@ -145,6 +151,13 @@ public class loginController extends HttpServlet {
                 if (!users.isEmpty()) {
                     session.setAttribute("user", users.get(0)); 
                 }
+                Users user=users.get(0);
+                if (user.getIsActive()==0){
+                    request.setAttribute("error","Tài khoản tạm thời bị vô hiệu hóa, vui lòng liên hệ admin: sonvd74@gmail.com để được mở khóa!" );
+                    request.getRequestDispatcher("/jsp/login.jsp").forward(request, response);
+                    return;
+                }
+                
                 if (remember_me != null) {
                     // Lưu email và role vào cookie
                     Cookie emailCookie = new Cookie("remember_meEmail", email);

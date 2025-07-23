@@ -104,13 +104,13 @@ public class JspFilter implements Filter {
 
     String requestURI = httpRequest.getRequestURI();
 
-    // Cho phép truy cập authenticationFailed.jsp
-    if (requestURI.endsWith("authenticationFailed.jsp")) {
+    
+    if (requestURI.endsWith("authenticationFailed.jsp")||requestURI.endsWith("error.jsp")) {
         chain.doFilter(request, response);
         return;
     }
 
-    // Nếu là file .jsp thì redirect về controller
+    
     if (requestURI.endsWith(".jsp")) {
         httpResponse.sendRedirect(httpRequest.getContextPath() + "/ListMovieController");
         return;
