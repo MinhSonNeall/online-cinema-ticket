@@ -215,7 +215,7 @@
                             </div>
                             <div class="profile-actions">
                                 <a href="#profile">Thông tin cá nhân</a>
-                                <a href="#booking-history">Lịch sử đặt vé</a>
+                                <a href="${pageContext.request.contextPath}/ListTicket">Lịch sử đặt vé</a>
                                 <a href="#settings">Cài đặt</a>
                                 <a href="${pageContext.request.contextPath}/LogoutController" class="logout-btn">Đăng xuất</a>
                             </div>

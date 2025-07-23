@@ -337,6 +337,8 @@
                       method="post">
 
                     <input type="hidden" name="confirm" value="true">
+                    <input type="hidden" name="selectedSeats" value="${selectedSeats}">
+                    <input type="hidden" name="showtimeid" value="${showtimeid}">
                     <input type="hidden" name="addInfo" value="${addInfo}">
                     <input type="hidden" name="totalPrice" value="${totalPrice}">
                     <input type="hidden" name="ticketId" value="${ticketId}">

@@ -123,6 +123,7 @@ public class InformationTicketController extends HttpServlet {
             String movieTitle = request.getParameter("movieTitle");
             String cinemaName = request.getParameter("cinemaName");
             String showtime = request.getParameter("showtime");
+            String showtimeid = request.getParameter("showtimeid");
             String selectedSeats = request.getParameter("selectedSeats");
             String selectedDate = request.getParameter("selectedDate");
             String roomId = request.getParameter("room_id");
@@ -142,6 +143,7 @@ public class InformationTicketController extends HttpServlet {
             request.setAttribute("movieTitle", movieTitle);
             request.setAttribute("cinemaName", cinemaName);
             request.setAttribute("showtime", showtime);
+            request.setAttribute("showtimeid", showtimeid);
             request.setAttribute("selectedSeats", selectedSeats);
             request.setAttribute("selectedDate", selectedDate);
             request.setAttribute("roomId", roomId);
