@@ -425,8 +425,6 @@ flex-direction: column;
 <li><a href="ManageMovie"><i class="fas fa-film"></i> Movies</a></li>
 <li><a href="ManageShowtime"><i class="fas fa-clock"></i> Showtimes</a></li>
 <li><a href="ManageRoomSeat"><i class="fas fa-chair"></i> CinemasCinemas</a></li>
-<li><a href="ManageTicketPrice"><i class="fas fa-tag"></i> Ticket Prices</a></li>
-<li><a href="ManageCombo" class="active"><i class="fas fa-utensils"></i> Combo Food</a></li>
 </ul>
 </div>
 <a href="#" class="logout-btn">
@@ -442,7 +440,7 @@ flex-direction: column;
 <h1><i class="fas fa-utensils"></i> Manage Combo Food</h1>
 </div>
 <div class="breadcrumb">
-<a href="http://localhost:9999/OnlineCinemaTicket/jsp/admindashboard.jsp"><i class="fas fa-home"></i> Dashboard</a>
+<a href="adminController"><i class="fas fa-home"></i> Dashboard</a>
 <span> / </span>
 <span>Combo Food</span>
 </div>

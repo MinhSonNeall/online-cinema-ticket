@@ -131,6 +131,23 @@ color: #2c3e50;
 font-size: 28px;
 font-weight: 600;
 }
+
+.breadcrumb {
+background: white;
+padding: 15px 25px;
+border-radius: 10px;
+box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+margin-bottom: 25px;
+}
+
+.breadcrumb a {
+color: #3498db;
+text-decoration: none;
+}
+
+.breadcrumb a:hover {
+text-decoration: underline;
+}
 .table-section {
 background: white;
 border-radius: 15px;
@@ -448,9 +465,7 @@ flex-direction: column;
                 <li><a href="ManageMovie"><i class="fas fa-film"></i> Movies</a></li>
                 <li><a href="ManageShowtime" class="active"><i class="fas fa-clock"></i> Showtimes</a></li>
                 <li><a href="ManageRoomSeat"><i class="fas fa-chair"></i> Cinemas</a></li>
-                <li><a href="ManageTicketPrice"><i class="fas fa-tag"></i> Ticket Prices</a></li>
-                <li><a href="ManageCombo"><i class="fas fa-utensils"></i> Combo Food</a></li>
-            </ul>
+               </ul>
         </div>
         <a href="#" class="logout-btn">
             <i class="fas fa-user-cog"></i> Change Profile
@@ -464,6 +479,12 @@ flex-direction: column;
         <div class="header">
             <h1><i class="fas fa-clock"></i> Manage Showtimes</h1>
             <a href="${pageContext.request.contextPath}/ManageShowtime?action=add" class="btn btn-primary"><i class="fas fa-plus"></i> Add Show time</a>
+        </div>
+        <!-- Breadcrumb -->
+        <div class="breadcrumb">
+            <a href="adminController"><i class="fas fa-home"></i> Dashboard</a> 
+            <span> / </span>
+            <span>Showtimes</span>
         </div>
         
         <c:if test="${not empty sessionScope.success}">

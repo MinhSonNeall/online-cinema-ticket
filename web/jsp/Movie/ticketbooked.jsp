@@ -489,7 +489,7 @@
                                 <div class="empty-icon">🎟️</div>
                                 <div class="empty-title">Bạn chưa có vé nào</div>
                                 <div class="empty-desc">Hãy đặt vé để bắt đầu trải nghiệm phim tại CinePlex.</div>
-                                <a href="/home" class="back-btn">Quay về trang chủ</a>
+                                <a href="/ListMovieController" class="back-btn">Quay về trang chủ</a>
                             </div>
                         </c:otherwise>
                     </c:choose>

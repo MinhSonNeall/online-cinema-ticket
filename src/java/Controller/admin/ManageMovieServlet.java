@@ -186,8 +186,15 @@ public class ManageMovieServlet extends HttpServlet {
                     break;
                 case "deleteMovie":
                     String deleteId = request.getParameter("id"); // Keep as String
-                    daoMovie.deleteMovie(deleteId); // Use new method (will be added to DaoMovie)
-                    response.sendRedirect("ManageMovie?service=listAllMovies");
+                    boolean check = daoMovie.deleteMovie(deleteId); // Use new method (will be added to DaoMovie)
+                    if (check) {
+                        request.getSession().setAttribute("successMessage", "Delete movie sucesss!");
+                        response.sendRedirect("ManageMovie");
+                    } else {
+                        request.getSession().setAttribute("errorMessage", "Film in use!");
+                        response.sendRedirect("ManageMovie");
+
+                    }
                     break;
                 case "searchMovie":
                     String searchTitle = request.getParameter("title").trim().replaceAll("\\s+", " ");
@@ -339,7 +346,7 @@ public class ManageMovieServlet extends HttpServlet {
                 String title = getPartContent(request.getPart("movieName"));
                 String description = getPartContent(request.getPart("description"));
                 int duration = Integer.parseInt(getPartContent(request.getPart("duration")));
-                String ageRestriction =getPartContent(request.getPart("ageLimit"));
+                String ageRestriction = getPartContent(request.getPart("ageLimit"));
                 Date releaseDate = Date.valueOf(getPartContent(request.getPart("releaseDate")));
 
                 Movies existingMovie = daoMovie.getMovieById(movieId);

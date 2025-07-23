@@ -53,6 +53,38 @@ public class DaoUser extends DBContext {
         }
     }
 
+     public String getPasswordByEmail(String email) {
+        String sql = "SELECT password FROM movie_ticketing.users WHERE email = ?";
+        try  {
+            connection=getConnection();
+            ps=connection.prepareStatement(sql);
+            
+            ps.setString(1, email);
+            rs = ps.executeQuery();
+            return rs.getString("password");
+        } catch (Exception ex) {
+            Logger.getLogger(DaoUser.class.getName()).log(Level.SEVERE, "Error getting password for email: " + email, ex);
+        }
+        return null; // Return null if user not found or error
+    }
+      public boolean updatePassword(String email, String newPassword) {
+        String sql = "UPDATE movie_ticketing.users SET password = ?, updated_at = ? WHERE email = ?";
+        try {
+            connection=getConnection();
+            ps = connection.prepareStatement(sql);
+            ps.setString(1,newPassword);
+            ps.setTimestamp(2, new Timestamp(System.currentTimeMillis()));
+            ps.setString(3, email);
+            int rowAffect = ps.executeUpdate();
+            return rowAffect >0;
+            
+        }
+         catch (Exception ex) {
+            Logger.getLogger(DaoUser.class.getName()).log(Level.SEVERE, "Error updating password for email: " + email, ex);
+            return false;
+        }
+        
+    }
     public Users.Roles checkRole(String email) {
         String sql = "SELECT role FROM movie_ticketing.users WHERE email = ?";
         try {
@@ -346,20 +378,74 @@ public class DaoUser extends DBContext {
     public boolean deleteCustomer(String email) {
         String sql = "DELETE FROM movie_ticketing.users WHERE email = ?";
         try {
-
             connection = getConnection();
-
             ps = connection.prepareStatement(sql);
             ps.setString(1, email);
-
             int rowsAffected = ps.executeUpdate();
             return rowsAffected > 0;
         } catch (Exception ex) {
-            ex.printStackTrace();
-            Logger.getLogger(DaoUser.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DaoUser.class.getName()).log(Level.SEVERE, "Error deleting customer with email: " + email, ex);
+            return false;
+        } finally {
+            closeConnection(connection, ps, null);
+        }
+    }
+    
+    // Phương thức kiểm tra mật khẩu hiện tại
+    public boolean checkPassword(String userId, String password) {
+        String sql = "SELECT * FROM movie_ticketing.users WHERE user_id = ? AND password = ?";
+        try {
+            connection = getConnection();
+            ps = connection.prepareStatement(sql);
+            ps.setString(1, userId);
+            ps.setString(2, password);
+            rs = ps.executeQuery();
+            return rs.next();
+        } catch (Exception ex) {
+            Logger.getLogger(DaoUser.class.getName()).log(Level.SEVERE, "Error checking password for user ID: " + userId, ex);
             return false;
         } finally {
             closeConnection(connection, ps, rs);
+        }
+    }
+    
+    // Phương thức cập nhật mật khẩu theo user_id
+    public boolean updatePasswordById(String userId, String newPassword) {
+        String sql = "UPDATE movie_ticketing.users SET password = ?, updated_at = ? WHERE user_id = ?";
+        try {
+            connection = getConnection();
+            ps = connection.prepareStatement(sql);
+            ps.setString(1, newPassword);
+            ps.setTimestamp(2, new Timestamp(System.currentTimeMillis()));
+            ps.setString(3, userId);
+            int rowsAffected = ps.executeUpdate();
+            return rowsAffected > 0;
+        } catch (Exception ex) {
+            Logger.getLogger(DaoUser.class.getName()).log(Level.SEVERE, "Error updating password for user ID: " + userId, ex);
+            return false;
+        } finally {
+            closeConnection(connection, ps, null);
+        }
+    }
+    
+    // Phương thức cập nhật thông tin cá nhân
+    public boolean updateUserProfile(Users user) {
+        String sql = "UPDATE movie_ticketing.users SET full_name = ?, email = ?, phone_number = ?, updated_at = ? WHERE user_id = ?";
+        try {
+            connection = getConnection();
+            ps = connection.prepareStatement(sql);
+            ps.setString(1, user.getFull_name());
+            ps.setString(2, user.getEmail());
+            ps.setString(3, user.getPhone_number());
+            ps.setTimestamp(4, new Timestamp(System.currentTimeMillis()));
+            ps.setString(5, user.getUser_id());
+            int rowsAffected = ps.executeUpdate();
+            return rowsAffected > 0;
+        } catch (Exception ex) {
+            Logger.getLogger(DaoUser.class.getName()).log(Level.SEVERE, "Error updating profile for user ID: " + user.getUser_id(), ex);
+            return false;
+        } finally {
+            closeConnection(connection, ps, null);
         }
     }
 

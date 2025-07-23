@@ -24,7 +24,7 @@ import jakarta.servlet.http.HttpSession;
  *
  * @author HP
  */
-@WebFilter(filterName = "AdminFilter", urlPatterns = {"/ManageCombo","/ManageMovie","/ManageRoomSeat","/ManageShowtime","/ManageTicketPrice","/ManageUserAccount","/customer","/adminController"})
+@WebFilter(filterName = "AdminFilter", urlPatterns = {"/ManageCombo","/ManageMovie","/ChangeUserAdminProfile","/ManageRoomSeat","/ManageShowtime","/ManageTicketPrice","/ManageUserAccount","/customer","/adminController"})
 public class AdminFilter implements Filter {
     
     private static final boolean debug = true;

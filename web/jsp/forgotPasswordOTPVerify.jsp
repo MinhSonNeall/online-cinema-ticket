@@ -1,9 +1,10 @@
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Verify OTP - Cinema Booking</title>
+        <title>Đặt lại mật khẩu - Cinema Booking</title>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
         <style>
             * {
@@ -122,9 +123,7 @@
                 color: #fff;
                 font-size: 1rem;
                 transition: all 0.3s ease;
-                text-align: center;
-                font-weight: 600;
-                letter-spacing: 2px;
+                font-weight: 500;
             }
             .form-input:focus {
                 outline: none;
@@ -134,7 +133,6 @@
             }
             .form-input::placeholder {
                 color: #aaa;
-                letter-spacing: normal;
                 font-weight: normal;
             }
             /* Login Button */
@@ -284,29 +282,6 @@
                     transform: translateY(0);
                 }
             }
-            /* Loading Animation */
-            .loading {
-                opacity: 0.7;
-                pointer-events: none;
-            }
-            .loading .login-btn {
-                background: linear-gradient(45deg, #aaa, #ccc);
-            }
-            .loading .login-btn::after {
-                content: '';
-                width: 16px;
-                height: 16px;
-                border: 2px solid transparent;
-                border-top: 2px solid #fff;
-                border-radius: 50%;
-                animation: spin 1s linear infinite;
-                display: inline-block;
-                margin-left: 0.5rem;
-            }
-            @keyframes spin {
-                0% { transform: rotate(0deg); }
-                100% { transform: rotate(360deg); }
-            }
             /* Background decoration */
             .login-container::before {
                 content: '';
@@ -333,55 +308,60 @@
         <div class="main-content">
             <div class="login-container">
                 <div class="login-header">
-                    <h1 class="login-title">Verify Email</h1>
-                    <p class="login-subtitle">Enter the 6-digit OTP code sent to your email</p>
-                </div>
+                    <h1 class="login-title">Đặt lại mật khẩu</h1>
+                    <p class="login-subtitle">Nhập mã OTP và mật khẩu mới của bạn</p>
+                                        </div>
                 
-                <form action="${pageContext.request.contextPath}/verifyEmailOTP" method="post" class="login-form">
+                                <c:if test="${not empty errorform}">
+                    <div class="error-message">
+                        <i class="fas fa-exclamation-circle"></i>
+                                        ${errorform}
+                                    </div>
+                                </c:if>
+                
+                                <c:if test="${not empty successMessage}">
+                    <div class="success-message">
+                        <i class="fas fa-check-circle"></i>
+                                        ${successMessage}
+                                    </div>
+                                </c:if>
+                
+                <form action="${pageContext.request.contextPath}/forgotPasswordOTPVerify" method="post" class="login-form">
                     <div class="form-group">
-                        <label for="otp" class="form-label">OTP Code</label>
-                        <input type="text" id="otp" name="otp" class="form-input" placeholder="Enter 6-digit OTP" required maxlength="6" pattern="[0-9]{6}">
-                    </div>
+                        <label for="otp" class="form-label">Mã OTP</label>
+                        <input type="text" id="otp" name="otp" class="form-input" placeholder="Nhập mã OTP" required maxlength="6" pattern="[0-9]{6}">
+                                            </div>
                     
-                    <% if (request.getAttribute("error") != null) { %>
-                        <div class="error-message">
-                            <i class="fas fa-exclamation-circle"></i>
-                            <%= request.getAttribute("error") %>
-                        </div>
-                    <% } %>
+                    <div class="form-group">
+                        <label for="newPassword" class="form-label">Mật khẩu mới</label>
+                        <input type="password" id="newPassword" name="newPassword" class="form-input" placeholder="Nhập mật khẩu mới (tối thiểu 12 ký tự)" required minlength="12">
+                                        </div>
                     
-                    <% if (request.getAttribute("success") != null) { %>
-                        <div class="success-message">
-                            <i class="fas fa-check-circle"></i>
-                            <%= request.getAttribute("success") %>
-                        </div>
-                    <% } %>
+                    <div class="form-group">
+                        <label for="confirmPassword" class="form-label">Xác nhận mật khẩu</label>
+                        <input type="password" id="confirmPassword" name="confirmPassword" class="form-input" placeholder="Xác nhận mật khẩu mới" required>
+                                            </div>
                     
                     <button type="submit" class="login-btn">
-                        <i class="fas fa-check"></i>
-                        Verify OTP
+                        <i class="fas fa-key"></i>
+                        Đặt lại mật khẩu
                     </button>
-                </form>
+                                </form>
                 
                 <div class="divider">
-                    <span>Need help?</span>
-                </div>
+                    <span>Trợ giúp</span>
+                                        </div>
                 
                 <div class="login-links">
                     <div style="display: flex; flex-direction: column; align-items: center; margin-bottom: 10px;">
-                        <a href="${pageContext.request.contextPath}/resendOtp" class="login-link register-link" id="resendOtpBtn">
+                        <a href="${pageContext.request.contextPath}/forgotPassword" class="login-link register-link">
                             <i class="fas fa-redo"></i>
-                            Resend OTP Code
+                            Gửi lại mã OTP
                         </a>
-                        <div id="cooldown-message" style="display: none; margin-top: 8px;">
-                            <span style="color: #ff6b6b; font-size: 0.9rem; font-weight: 500;">
-                                <i class="fas fa-clock"></i> Please wait 5 minutes before requesting another OTP
-                            </span>
-                        </div>
                     </div>
                     <a href="${pageContext.request.contextPath}/loginController" class="login-link">
                         <i class="fas fa-arrow-left"></i>
-                        Back to Login
+                        Quay lại đăng nhập
                     </a>
                 </div>
             </div>
@@ -396,75 +376,15 @@
                 this.value = this.value.replace(/[^0-9]/g, '');
             });
             
-            // Auto-submit when 6 digits are entered
-            document.querySelector('input[name="otp"]').addEventListener('input', function(e) {
-                if (this.value.length === 6) {
-                    // Optional: Auto-submit after a short delay
-                    setTimeout(() => {
-                        if (this.value.length === 6) {
-                            this.form.submit();
-                        }
-                    }, 500);
+            // Password confirmation validation
+            document.querySelector('form').addEventListener('submit', function(e) {
+                const newPassword = document.getElementById('newPassword').value;
+                const confirmPassword = document.getElementById('confirmPassword').value;
+                
+                if (newPassword !== confirmPassword) {
+                    e.preventDefault();
+                    alert('Mật khẩu xác nhận không khớp!');
                 }
-            });
-
-            // Resend OTP button cooldown functionality
-            const resendOtpBtn = document.getElementById('resendOtpBtn');
-            const cooldownMessage = document.getElementById('cooldown-message');
-            
-            // Check if there's a stored timestamp in localStorage
-            const cooldownTime = 5 * 60 * 1000; // 5 minutes in milliseconds
-            const lastClickTime = localStorage.getItem('lastResendOtpTime');
-            const currentTime = new Date().getTime();
-            
-            // Function to start the cooldown
-            function startCooldown() {
-                // Store the current time in localStorage
-                const clickTime = new Date().getTime();
-                localStorage.setItem('lastResendOtpTime', clickTime);
-                
-                // Disable the button and show message
-                resendOtpBtn.classList.add('disabled');
-                resendOtpBtn.style.pointerEvents = 'none';
-                resendOtpBtn.style.opacity = '0.5';
-                cooldownMessage.style.display = 'block';
-                
-                // Set a timeout to enable the button after cooldown
-                setTimeout(() => {
-                    resendOtpBtn.classList.remove('disabled');
-                    resendOtpBtn.style.pointerEvents = 'auto';
-                    resendOtpBtn.style.opacity = '1';
-                    cooldownMessage.style.display = 'none';
-                    localStorage.removeItem('lastResendOtpTime');
-                }, cooldownTime);
-            }
-            
-            // Check if button should be in cooldown state
-            if (lastClickTime && (currentTime - lastClickTime) < cooldownTime) {
-                // Button is still in cooldown
-                resendOtpBtn.classList.add('disabled');
-                resendOtpBtn.style.pointerEvents = 'none';
-                resendOtpBtn.style.opacity = '0.5';
-                cooldownMessage.style.display = 'block';
-                
-                // Set a timeout to enable the button after remaining cooldown time
-                const remainingTime = cooldownTime - (currentTime - parseInt(lastClickTime));
-                setTimeout(() => {
-                    resendOtpBtn.classList.remove('disabled');
-                    resendOtpBtn.style.pointerEvents = 'auto';
-                    resendOtpBtn.style.opacity = '1';
-                    cooldownMessage.style.display = 'none';
-                    localStorage.removeItem('lastResendOtpTime');
-                }, remainingTime);
-            }
-            
-            // Add click event listener to start cooldown
-            resendOtpBtn.addEventListener('click', function(e) {
-                // Start cooldown immediately to give visual feedback
-                startCooldown();
-                
-                // We don't prevent the default action - let the link work normally
-                // The page will reload, but localStorage will maintain our cooldown state
             });
         </script>
     </body>

@@ -50,10 +50,7 @@
                             <input type="number" id="duration" name="duration" class="form-input" placeholder="120" min="1" max="500" required value="${requestScope.movie.duration}">
                         </div>
 
-                        <div class="form-group">
-                            <label for="director" class="form-label"><i class="fas fa-user-tie"></i> Director *</label>
-                            <input type="text" id="director" name="director" class="form-input" placeholder="Enter director's name" required value="${requestScope.movie.director}">
-                        </div>
+                      
 
                         <div class="form-group">
                             <label for="releaseDate" class="form-label"><i class="fas fa-calendar-alt"></i> Release Date *</label>
@@ -77,7 +74,7 @@
                                 <option value="" disabled>Select status</option>
                                 <option value="COMING_SOON" ${requestScope.movie.status.name() == 'COMING_SOON' ? 'selected' : ''}>Coming Soon</option>
                                 <option value="NOW_SHOWING" ${requestScope.movie.status.name() == 'NOW_SHOWING' ? 'selected' : ''}>Now Showing</option>
-                                <option value="STOP_SHOWING" ${requestScope.movie.status.name() == 'STOP_SHOWING' ? 'selected' : ''}>Stop Showing</option>
+                                
                             </select>
                         </div>
 

@@ -42,3 +42,9 @@ out/
 # OS generated files
 .DS_Store
 Thumbs.db
+dist/OnlineCinemaTicket.war
+nbproject/build-impl.xml
+nbproject/genfiles.properties
+nbproject/project.properties
+nbproject/private/private.properties
+dist/OnlineCinemaTicket.war
