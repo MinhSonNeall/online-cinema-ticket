@@ -6,7 +6,9 @@ package Controller;
 
 import static Controller.InformationTicketController.checkPayment;
 import static Controller.InformationTicketController.sendMail;
+import Entity.TicketPayment;
 import Entity.Users;
+import Model.DaoTicket;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -15,6 +17,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  *
@@ -75,6 +79,8 @@ public class CheckPaymentController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        DaoTicket ticket = new DaoTicket();
+        TicketPayment payment = new TicketPayment();
         HttpSession session = request.getSession(false);
         Users user = (session != null) ? (Users) session.getAttribute("user") : null;
         if (user == null) {
@@ -83,6 +89,9 @@ public class CheckPaymentController extends HttpServlet {
         }
         String confirm = request.getParameter("confirm");
         
+            String selectedSeats = request.getParameter("selectedSeats");
+            String showtimeid = request.getParameter("showtimeid");
+            List<String> seat_list = Arrays.asList(selectedSeats.split(","));
             String addInfo = request.getParameter("addInfo");  // From hidden
             double amount = Double.parseDouble(request.getParameter("totalPrice"));  // From hidden
             String email = user.getEmail();  // From form input
@@ -107,9 +116,14 @@ public class CheckPaymentController extends HttpServlet {
                 }
 
                 try {
-                    sendMail(email, "Thanh toán đơn hàng thành công!!", "Thông báo về việc thanh toán vé phim");
+                    sendMail(email, "Thanh toán thành công!!", "Bạn đã đặt vé thành công");
                     session.removeAttribute("payment_confirmed");  // Clear flag sau khi gửi xong
-                    response.sendRedirect(request.getContextPath() + "/ListMovieController");
+                    payment.setSeat_ids(seat_list);
+                    payment.setShowtime_id(showtimeid);
+                    payment.setTotal_amount(request.getParameter("totalPrice"));
+                    payment.setUser_id(userId);
+                    String ticketId =ticket.insertMovie(payment);
+                    response.sendRedirect(request.getContextPath() + "/ListTicket");
                     return;
                 } catch (Exception ex) {
                     ex.printStackTrace();
