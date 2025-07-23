@@ -844,7 +844,7 @@
                         <input type="hidden" name="selectedDate" value="${selectedDate}">  <!-- Ngày chiếu -->
 <!--                        <input type="hidden" name="room_id" value="${room_id != null ? room_id : infomationMovie.showtime_id}">   Room ID (giả định từ param hoặc infomationMovie) -->
                         <input type="hidden" name="slot_id" value="${slot_id != null ? slot_id : infomationMovie.showtime_id}">  <!-- Slot ID (giả định từ param hoặc infomationMovie) -->
-
+<input type="hidden" name="showtimeid" value="${infomationMovie.showtime_id}">
                         <!-- SỬA: Thêm hidden cho tổng giá tiền, sẽ cập nhật bằng JS -->
                         <input type="hidden" name="totalPrice" id="totalPriceInput" value="0">
                         <button type="submit" class="booking-btn">Đặt vé ngay</button>
