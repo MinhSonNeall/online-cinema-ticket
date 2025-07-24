@@ -50,3 +50,5 @@ nbproject/private/private.properties
 dist/OnlineCinemaTicket.war
 dist/OnlineCinemaTicket.war
 *.war
+dist/OnlineCinemaTicket.war
+*.war
