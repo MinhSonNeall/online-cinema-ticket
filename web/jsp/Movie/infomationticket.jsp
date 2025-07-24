@@ -43,7 +43,7 @@
             }
 
             .logo::before {
-                content: "?";
+                
                 margin-right: 0.5rem;
             }
 
@@ -386,7 +386,7 @@
 
         <div class="success-animation" id="successAnimation">
             <div class="success-content">
-                <div class="success-icon">?</div>
+                <div class="success-icon"></div>
                 <h2 style="color: #4ade80; margin-bottom: 1rem;">Thanh toán thành công!</h2>
                 <p>Vé c?a b?n ?ã ???c g?i qua email</p>
                 <p style="margin-top: 0.5rem; font-size: 0.9rem; color: #b0b0b0;">Mã ??t ch?: CP2025062801</p>

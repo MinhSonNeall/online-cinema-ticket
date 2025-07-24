@@ -240,7 +240,7 @@ text-align: center;
                 <li><a href="ManageMovie"><i class="fas fa-film"></i> Movies</a></li>
                 <li><a href="ManageShowtime" class="active"><i class="fas fa-clock"></i> Showtimes</a></li>
                 <li><a href="ManageRoomSeat"><i class="fas fa-chair"></i> Cinemas</a></li>
-                <li><a href="ManageCombo"><i class="fas fa-utensils"></i> Combo Food</a></li>
+
             </ul>
         </div>
         <a href="#" class="logout-btn">

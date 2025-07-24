@@ -396,24 +396,7 @@ Manage Cinemas <i class="fas fa-arrow-right"></i>
 </button>
 </form>
 </div>
-<div class="dashboard-card">
-<h3><i class="fas fa-tag"></i> Ticket Prices</h3>
-<p>Manage ticket prices and discounts.</p>
-<form action="ManageTicketPrice" method="post">
-<button type="submit" class="card-link">
-Manage Ticket Prices <i class="fas fa-arrow-right"></i>
-</button>
-</form>
-</div>
-<div class="dashboard-card">
-<h3><i class="fas fa-utensils"></i> Combo Food</h3>
-<p>Manage combo food items and prices.</p>
-<form action="ManageCombo" method="post">
-<button type="submit" class="card-link">
-Manage Combo Food <i class="fas fa-arrow-right"></i>
-</button>
-</form>
-</div>
+
 </div>
 </div>
 </body>

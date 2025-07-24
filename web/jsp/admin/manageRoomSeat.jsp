@@ -440,7 +440,7 @@ flex-direction: column;
 
 </ul>
 </div>
-<a href="#" class="logout-btn">
+<a href="ChangeUserAdminProfile" class="logout-btn">
 <i class="fas fa-user-cog"></i> Change Profile
 </a>
 <c:url var="logoutUrl" value="/LogoutController"/>
@@ -480,7 +480,6 @@ flex-direction: column;
 <td>${room.name}</td>
 <td>${room.total_seats}</td>
 <td class="action-buttons">
-<a href="ManageRoomSeat?service=viewSeats&roomId=${room.room_id}" class="btn btn-info btn-sm"><i class="fas fa-eye"></i> View Seats</a>
 <a href="ManageRoomSeat?service=editRoom&id=${room.room_id}" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i> Edit</a>
 <a href="ManageRoomSeat?service=deleteRoom&id=${room.room_id}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')"><i class="fas fa-trash-alt"></i> Delete</a>
 </td>

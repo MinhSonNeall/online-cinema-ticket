@@ -218,13 +218,13 @@
                 
                 <div class="profile-content">
                     <!-- Alert Messages -->
-                    <c:if test="${not empty success}">
+                    <c:if test="${not empty requestScope.success}">
                         <div class="alert alert-success">
                             <i class="fas fa-check-circle"></i> ${success}
                         </div>
                     </c:if>
                     
-                    <c:if test="${not empty error}">
+                    <c:if test="${not empty requestScope.error}">
                         <div class="alert alert-danger">
                             <i class="fas fa-exclamation-circle"></i> ${error}
                         </div>

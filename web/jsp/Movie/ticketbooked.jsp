@@ -54,7 +54,7 @@
             }
 
             .logo::before {
-                content: '🎬';
+                
                 font-size: 1.8rem;
             }
 

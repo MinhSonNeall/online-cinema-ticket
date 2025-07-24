@@ -224,6 +224,7 @@ padding: 20px;
 flex-direction: column;
 text-align: center;
 }
+
 }
 </style>
 </head>
@@ -265,10 +266,12 @@ text-align: center;
 </a>
 </div>
 <!-- Main Content -->
+
 <div class="main-content">
 <div class="header">
 <h1><i class="fas fa-user-cog"></i> Change Admin Profile</h1>
-</div>
+</div
+>
 
 <!-- Profile Form -->
 <div class="profile-form-container">

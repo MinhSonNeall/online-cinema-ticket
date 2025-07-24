@@ -467,7 +467,7 @@ flex-direction: column;
                 <li><a href="ManageRoomSeat"><i class="fas fa-chair"></i> Cinemas</a></li>
                </ul>
         </div>
-        <a href="#" class="logout-btn">
+        <a href="ChangeUserAdminProfile" class="logout-btn">
             <i class="fas fa-user-cog"></i> Change Profile
         </a>
         <c:url var="logoutUrl" value="/LogoutController"/>

@@ -493,7 +493,7 @@ flex-direction: column;
                 <li><a href="ManageRoomSeat" class="active"><i class="fas fa-chair"></i> Cinemas</a></li>
                 </ul>
         </div>
-        <a href="#" class="logout-btn">
+        <a href="ChangeUserAdminProfile" class="logout-btn">
             <i class="fas fa-user-cog"></i> Change Profile
         </a>
         <c:url var="logoutUrl" value="/LogoutController"/>
@@ -570,9 +570,7 @@ flex-direction: column;
                                         <td>${room.name}</td>
                                         <td>${room.total_seats}</td>
                                         <td class="action-buttons">
-                                            <a href="${pageContext.request.contextPath}/ManageRoomSeat?service=viewSeats&roomId=${room.room_id}" class="btn btn-info btn-sm">
-                                                <i class="fas fa-chair"></i> View Seats
-                                            </a>
+                                            
                                             <a href="${pageContext.request.contextPath}/ManageRoomSeat?service=editRoom&id=${room.room_id}" class="btn btn-warning btn-sm">
                                                 <i class="fas fa-edit"></i> Edit
                                             </a>

@@ -217,7 +217,7 @@
 
                                 <a href="UserDetail">Thông tin cá nhân</a>
                                 <a href="${pageContext.request.contextPath}/ListTicket">Lịch sử đặt vé</a>
-                                <a href="#settings">Cài đặt</a>
+                               
 
                                 <a href="${pageContext.request.contextPath}/LogoutController" class="logout-btn">Đăng xuất</a>
                             </div>

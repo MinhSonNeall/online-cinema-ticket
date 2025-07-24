@@ -88,7 +88,7 @@ public class ListMovieDetailController extends HttpServlet {
         if (showtimeList.isEmpty()) {
             System.out.println("movieList is null");
             request.setAttribute("errorMessage", "Không có suất chiếu nào tại rạp CGV Hùng Vương Plaza vào ngày 01/06/2025.");
-            request.getRequestDispatcher("/jsp/Movie/index.jsp").forward(request, response);
+            request.getRequestDispatcher("/jsp/error.jsp").forward(request, response);
             return;
         }
         

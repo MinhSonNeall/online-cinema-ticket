@@ -15,7 +15,7 @@
                     <h1>Edit Movie</h1>
                     <p>Update movie details for "${requestScope.movie.title}"</p>
                 </div>
-                <a href="${pageContext.request.contextPath}/admin/ManageMovie" class="back-btn">
+                <a href="${pageContext.request.contextPath}/ManageMovie" class="back-btn">
                     <i class="fas fa-arrow-left"></i>
                     Back to Movies
                 </a>
@@ -174,7 +174,7 @@
                             <i class="fas fa-save"></i>
                             Save Changes
                         </button>
-                        <a href="${pageContext.request.contextPath}/admin/ManageMovie" class="btn btn-secondary">
+                        <a href="${pageContext.request.contextPath}/ManageMovie" class="btn btn-secondary">
                             <i class="fas fa-times"></i>
                             Cancel
                         </a>

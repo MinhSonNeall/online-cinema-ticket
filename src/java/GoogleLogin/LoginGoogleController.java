@@ -38,6 +38,10 @@ public class LoginGoogleController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String code = request.getParameter("code");
+         String error = request.getParameter("error");
+        if (error.equals("access_denied")){
+            response.sendRedirect("ListMovieController");
+        }
         GoogleLogin gg = new GoogleLogin();
         String token = gg.getToken(code);
         GoogleAccount access = gg.getUserInfo(token);
