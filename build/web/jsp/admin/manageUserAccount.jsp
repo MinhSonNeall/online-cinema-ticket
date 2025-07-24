@@ -433,11 +433,9 @@ flex-direction: column;
 <div class="nav-title">Management</div>
 <ul class="nav-links">
 <li><a href="ManageUserAccount" class="active"><i class="fas fa-users"></i> User Accounts</a></li>
-<li><a href="http://localhost:9999/OnlineCinemaTicket/admin/ManageMovie"><i class="fas fa-film"></i> Movies</a></li>
-<li><a href="http://localhost:9999/OnlineCinemaTicket/admin/ManageShowtime"><i class="fas fa-clock"></i> Showtimes</a></li>
-<li><a href="http://localhost:9999/OnlineCinemaTicket/admin/ManageRoomSeat"><i class="fas fa-chair"></i> Rooms & Seats</a></li>
-<li><a href="http://localhost:9999/OnlineCinemaTicket/admin/ManageTicketPrice"><i class="fas fa-tag"></i> Ticket Prices</a></li>
-<li><a href="http://localhost:9999/OnlineCinemaTicket/admin/ManageCombo"><i class="fas fa-utensils"></i> Combo Food</a></li>
+<li><a href="ManageMovie"><i class="fas fa-film"></i> Movies</a></li>
+<li><a href="ManageShowtime"><i class="fas fa-clock"></i> Showtimes</a></li>
+<li><a href="ManageRoomSeat"><i class="fas fa-chair"></i> Cinemas</a></li>
 </ul>
 </div>
 <a href="ManageUserAccount?service=update&email=${sessionScope.user.email}" class="logout-btn">

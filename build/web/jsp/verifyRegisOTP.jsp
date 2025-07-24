@@ -328,7 +328,7 @@
         </style>
     </head>
     <body>
-        <a href="${pageContext.request.contextPath}/jsp/index.jsp" class="logo">CinemaBook</a>
+        <a href="${pageContext.request.contextPath}/jsp/index.jsp" class="logo">🎬 CinePlex</a>
         
         <div class="main-content">
             <div class="login-container">
@@ -368,10 +368,17 @@
                 </div>
                 
                 <div class="login-links">
-                    <a href="${pageContext.request.contextPath}/resendOtp" class="login-link register-link">
-                        <i class="fas fa-redo"></i>
-                        Resend OTP Code
-                    </a>
+                    <div style="display: flex; flex-direction: column; align-items: center; margin-bottom: 10px;">
+                        <a href="${pageContext.request.contextPath}/resendOtp" class="login-link register-link" id="resendOtpBtn">
+                            <i class="fas fa-redo"></i>
+                            Resend OTP Code
+                        </a>
+                        <div id="cooldown-message" style="display: none; margin-top: 8px;">
+                            <span style="color: #ff6b6b; font-size: 0.9rem; font-weight: 500;">
+                                <i class="fas fa-clock"></i> Please wait 5 minutes before requesting another OTP
+                            </span>
+                        </div>
+                    </div>
                     <a href="${pageContext.request.contextPath}/loginController" class="login-link">
                         <i class="fas fa-arrow-left"></i>
                         Back to Login
@@ -399,6 +406,65 @@
                         }
                     }, 500);
                 }
+            });
+
+            // Resend OTP button cooldown functionality
+            const resendOtpBtn = document.getElementById('resendOtpBtn');
+            const cooldownMessage = document.getElementById('cooldown-message');
+            
+            // Check if there's a stored timestamp in localStorage
+            const cooldownTime = 5 * 60 * 1000; // 5 minutes in milliseconds
+            const lastClickTime = localStorage.getItem('lastResendOtpTime');
+            const currentTime = new Date().getTime();
+            
+            // Function to start the cooldown
+            function startCooldown() {
+                // Store the current time in localStorage
+                const clickTime = new Date().getTime();
+                localStorage.setItem('lastResendOtpTime', clickTime);
+                
+                // Disable the button and show message
+                resendOtpBtn.classList.add('disabled');
+                resendOtpBtn.style.pointerEvents = 'none';
+                resendOtpBtn.style.opacity = '0.5';
+                cooldownMessage.style.display = 'block';
+                
+                // Set a timeout to enable the button after cooldown
+                setTimeout(() => {
+                    resendOtpBtn.classList.remove('disabled');
+                    resendOtpBtn.style.pointerEvents = 'auto';
+                    resendOtpBtn.style.opacity = '1';
+                    cooldownMessage.style.display = 'none';
+                    localStorage.removeItem('lastResendOtpTime');
+                }, cooldownTime);
+            }
+            
+            // Check if button should be in cooldown state
+            if (lastClickTime && (currentTime - lastClickTime) < cooldownTime) {
+                // Button is still in cooldown
+                resendOtpBtn.classList.add('disabled');
+                resendOtpBtn.style.pointerEvents = 'none';
+                resendOtpBtn.style.opacity = '0.5';
+                cooldownMessage.style.display = 'block';
+                
+                // Set a timeout to enable the button after remaining cooldown time
+                const remainingTime = cooldownTime - (currentTime - parseInt(lastClickTime));
+                setTimeout(() => {
+                    resendOtpBtn.classList.remove('disabled');
+                    resendOtpBtn.style.pointerEvents = 'auto';
+                    resendOtpBtn.style.opacity = '1';
+                    cooldownMessage.style.display = 'none';
+                    localStorage.removeItem('lastResendOtpTime');
+                }, remainingTime);
+            }
+            
+            // Add click event listener to start cooldown
+            resendOtpBtn.addEventListener('click', function(e) {
+                // Start cooldown immediately to give visual feedback
+                startCooldown();
+                
+                // We don't prevent the default action - let the link work normally
+                // The page will reload, but localStorage will maintain our cooldown state
             });
         </script>
     </body>

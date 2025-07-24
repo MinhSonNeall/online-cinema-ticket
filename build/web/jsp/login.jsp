@@ -444,7 +444,7 @@
             </a>
             
             <div class="login-links">
-                <a href="#" class="login-link">Quên mật khẩu?</a>
+                <a href="forgotPassword" class="login-link">Quên mật khẩu?</a>
                 <a href="RegisterController" class="register-link">Chưa có tài khoản? Đăng ký ngay</a>
             </div>
         </div>

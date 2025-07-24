@@ -56,7 +56,7 @@
             }
 
             .logo::before {
-                content: "🎬";
+                
                 margin-right: 10px;
                 font-size: 1.2em;
                 background: none;

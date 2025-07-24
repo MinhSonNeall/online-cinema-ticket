@@ -131,6 +131,23 @@ color: #2c3e50;
 font-size: 28px;
 font-weight: 600;
 }
+
+.breadcrumb {
+background: white;
+padding: 15px 25px;
+border-radius: 10px;
+box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+margin-bottom: 25px;
+}
+
+.breadcrumb a {
+color: #3498db;
+text-decoration: none;
+}
+
+.breadcrumb a:hover {
+text-decoration: underline;
+}
 .table-section {
 background: white;
 border-radius: 15px;
@@ -216,6 +233,183 @@ color: white;
 .btn-primary:hover {
 background: #2980b9;
 }
+
+/* Cải thiện style cho các nút */
+.btn {
+    display: inline-block;
+    font-weight: 500;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    user-select: none;
+    border: 1px solid transparent;
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: 0.25rem;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.btn:active {
+    transform: translateY(0);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.btn i {
+    margin-right: 5px;
+}
+
+.btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    border-radius: 0.2rem;
+}
+
+.btn-primary {
+    background: linear-gradient(to right, #3498db, #2980b9);
+    border-color: #2980b9;
+    color: white;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(to right, #2980b9, #2573a7);
+    border-color: #2573a7;
+}
+
+.btn-info {
+    background: linear-gradient(to right, #17a2b8, #138496);
+    border-color: #138496;
+    color: white;
+}
+
+.btn-info:hover {
+    background: linear-gradient(to right, #138496, #117a8b);
+    border-color: #117a8b;
+}
+
+.btn-danger {
+    background: linear-gradient(to right, #dc3545, #c82333);
+    border-color: #c82333;
+    color: white;
+}
+
+.btn-danger:hover {
+    background: linear-gradient(to right, #c82333, #bd2130);
+    border-color: #bd2130;
+}
+
+.btn-success {
+    background: linear-gradient(to right, #28a745, #218838);
+    border-color: #218838;
+    color: white;
+}
+
+.btn-success:hover {
+    background: linear-gradient(to right, #218838, #1e7e34);
+    border-color: #1e7e34;
+}
+
+.btn-warning {
+    background: linear-gradient(to right, #ffc107, #e0a800);
+    border-color: #e0a800;
+    color: #212529;
+}
+
+.btn-warning:hover {
+    background: linear-gradient(to right, #e0a800, #d39e00);
+    border-color: #d39e00;
+    color: #212529;
+}
+
+.btn-secondary {
+    background: linear-gradient(to right, #6c757d, #5a6268);
+    border-color: #5a6268;
+    color: white;
+}
+
+.btn-secondary:hover {
+    background: linear-gradient(to right, #5a6268, #4e555b);
+    border-color: #4e555b;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.action-buttons .btn {
+    margin-bottom: 5px;
+}
+
+.header .btn-primary {
+    padding: 10px 20px;
+    font-size: 16px;
+    box-shadow: 0 4px 10px rgba(52, 152, 219, 0.3);
+    transition: all 0.3s ease;
+}
+
+.header .btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(52, 152, 219, 0.4);
+}
+
+/* Cải thiện hiệu ứng hover cho các dòng trong bảng */
+tbody tr {
+    transition: all 0.2s ease;
+}
+
+tbody tr:hover {
+    background: #f8f9fa;
+    transform: scale(1.01);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    z-index: 1;
+    position: relative;
+}
+
+/* Cải thiện style cho bảng */
+.table-container {
+    overflow-x: auto;
+    border-radius: 0 0 15px 15px;
+}
+
+table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+thead {
+    background: linear-gradient(to right, #f8f9fa, #e9ecef);
+}
+
+th {
+    padding: 15px 20px;
+    text-align: left;
+    font-weight: 600;
+    color: #2c3e50;
+    border-bottom: 2px solid #e1e8ed;
+    position: sticky;
+    top: 0;
+    background: #f8f9fa;
+    z-index: 10;
+}
+
+td {
+    padding: 15px 20px;
+    border-bottom: 1px solid #e1e8ed;
+    color: #2c3e50;
+    vertical-align: middle;
+}
 @media (max-width: 1024px) {
 .sidebar {
 width: 250px;
@@ -267,15 +461,13 @@ flex-direction: column;
         <div class="nav-section">
             <div class="nav-title">Management</div>
             <ul class="nav-links">
-                <li><a href="http://localhost:9999/OnlineCinemaTicket/admin/ManageUserAccount"><i class="fas fa-users"></i> User Accounts</a></li>
-                <li><a href="http://localhost:9999/OnlineCinemaTicket/admin/ManageMovie"><i class="fas fa-film"></i> Movies</a></li>
-                <li><a href="http://localhost:9999/OnlineCinemaTicket/admin/ManageShowtime" class="active"><i class="fas fa-clock"></i> Showtimes</a></li>
-                <li><a href="http://localhost:9999/OnlineCinemaTicket/admin/ManageRoomSeat"><i class="fas fa-chair"></i> Rooms & Seats</a></li>
-                <li><a href="http://localhost:9999/OnlineCinemaTicket/admin/ManageTicketPrice"><i class="fas fa-tag"></i> Ticket Prices</a></li>
-                <li><a href="http://localhost:9999/OnlineCinemaTicket/admin/ManageCombo"><i class="fas fa-utensils"></i> Combo Food</a></li>
-            </ul>
+                <li><a href="ManageUserAccount"><i class="fas fa-users"></i> User Accounts</a></li>
+                <li><a href="ManageMovie"><i class="fas fa-film"></i> Movies</a></li>
+                <li><a href="ManageShowtime" class="active"><i class="fas fa-clock"></i> Showtimes</a></li>
+                <li><a href="ManageRoomSeat"><i class="fas fa-chair"></i> Cinemas</a></li>
+               </ul>
         </div>
-        <a href="#" class="logout-btn">
+        <a href="ChangeUserAdminProfile" class="logout-btn">
             <i class="fas fa-user-cog"></i> Change Profile
         </a>
         <c:url var="logoutUrl" value="/LogoutController"/>
@@ -286,7 +478,13 @@ flex-direction: column;
     <div class="main-content">
         <div class="header">
             <h1><i class="fas fa-clock"></i> Manage Showtimes</h1>
-            <a href="${pageContext.request.contextPath}/ManageShowtime?action=add" class="btn btn-primary"><i class="fas fa-plus"></i> Thêm Đợt Chiếu Mới</a>
+            <a href="${pageContext.request.contextPath}/ManageShowtime?action=add" class="btn btn-primary"><i class="fas fa-plus"></i> Add Show time</a>
+        </div>
+        <!-- Breadcrumb -->
+        <div class="breadcrumb">
+            <a href="adminController"><i class="fas fa-home"></i> Dashboard</a> 
+            <span> / </span>
+            <span>Showtimes</span>
         </div>
         
         <c:if test="${not empty sessionScope.success}">
@@ -298,19 +496,19 @@ flex-direction: column;
         
         <div class="table-section">
             <div class="table-header">
-                <h3><i class="fas fa-clock"></i> Danh sách Đợt Chiếu</h3>
+                <h3><i class="fas fa-clock"></i> Show time waiting</h3>
             </div>
             <div class="table-container">
                 <table>
                     <thead>
                         <tr>
-                            <th>ID Đợt chiếu</th>
-                            <th>Tên Phim</th>
-                            <th>Rạp</th>
-                            <th>Phòng</th>
-                            <th>Ngày Bắt Đầu</th>
-                            <th>Ngày Kết Thúc</th>
-                            <th>Hành động</th>
+                            <th>Show Time ID</th>
+                            <th>Title</th>
+                            <th>Cinema</th>
+                            <th>Room</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -323,9 +521,9 @@ flex-direction: column;
                                 <td><fmt:formatDate value="${showtime.start_time}" pattern="dd/MM/yyyy" /></td>
                                 <td><fmt:formatDate value="${showtime.end_time}" pattern="dd/MM/yyyy" /></td>
                                 <td class="action-buttons">
-                                    <a href="${pageContext.request.contextPath}/ManageShowtime?action=edit&id=${showtime.showtime_id}" class="btn btn-info btn-sm"><i class="fas fa-edit"></i> Sửa</a>
-                                    <a href="${pageContext.request.contextPath}/ManageShowtime?action=delete&id=${showtime.showtime_id}" class="btn btn-danger btn-sm" onclick="return confirm('Bạn có chắc chắn muốn xóa đợt chiếu này? Tất cả các suất chiếu và ghế liên quan cũng sẽ bị xóa vĩnh viễn.')"><i class="fas fa-trash-alt"></i> Xóa</a>
-                                    <a href="${pageContext.request.contextPath}/ManageShowtime?action=add-slot&id=${showtime.showtime_id}" class="btn btn-success btn-sm"><i class="fas fa-plus"></i> Thêm Suất Chiếu</a>
+                                    <a href="${pageContext.request.contextPath}/ManageShowtime?action=edit&id=${showtime.showtime_id}" class="btn btn-info btn-sm"><i class="fas fa-edit"></i> Edit</a>
+                                    <a href="${pageContext.request.contextPath}/ManageShowtime?action=add-slot&id=${showtime.showtime_id}" class="btn btn-success btn-sm"><i class="fas fa-plus"></i> Add ShowTime Slot</a>
+                                    <a href="${pageContext.request.contextPath}/ManageShowtime?action=view-slots&id=${showtime.showtime_id}" class="btn btn-warning btn-sm"><i class="fas fa-list-ol"></i> List ShowTime Slot</a>
                                 </td>
                             </tr>
                         </c:forEach>

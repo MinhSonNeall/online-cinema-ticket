@@ -65,29 +65,26 @@
                 <h3>Dịch vụ</h3>
                 <ul>
                     <li><a href="#">Đặt vé online</a></li>
-                    <li><a href="#">Thành viên VIP</a></li>
-                    <li><a href="#">Gift voucher</a></li>
-                    <li><a href="#">Thuê phòng chiếu</a></li>
+                    
                 </ul>
             </div>
 
             <div class="footer-section">
                 <h3>Hỗ trợ</h3>
                 <ul>
-                    <li><a href="#">Câu hỏi thường gặp</a></li>
-                    <li><a href="#">Chính sách đổi trả</a></li>
+                    
                     <li><a href="#">Hotline: 1900-1234</a></li>
-                    <li><a href="#">Email: support@cineplex.vn</a></li>
+                    <li><a href="#">Email: sonvd74@gmail.com</a></li>
                 </ul>
             </div>
 
             <div class="footer-section">
                 <h3>Kết nối</h3>
                 <ul>
-                    <li><a href="#">📘 Facebook</a></li>
-                    <li><a href="#">📷 Instagram</a></li>
-                    <li><a href="#">🐦 Twitter</a></li>
-                    <li><a href="#">📺 YouTube</a></li>
+                    <li><a href="https://www.facebook.com/Best.Son.Dz/">📘 Facebook</a></li>
+                    <li><a href="https://www.instagram.com/neal._.91/">📷 Instagram</a></li>
+                    <li><a href="https://x.com/">🐦 Twitter</a></li>
+                    <li><a href="https://www.youtube.com/">📺 YouTube</a></li>
                 </ul>
             </div>
         </div>
