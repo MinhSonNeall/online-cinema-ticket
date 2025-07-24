@@ -12,10 +12,25 @@ public class ShowSeat {
     private String seat_number;
     private String check_seat;
     private String price;
+    private String seat_id;
 
-    public ShowSeat() {
+    public String getSeat_id() {
+        return seat_id;
     }
 
+    public void setSeat_id(String seat_id) {
+        this.seat_id = seat_id;
+    }
+    
+    
+    public ShowSeat() {
+    }
+    public ShowSeat(String seat_number,String check_seat,String price, String seat_id){
+        this.seat_number = seat_number;
+        this.check_seat = check_seat;
+        this.price = price;
+        this.seat_id=seat_id;
+    }
     public ShowSeat(String seat_number, String check_seat) {
         this.seat_number = seat_number;
         this.check_seat = check_seat;

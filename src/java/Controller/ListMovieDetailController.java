@@ -77,6 +77,10 @@ public class ListMovieDetailController extends HttpServlet {
         String selectedSlotId = request.getParameter("slot_id");
         DaoMovie daoMovie = new DaoMovie();
         Movies movie = daoMovie.getMovieById(movieId);
+        if (movieId==null){
+            response.sendRedirect("ListMovieController");
+            return;
+        }
         if (movie == null) {
             response.sendRedirect("/jsp/error.jsp");
             return;
@@ -96,14 +100,14 @@ public class ListMovieDetailController extends HttpServlet {
             if (movieId != null && selectedCityName != null && selectedDateStr != null) {
                 showtimeListOf = daoMovie.getTimeSlot(movieId, selectedCityName, selectedDateStr,selectedCinemaId);
             }else {
-                System.out.println("kh co du lieu");
+                System.out.println("kh co du lieu.that ha??");
             }
             
         List<ShowSeat> showSeatList = new ArrayList<>();
             if (movieId != null && selectedCityName != null && selectedDateStr != null) {
                 showSeatList = daoMovie.getShowSeat(movieId, selectedCityName, selectedDateStr,selectedCinemaId,selectedSlotId);
             }else {
-                System.out.println("kh co du lieu");
+                System.out.println("kh co du lieu,");
             }
 
         

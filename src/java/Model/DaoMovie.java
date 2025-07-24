@@ -404,7 +404,7 @@ public class DaoMovie extends DBContext {
 
     public List<ShowSeat> getShowSeat(String movie_id, String cityname, String date, String room_id, String slot_id) {
         List<ShowSeat> showSeatList = new ArrayList();
-        String sql = "select se.seat_number,se.check_seat,se.price from showtimes s\n"
+        String sql = "select se.seat_number,se.check_seat,se.price,se.seat_id from showtimes s\n"
                 + "join rooms r on s.room_id = r.room_id\n"
                 + "join cinemas c on r.cinema_id = c.cinema_id\n"
                 + "join showtime_slots sl on s.showtime_id = sl.showtime_id\n"
@@ -424,7 +424,8 @@ public class DaoMovie extends DBContext {
                 String seat_number = rs.getString("seat_number");
                 String check_seat = rs.getString("check_seat");
                 String price = rs.getString("price");
-                showSeatList.add(new ShowSeat(seat_number, check_seat, price));
+                String seat_id=rs.getString("seat_id");
+                showSeatList.add(new ShowSeat(seat_number, check_seat, price,seat_id));
             }
         } catch (Exception ex) {
             ex.printStackTrace();

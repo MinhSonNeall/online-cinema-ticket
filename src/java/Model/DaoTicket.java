@@ -94,7 +94,7 @@ public List<TicketPayment> getTicketsByUserId(String userId) {
     List<TicketPayment> tickets = new ArrayList<>();
 
     String sql = "SELECT t.ticket_id,t.user_id,t.showtime_id,t.booking_date,t.total_amount,s.seat_id,st.room_id"
-            + ",m.title,stl.date,stl.start_time,stl.end_time"
+            + ",m.title,stl.date,stl.start_time,stl.end_time,seat.seat_number"
             + ",r.name as room_name,c.name as cinema_name " +
                  "FROM movie_ticketing.tickets t " +
                  "JOIN movie_ticketing.ticket_seats s ON t.ticket_id = s.ticket_id " +
@@ -133,6 +133,7 @@ public List<TicketPayment> getTicketsByUserId(String userId) {
                 ticket.setEndTime(rs.getString("end_time"));
                 ticket.setRoomName(rs.getString("room_name"));
                 ticket.setCinemaName(rs.getString("cinema_name"));
+                ticket.setSeat_number(rs.getString("seat_number"));
                 ticket.setSeat_ids(new ArrayList<>());
                 ticketMap.put(ticketId, ticket);
             }

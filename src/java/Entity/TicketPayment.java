@@ -24,8 +24,18 @@ public class TicketPayment {
     private String endTime;
     private String roomName;
     private String cinemaName;
+    private String seat_number;
+    
     
     private List<String> seat_ids;
+
+    public String getSeat_number() {
+        return seat_number;
+    }
+
+    public void setSeat_number(String seat_number) {
+        this.seat_number = seat_number;
+    }
 
     public TicketPayment() {
     }

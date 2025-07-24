@@ -461,7 +461,7 @@
                                         <div class="seat-info">
                                             <div class="seat-label">Ghế đã đặt</div>
                                             <div class="seat-numbers">
-                                                <c:forEach var="seat" items="${ticket.seat_ids}">
+                                                <c:forEach var="seat" items="${ticket.seat_number}">
                                                     <span class="seat-number">${seat}</span>
                                                 </c:forEach>
                                             </div>
@@ -489,7 +489,7 @@
                                 <div class="empty-icon">🎟️</div>
                                 <div class="empty-title">Bạn chưa có vé nào</div>
                                 <div class="empty-desc">Hãy đặt vé để bắt đầu trải nghiệm phim tại CinePlex.</div>
-                                <a href="/ListMovieController" class="back-btn">Quay về trang chủ</a>
+                                <a href="<c:url value='/ListMovieController' />" class="back-btn">Quay về trang chủ</a>
                             </div>
                         </c:otherwise>
                     </c:choose>

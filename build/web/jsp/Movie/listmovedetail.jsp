@@ -108,24 +108,7 @@
                 transform: translateY(-2px);
             }
 
-            .user-profile {
-                display: flex;
-                align-items: center;
-                gap: 0.75rem;
-                padding: 0.5rem 1.25rem;
-                background: var(--glass-bg);
-                border: 2px solid var(--primary-color);
-                border-radius: 50px;
-                cursor: pointer;
-                transition: var(--transition);
-                backdrop-filter: blur(10px);
-            }
 
-            .user-profile:hover {
-                background: rgba(255, 107, 107, 0.1);
-                transform: translateY(-2px);
-                box-shadow: var(--shadow-glow);
-            }
 
             /* Main Container */
             .container {
@@ -524,6 +507,12 @@
                 opacity: 0.6;
             }
 
+            .seat input[type="checkbox"]:checked + span,
+            .seat input[type="checkbox"]:checked {
+                background: var(--primary-color);
+                color: white;
+            }
+
             /* Booking Form */
             .booking-form {
                 background: var(--glass-bg);
@@ -768,9 +757,8 @@
                         <div class="cinema-showtimes">
                             <div class="showtime-grid">
                                 <c:forEach var="showtime" items="${showtimeListOf}">
-                                    <a href="${pageContext.request.contextPath}/ListMovieDetailController?movieId=${movieId}&selectedDate=${selectedDate}&cityName=${showtime.city}&room_id=${showtime.room_id}&slot_id=${showtime.slot_id}" class="showtime-btn active"}" 
-                                       data-time="${showtime.start_time}" 
-                                       >
+                                    <a href="${pageContext.request.contextPath}/ListMovieDetailController?movieId=${movieId}&selectedDate=${selectedDate}&cityName=${showtime.city}&room_id=${showtime.room_id}&slot_id=${showtime.slot_id}" class="showtime-btn active" 
+                                       data-time="${showtime.start_time}">
                                         <div class="time">${showtime.start_time} - ${showtime.end_time}</div>
                                         <div class="price">${showtime.price}đ</div>
                                         <div class="seats-left">${showtime.seat_avaiable} ghế trống</div>
@@ -811,7 +799,8 @@
                     <div class="seat-grid">
                         <c:forEach var="seat" items="${showSeatList}">
                             <div class="seat ${seat.check_seat == 1 ? 'booked' : ''}"
-                                 data-price="${seat.price != null ? seat.price : 0}">
+                                 data-price="${seat.price != null ? seat.price : 0}"
+                                 data-seat-id="${seat.seat_id}">
                                 ${seat.seat_number}
                             </div>
                         </c:forEach>
@@ -880,76 +869,40 @@
                 });
             });
 
-            // Showtime selection
-            document.querySelectorAll('.showtime-btn:not(:disabled)').forEach(btn => {
-                btn.addEventListener('click', function (e) {
-                    // SỬA: Vì <a href> sẽ reload, nhưng nếu muốn prevent reload và xử lý JS (optional), uncomment e.preventDefault();
-                    // e.preventDefault();  // Nếu muốn AJAX, nhưng hiện tại giữ reload để server update data
-
-                    document.querySelectorAll('.showtime-btn').forEach(b => b.classList.remove('active'));
-                    this.classList.add('active');
-
-                    const selectedTime = this.dataset.time;
-                    document.getElementById('selectedShowtime').textContent = selectedTime;
-
-                    // SỬA: Cập nhật hidden showtime (nếu reload, server sẽ set; thêm để sync client-side)
-                    document.getElementById('showtimeInput').value = selectedTime;
-
-                    // Clear all selected seats
-                    document.querySelectorAll('.seat.selected').forEach(seat => {
-                        seat.classList.remove('selected');
-                    });
-                    
-                    updateSelectedSeats();
-                });
-            });
-
             function updateSelectedSeats() {
-                const selectedSeats = Array.from(document.querySelectorAll('.seat.selected'))
-                        .map(seat => seat.textContent.trim());
-
-                console.log("Ghế đã chọn:", selectedSeats);
-
+                const selectedSeats = document.querySelectorAll('.seat.selected');
+                // Hiển thị seat_number cho người dùng
+                const seatNumbers = Array.from(selectedSeats).map(seat => seat.textContent.trim());
                 document.getElementById('selectedSeatsDisplay').textContent =
-                        selectedSeats.length > 0 ? selectedSeats.join(', ') : 'Chưa chọn ghế';
-
-                document.querySelector('input[name="selectedSeats"]').value = selectedSeats.join(',');
-
+                        seatNumbers.length > 0 ? seatNumbers.join(', ') : 'Chưa chọn ghế';
+                
+                // Gửi seat_id lên server
+                const seatIds = Array.from(selectedSeats).map(seat => seat.getAttribute('data-seat-id'));
+                document.querySelector('input[name="selectedSeats"]').value = seatIds.join(',');
+                
                 updateTotalPrice();
             }
 
             function updateTotalPrice() {
                 const selectedSeats = document.querySelectorAll('.seat.selected');
                 let totalPrice = 0;
-
                 selectedSeats.forEach(seat => {
                     const raw = seat.getAttribute('data-price');
                     const price = parseFloat(raw?.trim());
-                    console.log('Ghế:', seat.textContent.trim(), '| raw:', raw, '| price:', price);
-
                     if (!isNaN(price)) {
                         totalPrice += price;
                     }
                 });
-
-                console.log('Tổng tiền tính được:', totalPrice);
-
                 const priceSpan = document.getElementById('priceValue');
                 if (priceSpan) {
                     priceSpan.textContent = totalPrice.toLocaleString('vi-VN');
-                } else {
-                    console.warn('Không tìm thấy phần tử #priceValue');
                 }
-
-                // SỬA: Cập nhật hidden totalPrice
                 document.getElementById('totalPriceInput').value = totalPrice;
             }
-
 
             document.addEventListener('DOMContentLoaded', function () {
                 updateSelectedSeats();
             });
-
         </script>
 
 
