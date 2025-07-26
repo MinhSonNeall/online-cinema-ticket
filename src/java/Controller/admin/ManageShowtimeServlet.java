@@ -22,6 +22,9 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.math.BigDecimal;
 import java.util.Map;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 @WebServlet(name = "ManageShowtimeServlet", urlPatterns = {"/ManageShowtime"})
 public class ManageShowtimeServlet extends HttpServlet {
@@ -51,6 +54,9 @@ public class ManageShowtimeServlet extends HttpServlet {
             case "get-rooms":
                 getRoomsByCinema(request, response);
                 break;
+            case "search":
+                searchShowtimes(request, response);
+                break;
             default:
                 listShowtimes(request, response);
                 break;
@@ -72,10 +78,29 @@ public class ManageShowtimeServlet extends HttpServlet {
             case "add-slot":
                 addShowtimeSlot(request, response);
                 break;
+            case "search":
+                searchShowtimes(request, response);
+                break;
             case "list":
                     listShowtimes(request, response);
                     break;
         }
+    }
+
+    private void searchShowtimes(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String movieTitle = request.getParameter("movieTitle");
+        DaoShowtime daoShowtime = new DaoShowtime();
+        
+        List<Showtimes> showtimeList;
+        if (movieTitle != null && !movieTitle.trim().isEmpty()) {
+            showtimeList = daoShowtime.searchShowtimesByMovieTitle(movieTitle);
+            request.setAttribute("searchTerm", movieTitle); // Store search term to display in the form
+        } else {
+            showtimeList = daoShowtime.getAllShowtimes();
+        }
+        
+        request.setAttribute("showtimeList", showtimeList);
+        request.getRequestDispatcher("/jsp/admin/manageShowtime.jsp").forward(request, response);
     }
 
     private void listShowtimes(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -133,11 +158,29 @@ public class ManageShowtimeServlet extends HttpServlet {
                 return;
             }
             
-            DaoShowtime daoShowtime = new DaoShowtime();
-            int maxId = daoShowtime.getMaxShowtimeId();
-            String newShowtimeId = String.valueOf(maxId + 1);
             Timestamp startTime = Timestamp.valueOf(startTimeStr + " 00:00:00");
             Timestamp endTime = Timestamp.valueOf(endTimeStr + " 00:00:00");
+            
+            // Kiểm tra thời gian hợp lệ
+            if (startTime.after(endTime)) {
+                request.setAttribute("error", "Ngày bắt đầu không thể sau ngày kết thúc!");
+                showAddForm(request, response);
+                return;
+            }
+            
+            // Kiểm tra trùng lặp showtime
+            DaoShowtime daoShowtime = new DaoShowtime();
+            boolean isOverlapping = daoShowtime.isShowtimeOverlapping(movieId, roomId, startTime, endTime);
+            
+            if (isOverlapping) {
+                request.setAttribute("error", "Không thể thêm đợt chiếu mới! Đã có đợt chiếu khác của phim này trong cùng phòng và thời gian trùng lặp.");
+                showAddForm(request, response);
+                return;
+            }
+            
+            // Tiếp tục thêm showtime mới nếu không có trùng lặp
+            int maxId = daoShowtime.getMaxShowtimeId();
+            String newShowtimeId = String.valueOf(maxId + 1);
             
             Showtimes showtime = new Showtimes();
             showtime.setShowtime_id(newShowtimeId);
@@ -164,15 +207,77 @@ public class ManageShowtimeServlet extends HttpServlet {
     }
 
     private void updateShowtime(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        String showtimeId = request.getParameter("showtimeId");
-        String startTimeStr = request.getParameter("startTime");
-        String endTimeStr = request.getParameter("endTime");
-        DaoShowtime daoShowtime = new DaoShowtime();
-        Showtimes showtime = daoShowtime.getShowtimeById(showtimeId);
-        showtime.setStart_time(Timestamp.valueOf(startTimeStr + " 00:00:00"));
-        showtime.setEnd_time(Timestamp.valueOf(endTimeStr + " 00:00:00"));
-        daoShowtime.updateShowtime(showtime);
-        response.sendRedirect(request.getContextPath() + "/ManageShowtime");
+        try {
+            String showtimeId = request.getParameter("showtimeId");
+            String startTimeStr = request.getParameter("startTime");
+            String endTimeStr = request.getParameter("endTime");
+            
+            DaoShowtime daoShowtime = new DaoShowtime();
+            Showtimes showtime = daoShowtime.getShowtimeById(showtimeId);
+            
+            if (showtime == null) {
+                request.getSession().setAttribute("error", "Không tìm thấy đợt chiếu cần cập nhật!");
+                response.sendRedirect(request.getContextPath() + "/ManageShowtime");
+                return;
+            }
+            
+            Timestamp startTime = Timestamp.valueOf(startTimeStr + " 00:00:00");
+            Timestamp endTime = Timestamp.valueOf(endTimeStr + " 00:00:00");
+            
+            // Kiểm tra thời gian hợp lệ
+            if (startTime.after(endTime)) {
+                request.getSession().setAttribute("error", "Ngày bắt đầu không thể sau ngày kết thúc!");
+                response.sendRedirect(request.getContextPath() + "/ManageShowtime?action=edit&id=" + showtimeId);
+                return;
+            }
+            
+            // Kiểm tra trùng lặp với các showtime khác (ngoại trừ chính nó)
+            String sql = "SELECT s.showtime_id, m.title, r.name as room_name, c.name as cinema_name, s.start_time, s.end_time " +
+                         "FROM Showtimes s " +
+                         "JOIN Movies m ON s.movie_id = m.movie_id " +
+                         "JOIN Rooms r ON s.room_id = r.room_id " +
+                         "JOIN Cinemas c ON r.cinema_id = c.cinema_id " +
+                         "WHERE s.movie_id = ? AND s.room_id = ? " +
+                         "AND s.showtime_id != ? " +
+                         "AND NOT (s.end_time < ? OR s.start_time > ?)";
+            
+            try (Connection connection = daoShowtime.getConnection();
+                 PreparedStatement ps = connection.prepareStatement(sql)) {
+                ps.setString(1, showtime.getMovie_id());
+                ps.setString(2, showtime.getRoom_id());
+                ps.setString(3, showtimeId);
+                ps.setTimestamp(4, startTime);
+                ps.setTimestamp(5, endTime);
+                
+                ResultSet rs = ps.executeQuery();
+                
+                if (rs.next()) {
+                    // Tìm thấy showtime khác bị trùng
+                    request.getSession().setAttribute("error", "Không thể cập nhật đợt chiếu! Đã có đợt chiếu khác của phim này trong cùng phòng và thời gian trùng lặp.");
+                    response.sendRedirect(request.getContextPath() + "/ManageShowtime?action=edit&id=" + showtimeId);
+                    return;
+                }
+            } catch (Exception e) {
+                System.out.println("Error checking overlapping showtimes in update: " + e.getMessage());
+                e.printStackTrace();
+                request.getSession().setAttribute("error", "Có lỗi xảy ra khi kiểm tra trùng lặp: " + e.getMessage());
+                response.sendRedirect(request.getContextPath() + "/ManageShowtime?action=edit&id=" + showtimeId);
+                return;
+            }
+            
+            // Cập nhật showtime nếu không có trùng lặp
+            showtime.setStart_time(startTime);
+            showtime.setEnd_time(endTime);
+            daoShowtime.updateShowtime(showtime);
+            
+            request.getSession().setAttribute("success", "Cập nhật đợt chiếu thành công!");
+            response.sendRedirect(request.getContextPath() + "/ManageShowtime");
+        } catch (Exception e) {
+            System.out.println("Error in updateShowtime: " + e.getMessage());
+            e.printStackTrace();
+            request.getSession().setAttribute("error", "Có lỗi xảy ra: " + e.getMessage());
+            response.sendRedirect(request.getContextPath() + "/ManageShowtime");
+        }
     }
 
     private void showAddSlotForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -215,7 +320,7 @@ public class ManageShowtimeServlet extends HttpServlet {
             System.out.println("slotDate: " + slotDate);
             System.out.println("showStart: " + showStart);
             System.out.println("showEnd: " + showEnd);
-            System.out.println("Room ID:"+showtime.getRoom_id());
+            System.out.println("Room ID:" + showtime.getRoom_id());
 
             if (slotDate.isBefore(showStart) || slotDate.isAfter(showEnd)) {
                 request.setAttribute("error", "Ngày suất chiếu phải nằm trong khoảng thời gian của đợt chiếu!");
@@ -231,6 +336,15 @@ public class ManageShowtimeServlet extends HttpServlet {
             System.out.println("Debug - Standardized times:");
             System.out.println("slotStartTime: " + slotStartTime);
             System.out.println("slotEndTime: " + slotEndTime);
+            
+            // Kiểm tra xem khung giờ mới có bị trùng với khung giờ nào khác trong cùng phòng và ngày không
+            if (daoShowtime.isTimeSlotOverlapping(showtime.getRoom_id(), dateStr, slotStartTime, slotEndTime)) {
+                System.out.println("Debug - Time slot overlapping detected!");
+                request.setAttribute("error", "Không thể thêm suất chiếu do đã có phim khác chiếu trong khung giờ này!");
+                request.setAttribute("showtime", showtime);
+                request.getRequestDispatcher("/jsp/admin/addShowtimeSlot.jsp").forward(request, response);
+                return;
+            }
 
             // Insert slot
             String newSlotId = daoShowtime.generateNextSlotId();
@@ -246,7 +360,7 @@ public class ManageShowtimeServlet extends HttpServlet {
                 request.getRequestDispatcher("/jsp/admin/addShowtimeSlot.jsp").forward(request, response);
                 return;
             }
-
+            
             // Sinh seat cho slot
             DaoRoom daoRoom = new DaoRoom();
             Rooms room = daoRoom.getRoomById(showtime.getRoom_id());

@@ -8,7 +8,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Manage Rooms - ${cinema.name}</title>
+<title>Room Showtime Slots - ${room.name}</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 <style>
 * {
@@ -174,141 +174,8 @@ margin: 0 8px;
 color: #95a5a6;
 }
 
-/* Cải thiện style cho các nút */
-.btn {
-    display: inline-block;
-    font-weight: 500;
-    text-align: center;
-    white-space: nowrap;
-    vertical-align: middle;
-    user-select: none;
-    border: 1px solid transparent;
-    padding: 0.375rem 0.75rem;
-    font-size: 1rem;
-    line-height: 1.5;
-    border-radius: 0.25rem;
-    transition: all 0.3s ease;
-    text-decoration: none;
-    cursor: pointer;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
-
-.btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-}
-
-.btn:active {
-    transform: translateY(0);
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-}
-
-.btn i {
-    margin-right: 5px;
-}
-
-.btn-sm {
-    padding: 0.25rem 0.5rem;
-    font-size: 0.875rem;
-    line-height: 1.5;
-    border-radius: 0.2rem;
-}
-
-.btn-primary {
-    background: linear-gradient(to right, #3498db, #2980b9);
-    border-color: #2980b9;
-    color: white;
-}
-
-.btn-primary:hover {
-    background: linear-gradient(to right, #2980b9, #2573a7);
-    border-color: #2573a7;
-}
-
-.btn-info {
-    background: linear-gradient(to right, #17a2b8, #138496);
-    border-color: #138496;
-    color: white;
-}
-
-.btn-info:hover {
-    background: linear-gradient(to right, #138496, #117a8b);
-    border-color: #117a8b;
-}
-
-.btn-danger {
-    background: linear-gradient(to right, #dc3545, #c82333);
-    border-color: #c82333;
-    color: white;
-}
-
-.btn-danger:hover {
-    background: linear-gradient(to right, #c82333, #bd2130);
-    border-color: #bd2130;
-}
-
-.btn-success {
-    background: linear-gradient(to right, #28a745, #218838);
-    border-color: #218838;
-    color: white;
-}
-
-.btn-success:hover {
-    background: linear-gradient(to right, #218838, #1e7e34);
-    border-color: #1e7e34;
-}
-
-.btn-warning {
-    background: linear-gradient(to right, #ffc107, #e0a800);
-    border-color: #e0a800;
-    color: #212529;
-}
-
-.btn-warning:hover {
-    background: linear-gradient(to right, #e0a800, #d39e00);
-    border-color: #d39e00;
-    color: #212529;
-}
-
-.header .btn-primary {
-    padding: 10px 20px;
-    font-size: 16px;
-    box-shadow: 0 4px 10px rgba(52, 152, 219, 0.3);
-    transition: all 0.3s ease;
-}
-
-.header .btn-primary:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 15px rgba(52, 152, 219, 0.4);
-}
-
-/* Message Alerts */
-.alert {
-    padding: 15px;
-    border-radius: 8px;
-    margin-bottom: 20px;
-    animation: fadeIn 0.5s ease;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-.alert-success {
-    background: #d4edda;
-    color: #155724;
-    border: 1px solid #c3e6cb;
-}
-
-.alert-danger {
-    background: #f8d7da;
-    color: #721c24;
-    border: 1px solid #f5c6cb;
-}
-
-/* Cinema Info Card */
-.cinema-info-card {
+/* Room Info Card */
+.room-info-card {
     background: white;
     border-radius: 15px;
     box-shadow: 0 5px 15px rgba(0,0,0,0.05);
@@ -317,7 +184,7 @@ color: #95a5a6;
     border-left: 5px solid #3498db;
 }
 
-.cinema-info-card h2 {
+.room-info-card h2 {
     color: #2c3e50;
     font-size: 24px;
     margin-bottom: 15px;
@@ -325,20 +192,20 @@ color: #95a5a6;
     align-items: center;
 }
 
-.cinema-info-card h2 i {
+.room-info-card h2 i {
     margin-right: 10px;
     color: #3498db;
 }
 
-.cinema-info-card p {
+.room-info-card p {
     margin: 10px 0;
     color: #2c3e50;
     font-size: 16px;
 }
 
-.cinema-info-card p strong {
+.room-info-card p strong {
     display: inline-block;
-    width: 100px;
+    width: 120px;
     color: #7f8c8d;
 }
 
@@ -407,7 +274,7 @@ td {
     vertical-align: middle;
 }
 
-/* Cải thiện hiệu ứng hover cho các dòng trong bảng */
+/* Cáº£i thiá»n hiá»u á»©ng hover cho cÃ¡c dÃ²ng trong báº£ng */
 tbody tr {
     transition: all 0.2s ease;
 }
@@ -420,14 +287,39 @@ tbody tr:hover {
     position: relative;
 }
 
-.action-buttons {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
+.btn {
+    display: inline-block;
+    font-weight: 500;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    user-select: none;
+    border: 1px solid transparent;
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: 0.25rem;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
-.action-buttons .btn {
-    margin-bottom: 5px;
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.btn-primary {
+    background: linear-gradient(to right, #3498db, #2980b9);
+    border-color: #2980b9;
+    color: white;
+}
+
+.btn-secondary {
+    background: linear-gradient(to right, #6c757d, #5a6268);
+    border-color: #5a6268;
+    color: white;
 }
 
 /* Responsive Design */
@@ -458,12 +350,28 @@ flex-direction: column;
 text-align: center;
 gap: 15px;
 }
-.action-buttons {
-flex-direction: column;
 }
-.cinema-info-card p strong {
-    width: 80px;
+
+/* Chip/Tag style for movie titles */
+.movie-chip {
+    display: inline-block;
+    padding: 5px 10px;
+    background: #3498db;
+    color: white;
+    border-radius: 20px;
+    font-size: 14px;
+    margin-right: 5px;
 }
+
+/* Format date and time nicely */
+.time-slot {
+    display: flex;
+    align-items: center;
+}
+
+.time-slot i {
+    margin-right: 8px;
+    color: #3498db;
 }
 </style>
 </head>
@@ -504,85 +412,59 @@ flex-direction: column;
     
     <div class="main-content">
         <div class="header">
-            <h1><i class="fas fa-door-open"></i> Manage Rooms</h1>
-            <a href="${pageContext.request.contextPath}/ManageRoomSeat?service=addRoom&cinemaId=${cinema.cinema_id}" class="btn btn-primary">
-                <i class="fas fa-plus"></i> Add New Room
+            <h1><i class="fas fa-film"></i> Room Showtime Slots</h1>
+            <a href="${pageContext.request.contextPath}/ManageRoomSeat?service=viewRooms&cinemaId=${cinema.cinema_id}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Back to Rooms
             </a>
         </div>
         
         <div class="breadcrumb">
             <a href="${pageContext.request.contextPath}/ManageRoomSeat"><i class="fas fa-building"></i> Cinemas</a>
             <i class="fas fa-chevron-right"></i>
-            <span>${cinema.name}</span>
+            <a href="${pageContext.request.contextPath}/ManageRoomSeat?service=viewRooms&cinemaId=${cinema.cinema_id}">${cinema.name}</a>
+            <i class="fas fa-chevron-right"></i>
+            <span>Room ${room.name} Showtime Slots</span>
         </div>
         
-        <c:if test="${not empty sessionScope.success}">
-            <div class="alert alert-success">
-                <i class="fas fa-check-circle"></i> ${sessionScope.success}
-                <c:remove var="success" scope="session" />
-            </div>
-        </c:if>
-        
-        <c:if test="${not empty sessionScope.error}">
-            <div class="alert alert-danger">
-                <i class="fas fa-exclamation-circle"></i> ${sessionScope.error}
-                <c:remove var="error" scope="session" />
-            </div>
-        </c:if>
-        
-        <div class="cinema-info-card">
-            <h2><i class="fas fa-building"></i> Cinema Information</h2>
-            <p><strong>ID:</strong> ${cinema.cinema_id}</p>
-            <p><strong>Name:</strong> ${cinema.name}</p>
-            <p><strong>Address:</strong> ${cinema.address}</p>
-            <p><strong>City:</strong> ${cinema.city}</p>
+        <div class="room-info-card">
+            <h2><i class="fas fa-door-open"></i> Room Information</h2>
+            <p><strong>Room ID:</strong> ${room.room_id}</p>
+            <p><strong>Room Name:</strong> ${room.name}</p>
+            <p><strong>Total Seats:</strong> ${room.total_seats}</p>
+            <p><strong>Cinema:</strong> ${cinema.name} (${cinema.address}, ${cinema.city})</p>
         </div>
         
         <div class="table-section">
             <div class="table-header">
-                <h3><i class="fas fa-door-open"></i> All Rooms</h3>
+                <h3><i class="fas fa-clock"></i> Showtime Slots</h3>
             </div>
             <div class="table-container">
                 <table>
                     <thead>
                         <tr>
+                            <th>Date</th>
+                            <th>Movie</th>
+                            <th>Start Time - End Time</th>
                             
-                            <th>Room Name</th>
-                            <th>Total Seats</th>
-                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         <c:choose>
-                            <c:when test="${empty rooms}">
+                            <c:when test="${empty roomSlots}">
                                 <tr>
                                     <td colspan="4" style="text-align: center; padding: 30px;">
                                         <i class="fas fa-info-circle" style="font-size: 24px; color: #3498db; margin-bottom: 10px; display: block;"></i>
-                                        <p>No rooms found for this cinema.</p>
-                                        <p>Click "Add New Room" to create one.</p>
+                                        <p>No showtime slots found for this room.</p>
                                     </td>
                                 </tr>
                             </c:when>
                             <c:otherwise>
-                                <c:forEach var="room" items="${rooms}">
+                                <c:forEach var="slot" items="${roomSlots}">
                                     <tr>
-                                        
-                                        <td>${room.name}</td>
-                                        <td>${room.total_seats}</td>
-                                        <td class="action-buttons">
-                                            
-                                            <a href="${pageContext.request.contextPath}/ManageRoomSeat?service=editRoom&id=${room.room_id}" class="btn btn-warning btn-sm">
-                                                <i class="fas fa-edit"></i> Edit
-                                            </a>
-                                            <a href="${pageContext.request.contextPath}/ManageRoomSeat?service=viewRoomShowtimeSlots&roomId=${room.room_id}" class="btn btn-info btn-sm">
-                                                <i class="fas fa-film"></i> View Showtime Slots
-                                            </a>
-                                            <a href="${pageContext.request.contextPath}/ManageRoomSeat?service=deleteRoom&id=${room.room_id}" 
-                                               class="btn btn-danger btn-sm" 
-                                               onclick="return confirm('Are you sure you want to delete this room? This action cannot be undone if the room is not used in any showtime.')">
-                                                <i class="fas fa-trash-alt"></i> Delete
-                                            </a>
-                                        </td>
+                                        <td>${slot.date}</td>
+                                        <td><span class="movie-chip">${slot.movie_title}</span></td>
+                                        <td class="time-slot"><i class="far fa-clock"></i>${slot.start_time}</td>
+                                        <td class="time-slot"><i class="far fa-clock"></i>${slot.end_time}</td>
                                     </tr>
                                 </c:forEach>
                             </c:otherwise>

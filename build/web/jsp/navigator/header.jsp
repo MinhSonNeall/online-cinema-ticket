@@ -174,7 +174,7 @@
 
 <header class="header">
     <nav class="nav-container">
-        <a href="${pageContext.request.contextPath}/ListMovieController" class="logo">🎬 CinePlex</a>
+        <a href="${pageContext.request.contextPath}/ListMovieController" class="logo">🎬 TickMe</a>
         
         <ul class="nav-menu">
             <li><a href="${pageContext.request.contextPath}/ListMovieController">Trang chủ</a></li>

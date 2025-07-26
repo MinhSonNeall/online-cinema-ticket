@@ -12,6 +12,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.math.BigDecimal;
+import java.util.HashMap;
 
 /**
  *
@@ -150,6 +152,56 @@ public List<TicketPayment> getTicketsByUserId(String userId) {
     }
 
     return tickets;
+}
+
+// Lấy tổng tiền vé đã bán
+public BigDecimal getTotalRevenue() {
+    BigDecimal total = BigDecimal.ZERO;
+    String sql = "SELECT SUM(total_amount) FROM movie_ticketing.tickets WHERE status = 'confirmed'";
+    try {
+        connection = getConnection();
+        ps = connection.prepareStatement(sql);
+        rs = ps.executeQuery();
+        if (rs.next()) {
+            total = rs.getBigDecimal(1);
+            if (total == null) total = BigDecimal.ZERO;
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+    } finally {
+        closeConnection(connection, ps, rs);
+    }
+    return total;
+}
+
+// Lấy danh sách phim được đặt vé nhiều nhất (tên phim + số vé)
+public List<Map<String, Object>> getTopMoviesByTicket(int limit) {
+    List<Map<String, Object>> result = new ArrayList<>();
+    String sql = "SELECT m.title, COUNT(t.ticket_id) as ticket_count " +
+            "FROM movie_ticketing.tickets t " +
+            "JOIN movie_ticketing.showtimes s ON t.showtime_id = s.showtime_id " +
+            "JOIN movie_ticketing.movies m ON s.movie_id = m.movie_id " +
+            "WHERE t.status = 'confirmed' " +
+            "GROUP BY m.title " +
+            "ORDER BY ticket_count DESC " +
+            "LIMIT ?";
+    try {
+        connection = getConnection();
+        ps = connection.prepareStatement(sql);
+        ps.setInt(1, limit);
+        rs = ps.executeQuery();
+        while (rs.next()) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("title", rs.getString("title"));
+            map.put("ticket_count", rs.getInt("ticket_count"));
+            result.add(map);
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+    } finally {
+        closeConnection(connection, ps, rs);
+    }
+    return result;
 }
 
 }

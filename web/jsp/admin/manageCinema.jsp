@@ -456,6 +456,56 @@ flex-direction: column;
     justify-content: flex-end;
     gap: 10px;
 }
+
+/* Styles for search functionality */
+.table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.search-container {
+    position: relative;
+}
+
+.search-input {
+    padding: 8px 35px 8px 12px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    width: 250px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.search-input:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.25);
+    outline: none;
+}
+
+.btn-secondary {
+    background: linear-gradient(to right, #6c757d, #5a6268);
+    border-color: #5a6268;
+    color: white;
+}
+
+.btn-secondary:hover {
+    background: linear-gradient(to right, #5a6268, #4e555b);
+    border-color: #4e555b;
+}
+
+@media (max-width: 768px) {
+    .table-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .search-input {
+        width: 100%;
+    }
+}
 </style>
 </head>
 <body>
@@ -518,6 +568,26 @@ flex-direction: column;
         <div class="table-section">
             <div class="table-header">
                 <h3><i class="fas fa-list"></i> All Cinemas</h3>
+                
+                <!-- Search Form -->
+                <form action="${pageContext.request.contextPath}/ManageRoomSeat" method="GET" style="display: flex; align-items: center;">
+                    <input type="hidden" name="service" value="searchCinemas">
+                    <div style="display: flex; gap: 10px; align-items: center;">
+                        <div class="search-container">
+                            <input type="text" name="searchTerm" placeholder="Search by name or address" 
+                                   value="${searchTerm}" 
+                                   class="search-input">
+                            <button type="submit" style="position: absolute; right: 5px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer;">
+                                <i class="fas fa-search" style="color: #3498db;"></i>
+                            </button>
+                        </div>
+                        <c:if test="${not empty searchTerm}">
+                            <a href="${pageContext.request.contextPath}/ManageRoomSeat" class="btn btn-secondary btn-sm">
+                                <i class="fas fa-times"></i> Clear
+                            </a>
+                        </c:if>
+                    </div>
+                </form>
             </div>
             <div class="table-container">
                 <table>
@@ -531,27 +601,51 @@ flex-direction: column;
                         </tr>
                     </thead>
                     <tbody>
-                        <c:forEach var="cinema" items="${cinemas}">
-                            <tr>
-                                <td>${cinema.cinema_id}</td>
-                                <td>${cinema.name}</td>
-                                <td>${cinema.address}</td>
-                                <td>${cinema.city}</td>
-                                <td class="action-buttons">
-                                    <a href="${pageContext.request.contextPath}/ManageRoomSeat?service=viewRooms&cinemaId=${cinema.cinema_id}" class="btn btn-info btn-sm">
-                                        <i class="fas fa-door-open"></i> Rooms
-                                    </a>
-                                    <a href="${pageContext.request.contextPath}/ManageRoomSeat?service=editCinema&id=${cinema.cinema_id}" class="btn btn-warning btn-sm">
-                                        <i class="fas fa-edit"></i> Edit
-                                    </a>
-                                    <a href="${pageContext.request.contextPath}/ManageRoomSeat?service=deleteCinema&id=${cinema.cinema_id}" 
-                                       class="btn btn-danger btn-sm" 
-                                       onclick="return confirm('Are you sure you want to delete this cinema? This action cannot be undone if the cinema has no rooms.')">
-                                        <i class="fas fa-trash-alt"></i> Delete
-                                    </a>
-                                </td>
-                            </tr>
-                        </c:forEach>
+                        <c:choose>
+                            <c:when test="${empty cinemas}">
+                                <tr>
+                                    <td colspan="5" style="text-align: center; padding: 20px;">
+                                        <c:choose>
+                                            <c:when test="${not empty searchTerm}">
+                                                <div style="color: #6c757d;">
+                                                    <i class="fas fa-search" style="font-size: 24px; margin-bottom: 10px;"></i>
+                                                    <p>No cinemas found for "${searchTerm}"</p>
+                                                </div>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <div style="color: #6c757d;">
+                                                    <i class="fas fa-film" style="font-size: 24px; margin-bottom: 10px;"></i>
+                                                    <p>No cinemas available</p>
+                                                </div>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </td>
+                                </tr>
+                            </c:when>
+                            <c:otherwise>
+                                <c:forEach var="cinema" items="${cinemas}">
+                                    <tr>
+                                        <td>${cinema.cinema_id}</td>
+                                        <td>${cinema.name}</td>
+                                        <td>${cinema.address}</td>
+                                        <td>${cinema.city}</td>
+                                        <td class="action-buttons">
+                                            <a href="${pageContext.request.contextPath}/ManageRoomSeat?service=viewRooms&cinemaId=${cinema.cinema_id}" class="btn btn-info btn-sm">
+                                                <i class="fas fa-door-open"></i> Rooms
+                                            </a>
+                                            <a href="${pageContext.request.contextPath}/ManageRoomSeat?service=editCinema&id=${cinema.cinema_id}" class="btn btn-warning btn-sm">
+                                                <i class="fas fa-edit"></i> Edit
+                                            </a>
+                                            <a href="${pageContext.request.contextPath}/ManageRoomSeat?service=deleteCinema&id=${cinema.cinema_id}" 
+                                               class="btn btn-danger btn-sm" 
+                                               onclick="return confirm('Are you sure you want to delete this cinema? This action cannot be undone if the cinema has no rooms.')">
+                                                <i class="fas fa-trash-alt"></i> Delete
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </c:forEach>
+                            </c:otherwise>
+                        </c:choose>
                     </tbody>
                 </table>
             </div>

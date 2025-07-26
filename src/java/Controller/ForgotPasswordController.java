@@ -47,7 +47,7 @@ public class ForgotPasswordController extends HttpServlet {
         }
 
         DaoUser daoUser = new DaoUser();
-        Vector<Users> list = daoUser.listAllUser();
+        Vector<Users> list = daoUser.listAllAccount();
         boolean emailExists = false;
         Users user = null;
 

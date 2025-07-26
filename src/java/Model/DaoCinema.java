@@ -38,6 +38,32 @@ public class DaoCinema extends DBContext {
         return cinemas;
     }
     
+    public List<Cinemas> searchCinemas(String searchTerm) {
+        List<Cinemas> cinemas = new Vector<>();
+        String sql = "SELECT * FROM Cinemas WHERE name LIKE ? OR address LIKE ?";
+        try {
+            connection = getConnection();
+            ps = connection.prepareStatement(sql);
+            String searchPattern = "%" + searchTerm.replaceAll("\\s+", " ") + "%";
+            ps.setString(1, searchPattern);
+            ps.setString(2, searchPattern);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                Cinemas cinema = new Cinemas();
+                cinema.setCinema_id(rs.getString("cinema_id"));
+                cinema.setName(rs.getString("name"));
+                cinema.setAddress(rs.getString("address"));
+                cinema.setCity(rs.getString("city"));
+                cinemas.add(cinema);
+            }
+        } catch (Exception e) {
+            Logger.getLogger(DaoCinema.class.getName()).log(Level.SEVERE, "Error searching cinemas: " + e.getMessage(), e);
+        } finally {
+            closeConnection(connection, ps, rs);
+        }
+        return cinemas;
+    }
+    
     public Cinemas getCinemaById(String cinemaId) {
         String sql = "SELECT * FROM Cinemas WHERE cinema_id = ?";
         try {

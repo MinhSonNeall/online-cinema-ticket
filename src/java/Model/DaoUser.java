@@ -207,7 +207,35 @@ public class DaoUser extends DBContext {
         }
         return list;
     }
+    public Vector<Users> listAllAccount() {
+        Vector<Users> list = new Vector<>();
+        String sql = "select * from users";
 
+        try {
+            connection = getConnection();
+            ps = connection.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                String user_id = rs.getString("user_id");
+                String user_email = rs.getString("email");
+                String full_name = rs.getString("full_name");
+                String phone_number = rs.getString("phone_number");
+                String roletype = rs.getString("role");
+                Roles role = Roles.valueOf(roletype.toUpperCase());
+                Timestamp created_at = rs.getTimestamp("created_at");
+                Timestamp updated_at = rs.getTimestamp("updated_at");
+                int isActive = rs.getInt("IsActive");
+                Users user = new Users(user_id, user_email, null, full_name,
+                        phone_number, role, created_at, updated_at,isActive);
+                list.add(user);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            closeConnection(connection, ps, rs);
+        }
+        return list;
+    }
     public String generateOTP() {
         Random random = new Random();
         int otp = 100000 + random.nextInt(900000); // Generate 6-digit OTP

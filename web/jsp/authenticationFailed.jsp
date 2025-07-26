@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CinePlex - Xác thực thất bại</title>
+    <title>TickMe - Xác thực thất bại</title>
     <style>
         * {
             margin: 0;
@@ -324,7 +324,7 @@
     </style>
 </head>
 <body>
-    <a href="${pageContext.request.contextPath}/ListMovieController" class="logo">🎬 CinePlex</a>
+    <a href="${pageContext.request.contextPath}/ListMovieController" class="logo">🎬 TickMe</a>
     
     <!-- Floating Background Shapes -->
     <div class="floating-shapes">
@@ -344,7 +344,7 @@
             
             <p class="error-message">
                 Rất tiếc! Bạn không có quyền truy cập vào trang này.<br>
-                Vui lòng đăng nhập để tiếp tục sử dụng dịch vụ CinePlex.
+                
             </p>
             
             <div class="action-buttons">

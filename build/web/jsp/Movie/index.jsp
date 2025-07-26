@@ -5,7 +5,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>CinePlex - Đặt vé xem phim online</title>
+        <title>TickMe - Đặt vé xem phim online</title>
         <style>
             * {
                 margin: 0;
@@ -478,7 +478,7 @@
             <!-- Features Section -->
             <section class="features">
                 <div class="features-container">
-                    <h2 class="section-title">Tại sao chọn CinePlex?</h2>
+                    <h2 class="section-title">Tại sao chọn TickMe?</h2>
 
                     <div class="features-grid">
                         <div class="feature-card">

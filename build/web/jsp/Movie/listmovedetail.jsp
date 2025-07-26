@@ -5,7 +5,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>CinePlex - Đặt vé xem phim</title>
+        <title>TickMe - Đặt vé xem phim</title>
         <style>
             :root {
                 --primary-color: #ff6b6b;
@@ -683,6 +683,7 @@
     <body>
         <!-- Header -->
         <%@ include file="../navigator/header.jsp" %>
+        <input type="hidden" name="service" value="service">
         <main class="main-content">
             <div class="container">
                 <!-- Date Selector -->

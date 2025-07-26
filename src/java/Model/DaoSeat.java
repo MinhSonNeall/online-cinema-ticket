@@ -6,10 +6,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 public class DaoSeat extends DBContext {
 
@@ -36,10 +38,48 @@ public class DaoSeat extends DBContext {
             }
         } catch (Exception e) {
             Logger.getLogger(DaoSeat.class.getName()).log(Level.SEVERE, "Error getting seats by room: " + e.getMessage(), e);
+
         } finally {
             closeConnection(connection, ps, rs);
         }
         return seats;
+    }
+  public String getSeatNumberbySeatId(String seatIdsStr)  {
+        if (seatIdsStr == null || seatIdsStr.isEmpty()) {
+            return "";
+        }
+
+        // Tách chuỗi seat_id thành mảng
+        String[] idArray = seatIdsStr.split(",");
+        // Tạo danh sách placeholder (?) tương ứng
+        String placeholders = Arrays.stream(idArray)
+                .map(id -> "?")
+                .collect(Collectors.joining(","));
+        String sql = "SELECT GROUP_CONCAT(seat_number) AS seat_numbers FROM seats WHERE seat_id IN (" + placeholders + ")";
+
+        try {
+            connection = getConnection();
+            ps = connection.prepareStatement(sql);
+
+            // Gán giá trị cho các placeholder
+            for (int i = 0; i < idArray.length; i++) {
+                ps.setInt(i + 1, Integer.parseInt(idArray[i]));
+            }
+
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                String result = rs.getString("seat_numbers");
+                return result != null ? result : "";
+            }
+        } catch (Exception e) {
+            Logger.getLogger(DaoSeat.class.getName()).log(Level.SEVERE, "Error getting seats by ID: " + e.getMessage(), e);
+            // Ném lại ngoại lệ để lớp gọi xử lý
+        
+        } finally {
+            closeConnection(connection, ps, rs);
+        }
+
+        return "";
     }
 
     public String generateNextSeatId() {

@@ -14,6 +14,8 @@ import Model.DaoSeat;
 import Entity.Seats;
 import Model.DaoCinema;
 import Entity.Cinemas;
+import Model.DaoShowtime;
+import java.util.Map;
 
 @WebServlet(name="ManageRoomSeatServlet", urlPatterns={"/ManageRoomSeat"})
 public class ManageRoomSeatServlet extends HttpServlet {
@@ -35,6 +37,21 @@ public class ManageRoomSeatServlet extends HttpServlet {
             case "listCinemas":
                 List<Cinemas> cinemas = daoCinema.getAllCinemas();
                 request.setAttribute("cinemas", cinemas);
+                request.getRequestDispatcher("/jsp/admin/manageCinema.jsp").forward(request, response);
+                break;
+                
+            case "searchCinemas":
+                String searchTerm = request.getParameter("searchTerm");
+                List<Cinemas> searchResults;
+                
+                if (searchTerm != null && !searchTerm.trim().isEmpty()) {
+                    searchResults = daoCinema.searchCinemas(searchTerm);
+                    request.setAttribute("searchTerm", searchTerm); // Store search term to display in the form
+                } else {
+                    searchResults = daoCinema.getAllCinemas();
+                }
+                
+                request.setAttribute("cinemas", searchResults);
                 request.getRequestDispatcher("/jsp/admin/manageCinema.jsp").forward(request, response);
                 break;
                 
@@ -199,6 +216,20 @@ public class ManageRoomSeatServlet extends HttpServlet {
                 request.setAttribute("seats", seats);
                 request.setAttribute("room", seatRoom);
                 request.getRequestDispatcher("/jsp/admin/viewSeats.jsp").forward(request, response);
+                break;
+                
+            case "viewRoomShowtimeSlots":
+                String viewSlotRoomId = request.getParameter("roomId");
+                Rooms viewSlotRoom = daoRoom.getRoomById(viewSlotRoomId);
+                Cinemas viewSlotCinema = daoCinema.getCinemaById(viewSlotRoom.getCinema_id());
+                
+                DaoShowtime daoShowtime = new DaoShowtime();
+                List<Map<String, Object>> roomSlots = daoShowtime.getShowtimeSlotsByRoomId(viewSlotRoomId);
+                
+                request.setAttribute("room", viewSlotRoom);
+                request.setAttribute("cinema", viewSlotCinema);
+                request.setAttribute("roomSlots", roomSlots);
+                request.getRequestDispatcher("/jsp/admin/viewRoomShowtimeSlots.jsp").forward(request, response);
                 break;
                 
             default:

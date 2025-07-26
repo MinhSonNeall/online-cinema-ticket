@@ -55,7 +55,7 @@
     <div class="footer-container">
         <div class="footer-grid">
             <div class="footer-section">
-                <h3>🎬 CinePlex</h3>
+                <h3>🎬 TickMe</h3>
                 <p style="color: #aaa; line-height: 1.6;">
                     Hệ thống rạp chiếu phim hàng đầu Việt Nam với trải nghiệm điện ảnh tuyệt vời nhất.
                 </p>
@@ -90,7 +90,7 @@
         </div>
 
         <div class="footer-bottom">
-            <p>© 2024 CinePlex. Tất cả quyền được bảo lưu.</p>
+            <p>© 2024 TickMe. Tất cả quyền được bảo lưu.</p>
         </div>
     </div>
 </footer>

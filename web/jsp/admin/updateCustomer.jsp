@@ -512,7 +512,7 @@ Full Name
 <i class="fas fa-envelope"></i>
 Email Address
 </label>
-<input type="email" name="email" id="email" value="<%= user.getEmail()%>" required>
+<input type="email" name="email" id="email" value="<%= user.getEmail()%> " readonly>
 </div>
 
 <div class="form-group">
@@ -531,7 +531,7 @@ Password
 <i class="fas fa-phone"></i>
 Phone Number
 </label>
-<input type="text" name="phone_number" id="phone_number" value="<%= user.getPhone_number()%>" placeholder="Enter phone number">
+    <input type="text" name="phone_number" id="phone_number" value="<%= user.getPhone_number()%>" placeholder="Enter phone number" required=>
 </div>
 
 <div class="form-actions">

@@ -7,7 +7,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Chi Tiết Phim - CinePlex</title>
+        <title>Chi Tiết Phim - TickMe</title>
         <style>
             * {
                 margin: 0;

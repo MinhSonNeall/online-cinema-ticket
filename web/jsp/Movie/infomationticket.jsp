@@ -5,7 +5,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Thanh Toán - CinePlex</title>
+        <title>Thanh Toán - TickMe</title>
         <style>
             * {
                 margin: 0;
@@ -318,6 +318,8 @@
     <body>
         <%@ include file="../navigator/header.jsp" %>
 
+        <!-- SQL query to get seat numbers for selected seats -->
+        
         <div class="container">
             <div class="checkout-form">
                 <h2 class="section-title">Thông tin thanh toán</h2>
@@ -330,6 +332,13 @@
                         <p style="color: #b0b0b0; font-size: 0.9rem;">Nội dung: ${addInfo}| Sau chuyển khoản, vé gửi qua email.</p>
                     </div>
                 </div>
+
+                <!-- Display error message if exists -->
+                <c:if test="${not empty error}">
+                    <div style="padding: 1rem; margin-bottom: 1rem; background: rgba(255, 0, 0, 0.1); border-radius: 10px; border-left: 4px solid #ff0000;">
+                        <p style="color: #ff0000; font-weight: 500;">${error}</p>
+                    </div>
+                </c:if>
 
                 <!-- Button xác nhận (optional, nếu cần POST confirm) -->
                 <form id="checkoutForm"
@@ -346,9 +355,21 @@
 
                     <!-- ảnh QR, mô tả... -->
 
-                    <button type="submit" class="btn">
-                        Xác nhận đã thanh toán
-                    </button>
+                    <c:choose>
+                        <c:when test="${empty error}">
+                            <button type="submit" class="btn">
+                                Xác nhận đã thanh toán
+                            </button>
+                        </c:when>
+                        <c:otherwise>
+                            <button type="button" class="btn" style="background: gray; cursor: not-allowed;" disabled>
+                                Xác nhận đã thanh toán
+                            </button>
+                            <p style="text-align: center; margin-top: 0.5rem; color: #b0b0b0; font-size: 0.9rem;">
+                                Vui lòng làm mới trang sau khi thanh toán thành công
+                            </p>
+                        </c:otherwise>
+                    </c:choose>
                 </form>
 
             </div>
@@ -362,7 +383,8 @@
                         <h4>${movieTitle}</h4>
                         <p>Rạp: ${cinemaName}</p>
                         <p>Suất: ${showtime}</p>
-                        <p>Ghế: ${selectedSeats}</p>
+                        <p>Ghế: ${requestScope.seat_number}</p>
+                        
                     </div>
                 </div>
 

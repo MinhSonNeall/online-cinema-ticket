@@ -303,7 +303,7 @@
         </style>
     </head>
     <body>
-        <a href="${pageContext.request.contextPath}/jsp/index.jsp" class="logo">🎬 CinePlex</a>
+        <a href="${pageContext.request.contextPath}/jsp/index.jsp" class="logo">🎬 TickMe</a>
         
         <div class="main-content">
             <div class="login-container">

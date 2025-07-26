@@ -5,6 +5,7 @@
 package Controller;
 
 import Entity.Users;
+import Model.DaoSeat;
 import jakarta.mail.Message;
 import jakarta.mail.MessagingException;
 import jakarta.mail.PasswordAuthentication;
@@ -139,6 +140,8 @@ public class InformationTicketController extends HttpServlet {
                     + "&addInfo=" + addInfo
                     + "&accountName=" + URLEncoder.encode(ACCOUNT_NAME, "UTF-8");
 
+            DaoSeat daoseat= new DaoSeat();
+            String seat_number=daoseat.getSeatNumberbySeatId(selectedSeats);
             // Set attributes
             request.setAttribute("movieTitle", movieTitle);
             request.setAttribute("cinemaName", cinemaName);
@@ -149,6 +152,7 @@ public class InformationTicketController extends HttpServlet {
             request.setAttribute("roomId", roomId);
             request.setAttribute("totalPrice", totalPrice);
             request.setAttribute("qrUrl", qrUrl);
+            request.setAttribute("seat_number", seat_number);
             request.setAttribute("addInfo", addInfo);  // For display and hidden
 
             // TODO: Insert pending ticket to DB here, get ticketId from DAO

@@ -8,6 +8,11 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import Model.DaoTicket;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 @WebServlet(name = "adminController", urlPatterns = {"/adminController"})
 public class adminController extends HttpServlet {
@@ -21,6 +26,19 @@ public class adminController extends HttpServlet {
             Users adminUser=(Users)session.getAttribute("user");
 
             if (adminUser != null) {
+                // Lấy dữ liệu cho dashboard
+                DaoTicket daoTicket = new DaoTicket();
+                BigDecimal totalRevenue = daoTicket.getTotalRevenue();
+                List<Map<String, Object>> topMovies = daoTicket.getTopMoviesByTicket(5);
+                List<String> movieLabels = new ArrayList<>();
+                List<Integer> movieData = new ArrayList<>();
+                for (Map<String, Object> m : topMovies) {
+                    movieLabels.add((String)m.get("title"));
+                    movieData.add((Integer)m.get("ticket_count"));
+                }
+                request.setAttribute("totalRevenue", totalRevenue);
+                request.setAttribute("movieLabels", movieLabels);
+                request.setAttribute("movieData", movieData);
 
                 request.setAttribute("adminUser", adminUser);
                 request.setAttribute("role", session.getAttribute("role"));

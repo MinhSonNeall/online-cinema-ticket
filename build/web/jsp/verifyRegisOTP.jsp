@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -328,13 +329,13 @@
         </style>
     </head>
     <body>
-        <a href="${pageContext.request.contextPath}/jsp/index.jsp" class="logo">🎬 CinePlex</a>
+        <a href="${pageContext.request.contextPath}/jsp/index.jsp" class="logo">🎬 TickMe</a>
         
         <div class="main-content">
             <div class="login-container">
                 <div class="login-header">
                     <h1 class="login-title">Verify Email</h1>
-                    <p class="login-subtitle">Enter the 6-digit OTP code sent to your email</p>
+                    <p class="login-subtitle">Enter the 6-digit OTP code sent to your email ${sessionScope.email} </p>
                 </div>
                 
                 <form action="${pageContext.request.contextPath}/verifyEmailOTP" method="post" class="login-form">

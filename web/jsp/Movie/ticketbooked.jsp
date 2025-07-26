@@ -6,7 +6,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>CinePlex - Vé Đã Thanh Toán</title>
+        <title>TickMeTickMe - Vé Đã Thanh Toán</title>
         <style>
             * {
                 margin: 0;
@@ -488,7 +488,7 @@
                             <div class="empty-state">
                                 <div class="empty-icon">🎟️</div>
                                 <div class="empty-title">Bạn chưa có vé nào</div>
-                                <div class="empty-desc">Hãy đặt vé để bắt đầu trải nghiệm phim tại CinePlex.</div>
+                                <div class="empty-desc">Hãy đặt vé để bắt đầu trải nghiệm phim tại TickMeTickMe.</div>
                                 <a href="<c:url value='/ListMovieController' />" class="back-btn">Quay về trang chủ</a>
                             </div>
                         </c:otherwise>

@@ -439,6 +439,61 @@ text-align: center;
 flex-direction: column;
 }
 }
+
+/* Updated styles for the table-header with search form */
+.table-header {
+    background: #f8f9fa;
+    padding: 20px 25px;
+    border-bottom: 1px solid #e1e8ed;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.table-header h3 {
+    color: #2c3e50;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    margin: 0;
+}
+
+.table-header h3 i {
+    margin-right: 10px;
+    color: #3498db;
+}
+
+.search-container {
+    position: relative;
+}
+
+.search-input {
+    padding: 8px 35px 8px 12px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    width: 250px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.search-input:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.25);
+    outline: none;
+}
+
+@media (max-width: 768px) {
+    .table-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .search-input {
+        width: 100%;
+    }
+}
 </style>
 </head>
 <body>
@@ -497,12 +552,32 @@ flex-direction: column;
         <div class="table-section">
             <div class="table-header">
                 <h3><i class="fas fa-clock"></i> Show time waiting</h3>
+                
+                <!-- Search Form -->
+                <form action="${pageContext.request.contextPath}/ManageShowtime" method="GET" style="display: flex; align-items: center;">
+                    <input type="hidden" name="action" value="search">
+                    <div style="display: flex; gap: 10px; align-items: center;">
+                        <div class="search-container">
+                            <input type="text" name="movieTitle" placeholder="Search by movie title" 
+                                   value="${searchTerm}" 
+                                   class="search-input">
+                            <button type="submit" style="position: absolute; right: 5px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer;">
+                                <i class="fas fa-search" style="color: #3498db;"></i>
+                            </button>
+                        </div>
+                        <c:if test="${not empty searchTerm}">
+                            <a href="${pageContext.request.contextPath}/ManageShowtime" class="btn btn-secondary btn-sm">
+                                <i class="fas fa-times"></i> Clear
+                            </a>
+                        </c:if>
+                    </div>
+                </form>
             </div>
             <div class="table-container">
                 <table>
                     <thead>
                         <tr>
-                            <th>Show Time ID</th>
+                            
                             <th>Title</th>
                             <th>Cinema</th>
                             <th>Room</th>
@@ -512,21 +587,45 @@ flex-direction: column;
                         </tr>
                     </thead>
                     <tbody>
-                        <c:forEach var="showtime" items="${showtimeList}">
-                            <tr>
-                                <td>${showtime.showtime_id}</td>
-                                <td>${showtime.movie_title}</td>
-                                <td>${showtime.cinema_name}</td>
-                                <td>${showtime.room_name}</td>
-                                <td><fmt:formatDate value="${showtime.start_time}" pattern="dd/MM/yyyy" /></td>
-                                <td><fmt:formatDate value="${showtime.end_time}" pattern="dd/MM/yyyy" /></td>
-                                <td class="action-buttons">
-                                    <a href="${pageContext.request.contextPath}/ManageShowtime?action=edit&id=${showtime.showtime_id}" class="btn btn-info btn-sm"><i class="fas fa-edit"></i> Edit</a>
-                                    <a href="${pageContext.request.contextPath}/ManageShowtime?action=add-slot&id=${showtime.showtime_id}" class="btn btn-success btn-sm"><i class="fas fa-plus"></i> Add ShowTime Slot</a>
-                                    <a href="${pageContext.request.contextPath}/ManageShowtime?action=view-slots&id=${showtime.showtime_id}" class="btn btn-warning btn-sm"><i class="fas fa-list-ol"></i> List ShowTime Slot</a>
-                                </td>
-                            </tr>
-                        </c:forEach>
+                        <c:choose>
+                            <c:when test="${empty showtimeList}">
+                                <tr>
+                                    <td colspan="6" style="text-align: center; padding: 20px;">
+                                        <c:choose>
+                                            <c:when test="${not empty searchTerm}">
+                                                <div style="color: #6c757d;">
+                                                    <i class="fas fa-search" style="font-size: 24px; margin-bottom: 10px;"></i>
+                                                    <p>No showtimes found for "${searchTerm}"</p>
+                                                </div>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <div style="color: #6c757d;">
+                                                    <i class="fas fa-calendar-times" style="font-size: 24px; margin-bottom: 10px;"></i>
+                                                    <p>No showtimes available</p>
+                                                </div>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </td>
+                                </tr>
+                            </c:when>
+                            <c:otherwise>
+                                <c:forEach var="showtime" items="${showtimeList}">
+                                    <tr>
+                                       
+                                        <td>${showtime.movie_title}</td>
+                                        <td>${showtime.cinema_name}</td>
+                                        <td>${showtime.room_name}</td>
+                                        <td><fmt:formatDate value="${showtime.start_time}" pattern="dd/MM/yyyy" /></td>
+                                        <td><fmt:formatDate value="${showtime.end_time}" pattern="dd/MM/yyyy" /></td>
+                                        <td class="action-buttons">
+                                            <a href="${pageContext.request.contextPath}/ManageShowtime?action=edit&id=${showtime.showtime_id}" class="btn btn-info btn-sm"><i class="fas fa-edit"></i> Edit</a>
+                                            <a href="${pageContext.request.contextPath}/ManageShowtime?action=add-slot&id=${showtime.showtime_id}" class="btn btn-success btn-sm"><i class="fas fa-plus"></i> Add ShowTime Slot</a>
+                                            <a href="${pageContext.request.contextPath}/ManageShowtime?action=view-slots&id=${showtime.showtime_id}" class="btn btn-warning btn-sm"><i class="fas fa-list-ol"></i> List ShowTime Slot</a>
+                                        </td>
+                                    </tr>
+                                </c:forEach>
+                            </c:otherwise>
+                        </c:choose>
                     </tbody>
                 </table>
             </div>

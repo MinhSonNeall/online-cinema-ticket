@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CinePlex - Thông báo</title>
+    <title>TickMe - Thông báo</title>
     <style>
         * {
             margin: 0;
@@ -218,7 +218,7 @@
     </style>
 </head>
 <body>
-    <a href="<c:url value='/ListMovieController'/>" class="logo">🎬 CinePlex</a>
+    <a href="<c:url value='/ListMovieController'/>" class="logo">🎬 TickMe</a>
     
     <!-- Main Content -->
     <main class="main-content">

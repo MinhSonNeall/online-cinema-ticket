@@ -10,6 +10,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Staff Dashboard</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<!-- Add Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
 * {
 margin: 0;
@@ -301,6 +303,72 @@ box-shadow: 0 6px 20px rgba(0,0,0,0.15);
 .error-button i {
 margin-right: 10px;
 }
+
+/* Chart container styles */
+.chart-container {
+background: white;
+border-radius: 15px;
+padding: 25px;
+box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+margin-top: 30px;
+margin-bottom: 30px;
+}
+
+.chart-header {
+display: flex;
+justify-content: space-between;
+align-items: center;
+margin-bottom: 20px;
+}
+
+.chart-header h2 {
+color: #2c3e50;
+font-size: 22px;
+font-weight: 600;
+}
+
+.revenue-highlight {
+font-size: 24px;
+color: #2ecc71;
+font-weight: bold;
+}
+
+/* Stats cards */
+.stats-container {
+display: grid;
+grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+gap: 25px;
+padding: 10px;
+margin-bottom: 30px;
+}
+
+.stats-card {
+background: white;
+border-radius: 15px;
+padding: 20px;
+box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+transition: all 0.3s ease;
+}
+
+.stats-card h3 {
+color: #2c3e50;
+margin-bottom: 10px;
+font-size: 18px;
+display: flex;
+align-items: center;
+}
+
+.stats-card .value {
+font-size: 28px;
+font-weight: bold;
+color: #3498db;
+margin-top: 10px;
+}
+
+.stats-card .subtitle {
+color: #7f8c8d;
+font-size: 14px;
+}
 </style>
 </head>
 <body>
@@ -323,12 +391,12 @@ Back to Login
 <!-- User Info Section -->
 <div class="welcome-user">
 <i class="fas fa-user-circle" style="font-size: 48px; margin-bottom: 10px;"></i>
-<p>Welcome, ${adminUser.getFull_name()}</p>
+<p>Welcome, ${sessionScope.user.full_name}</p>
 <div class="profile-dropdown">
 <div class="profile-info">
-<div class="profile-name">${adminUser.getFull_name()}</div>
-<div class="profile-role">${adminUser.getRole()}</div>
-<div class="profile-email">${adminUser.getEmail()}</div>
+<div class="profile-name">${sessionScope.user.full_name}</div>
+<div class="profile-role">${sessionScope.user.role}</div>
+<div class="profile-email">${sessionScope.user.email}</div>
 </div>
 <div class="profile-actions">
 <c:url var="logoutUrl" value="/LogoutController"/>
@@ -358,6 +426,8 @@ Back to Login
 <div class="header">
 <h1><i class="fas fa-tachometer-alt"></i> Staff Management Dashboard</h1>
 </div>
+
+
 <!-- Dashboard Grid -->
 <div class="dashboard-grid">
 <div class="dashboard-card">
@@ -396,8 +466,103 @@ Manage Cinemas <i class="fas fa-arrow-right"></i>
 </button>
 </form>
 </div>
-
+</div>
+<!-- Biểu đồ doanh thu và phim đặt vé nhiều nhất -->
+<div style="display: flex; gap: 40px; margin-bottom: 40px; flex-wrap: wrap;">
+  <div style="flex: 1; min-width: 350px;">
+    <h3 style="text-align:center;">Total Revenue</h3>
+    <canvas id="revenueChart"></canvas>
+  </div>
+  <div style="flex: 1; min-width: 350px;">
+    <h3 style="text-align:center;">Top Movie</h3>
+    <canvas id="movieChart"></canvas>
+  </div>
 </div>
 </div>
+</div>
+<script>
+// Biểu đồ tổng doanh thu
+const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+const revenueChart = new Chart(revenueCtx, {
+    type: 'bar',
+    data: {
+        labels: ['Total Revenue'],
+        datasets: [{
+            label: 'Total Ticket Price',
+            data: [${totalRevenue}],
+            backgroundColor: 'rgba(54, 162, 235, 0.6)',
+            borderColor: 'rgba(54, 162, 235, 1)',
+            borderWidth: 1
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: { display: false }
+        },
+        scales: {
+            y: {
+                beginAtZero: true,
+                ticks: {
+                    callback: function(value) { return 'VND ' + value; }
+                }
+            }
+        }
+    }
+});
+// Biểu đồ top phim đặt vé nhiều nhất
+const movieCtx = document.getElementById('movieChart').getContext('2d');
+const movieLabels = [
+  <c:forEach items="${movieLabels}" var="label" varStatus="status">
+    "${label}"<c:if test="${!status.last}">,</c:if>
+  </c:forEach>
+];
+const movieData = [
+  <c:forEach items="${movieData}" var="data" varStatus="status">
+    ${data}<c:if test="${!status.last}">,</c:if>
+  </c:forEach>
+];
+const movieChart = new Chart(movieCtx, {
+    type: 'pie',
+    data: {
+        labels: movieLabels,
+        datasets: [{
+            label: 'Total Ticket',
+            data: movieData,
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.6)',
+                'rgba(54, 162, 235, 0.6)',
+                'rgba(255, 206, 86, 0.6)',
+                'rgba(75, 192, 192, 0.6)',
+                'rgba(153, 102, 255, 0.6)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: { position: 'right' },
+            tooltip: {
+                callbacks: {
+                    label: function(context) {
+                        let label = context.label || '';
+                        if (label) label += ': ';
+                        label += context.raw + ' tickets';
+                        return label;
+                    }
+                }
+            }
+        }
+    }
+});
+</script>
 </body>
 </html>

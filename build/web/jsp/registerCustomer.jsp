@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CinePlex - Đăng ký tài khoản</title>
+    <title>TickMe - Đăng ký tài khoản</title>
     <style>
         * {
             margin: 0;
@@ -364,14 +364,14 @@
     </style>
 </head>
 <body>
-    <a href="ListMovieController" class="logo">🎬 CinePlex</a>
+    <a href="ListMovieController" class="logo">🎬 TickMe</a>
     
     <!-- Main Content -->
     <main class="main-content">
         <div class="register-container">
             <div class="register-header">
                 <h1 class="register-title">Đăng ký</h1>
-                <p class="register-subtitle">Tạo tài khoản CinePlex của bạn</p>
+                <p class="register-subtitle">Tạo tài khoản TickMe của bạn</p>
             </div>
             
             <!-- Error Message -->
